@@ -743,7 +743,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     stem: 'DSRCT (Desmoplastic Small Round Cell Tumour) has which characteristic chromosomal translocation?',
     options: { A: 't(11;22)(q24;q12) — EWS-FLI1', B: 't(11;22)(p13;q12) — EWS-WT1', C: 't(9;22)(q34;q11) — BCR-ABL', D: 't(X;18)(p11;q11) — SYT-SSX' },
     correct: 'B',
-    explanation: 'DSRCT is defined by the t(11;22)(p13;q12) translocation creating the EWS-WT1 fusion oncogene. This is the pathognomonic molecular alteration — present in >95% of DSRCT. The fusion product activates transcription factors driving DSRCT's unique phenotype (peritoneal tropism, polyphenotypic differentiation). Note: t(11;22)(q24;q12) = EWS-FLI1 is Ewing sarcoma — a common trap in exams.',
+    explanation: 'DSRCT is defined by the t(11;22)(p13;q12) translocation creating the EWS-WT1 fusion oncogene. This is the pathognomonic molecular alteration — present in >95% of DSRCT. The fusion product activates transcription factors driving DSRCT unique phenotype (peritoneal tropism, polyphenotypic differentiation). Note: t(11;22)(q24;q12) = EWS-FLI1 is Ewing sarcoma — a common trap in exams.',
     guideline_ref: 'Gerald WL et al. Cancer 1991; WHO Soft Tissue Tumours 2020',
     pearl: 'DSRCT occurs predominantly in young males (median 22 years), presenting with massive peritoneal disease and often minimal primary mass. CRS+HIPEC is performed at select centres but outcomes remain poor (median OS 26–30 months). FISH for EWS-WT1 is the confirmatory diagnostic test.',
   },
