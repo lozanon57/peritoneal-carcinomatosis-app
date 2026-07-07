@@ -18,7 +18,7 @@ const TOPICS: { id: QuizTopic; label: string }[] = [
 
 // ─── Mode selector ─────────────────────────────────────────────────────────────
 
-function ModeSelector({ stats, onStart }: { stats: ReturnType<typeof useQuiz>['stats']; onStart: (mode: 'quick' | 'topic' | 'exam', topic?: QuizTopic) => void }) {
+function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof useQuiz>['stats']; onStart: (mode: 'quick' | 'topic' | 'exam', topic?: QuizTopic) => void; onReset: () => void }) {
   const [topicMode, setTopicMode] = useState(false)
   const accuracy = stats.totalAnswered > 0 ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : null
 
@@ -109,6 +109,16 @@ function ModeSelector({ stats, onStart }: { stats: ReturnType<typeof useQuiz>['s
         )}
       </div>
 
+      {/* Current streak */}
+      {stats.streak > 0 && (
+        <div className="card text-center col-span-3">
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-2xl font-bold text-orange-500">🔥 {stats.streak}</span>
+            <span className="text-xs text-gray-400">Current streak</span>
+          </div>
+        </div>
+      )}
+
       {/* Weak areas */}
       {stats.wrongQuestionIds.length > 0 && (
         <div>
@@ -121,6 +131,13 @@ function ModeSelector({ stats, onStart }: { stats: ReturnType<typeof useQuiz>['s
           </div>
         </div>
       )}
+
+      <button
+        onClick={onReset}
+        className="text-xs text-gray-300 underline w-full text-center"
+      >
+        Reset all progress
+      </button>
     </div>
   )
 }
@@ -259,7 +276,23 @@ function ScoreScreen({ correct, total, onRestart }: { correct: number; total: nu
         </div>
       </div>
       <div>
-        <div className="text-5xl font-bold text-gray-900">{pct}%</div>
+        <div className="relative w-24 h-24 mx-auto">
+          <svg className="w-24 h-24 -rotate-90" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="40" fill="none" stroke="#f3f4f6" strokeWidth="8" />
+            <circle
+              cx="48" cy="48" r="40" fill="none"
+              stroke={pct >= 80 ? '#16a34a' : pct >= 60 ? '#d97706' : '#dc2626'}
+              strokeWidth="8"
+              strokeDasharray={`${2 * Math.PI * 40}`}
+              strokeDashoffset={`${2 * Math.PI * 40 * (1 - pct / 100)}`}
+              strokeLinecap="round"
+              style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className={`text-2xl font-bold ${grade.color}`}>{pct}%</span>
+          </div>
+        </div>
         <div className={`text-lg font-semibold mt-1 ${grade.color}`}>{grade.label}</div>
         <div className="text-sm text-gray-500 mt-1">{correct} / {total} correct</div>
       </div>
@@ -278,12 +311,12 @@ function ScoreScreen({ correct, total, onRestart }: { correct: number; total: nu
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function PageQuiz() {
-  const { session, stats, currentQuestion, startSession, answer, reveal, next, endSession } = useQuiz()
+  const { session, stats, currentQuestion, startSession, answer, reveal, next, endSession, resetStats } = useQuiz()
 
   if (!session) {
     return (
       <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
-        <ModeSelector stats={stats} onStart={startSession} />
+        <ModeSelector stats={stats} onStart={startSession} onReset={resetStats} />
       </div>
     )
   }

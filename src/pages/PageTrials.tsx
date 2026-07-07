@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, X } from 'lucide-react'
+import { ChevronRight, X, Search } from 'lucide-react'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import type { LandmarkTrial } from '../types'
 
@@ -107,17 +107,37 @@ function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => vo
 export default function PageTrials() {
   const [filter, setFilter] = useState<HistFilter>('all')
   const [selected, setSelected] = useState<LandmarkTrial | null>(null)
+  const [search, setSearch] = useState('')
 
   const filtered = filter === 'all'
     ? LANDMARK_TRIALS
     : LANDMARK_TRIALS.filter(t => t.histologies.includes(filter))
+
+  const displayed = search
+    ? filtered.filter(t =>
+        t.name?.toLowerCase().includes(search.toLowerCase()) ||
+        t.clinical_question?.toLowerCase().includes(search.toLowerCase()) ||
+        t.key_result?.toLowerCase().includes(search.toLowerCase())
+      )
+    : filtered
 
   return (
     <>
       <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Landmark Trials</h1>
-          <p className="text-xs text-gray-400">{filtered.length} trials shown</p>
+          <p className="text-xs text-gray-400">{displayed.length} trials shown</p>
+        </div>
+
+        <div className="relative">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="search"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search trials…"
+            className="input-field pl-8 text-sm"
+          />
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
@@ -135,10 +155,10 @@ export default function PageTrials() {
         </div>
 
         <div className="space-y-2">
-          {filtered.map(t => (
+          {displayed.map(t => (
             <TrialCard key={t.id} trial={t} onClick={() => setSelected(t)} />
           ))}
-          {filtered.length === 0 && (
+          {displayed.length === 0 && (
             <div className="text-center py-8 text-gray-400 text-sm">No trials for this filter</div>
           )}
         </div>

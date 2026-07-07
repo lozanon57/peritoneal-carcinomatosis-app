@@ -1,4 +1,4 @@
-import { ShieldCheck, CheckCircle2, BookOpen, Globe, ClipboardList, History } from 'lucide-react'
+import { ShieldCheck, CheckCircle2, BookOpen, Globe, ClipboardList } from 'lucide-react'
 import { useAppI18n } from '../App'
 
 export default function PageAbout() {
@@ -38,6 +38,22 @@ export default function PageAbout() {
           {['CRS+HIPEC', 'PIPAC', 'Sarcoma', 'Retroperitoneal', 'MSKCC Fellow'].map(tag => (
             <span key={tag} className="badge badge-blue">{tag}</span>
           ))}
+        </div>
+        <div className="flex gap-2 mt-3">
+          <a
+            href="https://orcid.org/0000-0003-0614-6329"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="badge badge-blue text-xs"
+          >
+            ORCID iD
+          </a>
+          <a
+            href="mailto:plozano@salud.madrid.org"
+            className="badge bg-gray-100 text-gray-600 text-xs"
+          >
+            Contact
+          </a>
         </div>
       </div>
 
@@ -91,16 +107,15 @@ export default function PageAbout() {
 
       {/* Version */}
       <div className="card">
-        <div className="flex items-center gap-2 mb-2">
-          <History size={14} className="text-gray-400" />
-          <h3 className="text-sm font-semibold text-gray-700">Version History</h3>
-        </div>
-        <div className="space-y-2 text-xs text-gray-500">
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-700">v1.0 — July 2025</span>
-            <span>Initial release</span>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">Version &amp; Changelog</h3>
+        <div className="space-y-2">
+          <div className="flex gap-3">
+            <span className="text-xs font-mono bg-primary-50 text-primary-700 px-2 py-0.5 rounded">v1.0</span>
+            <div>
+              <p className="text-xs font-medium text-gray-700">July 2025 — Initial Release</p>
+              <p className="text-xs text-gray-400">10 PC entities · 5 algorithms · 20 landmark trials · 65 quiz questions</p>
+            </div>
           </div>
-          <p className="text-gray-400">10 PC entities · 5 algorithms · 20 landmark trials · 65 quiz questions · HIPEC/PIPAC protocols</p>
         </div>
       </div>
 

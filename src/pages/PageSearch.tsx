@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Search, X, ChevronDown, ChevronUp, Layers, FlaskConical, Beaker } from 'lucide-react'
 import { useSearch } from '../hooks/useSearch'
-import type { PCDisease, HIPECProtocol } from '../types'
+import { HIPECProtocolCard } from '../components/HIPECProtocolCard'
+import type { PCDisease } from '../types'
 
 function eligibilityBadge(e: PCDisease['hipec_eligibility']) {
   const map: Record<string, string> = {
@@ -17,19 +18,6 @@ function eligibilityBadge(e: PCDisease['hipec_eligibility']) {
     contraindicated: 'Contraindicated',
   }
   return <span className={`badge ${map[e] ?? 'badge-gray'}`}>{labels[e] ?? e}</span>
-}
-
-function ProtocolCard({ p }: { p: HIPECProtocol }) {
-  return (
-    <div className="rounded-lg border border-gray-100 p-3 text-sm">
-      <div className="flex justify-between items-start gap-2">
-        <span className="font-semibold text-gray-800">{p.drug}</span>
-        <span className="text-xs text-gray-400 whitespace-nowrap">{p.duration}</span>
-      </div>
-      <div className="text-xs text-gray-500 mt-0.5">{p.dose} · {p.temperature}</div>
-      {p.notes && <div className="text-xs text-gray-400 mt-1.5 italic leading-relaxed">{p.notes}</div>}
-    </div>
-  )
 }
 
 type Tab = 'overview' | 'hipec' | 'pearls'
@@ -85,7 +73,15 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             </div>
             <div className="card">
               <h3 className="font-semibold text-gray-800 mb-2 text-sm">PCI Threshold</h3>
-              <p className="text-sm text-gray-600">{disease.pci_threshold}</p>
+              <div className="flex items-center gap-3">
+                <div className="bg-primary-50 rounded-xl p-3 text-center min-w-[64px]">
+                  <div className="text-2xl font-bold text-primary-600">
+                    {disease.pci_threshold?.match(/\d+/)?.[0] ?? '—'}
+                  </div>
+                  <div className="text-[10px] text-primary-400 font-medium">max PCI</div>
+                </div>
+                <p className="text-sm text-gray-600 leading-relaxed flex-1">{disease.pci_threshold}</p>
+              </div>
             </div>
             <div className="card">
               <h3 className="font-semibold text-gray-800 mb-2 text-sm">Prognosis</h3>
@@ -130,7 +126,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               <div className="card">
                 <h3 className="font-semibold text-gray-800 mb-3 text-sm">HIPEC Protocols</h3>
                 <div className="space-y-2">
-                  {disease.hipec_protocols.map((p, i) => <ProtocolCard key={i} p={p} />)}
+                  {disease.hipec_protocols.map((p, i) => <HIPECProtocolCard key={i} protocol={p} index={i} />)}
                 </div>
               </div>
             ) : (

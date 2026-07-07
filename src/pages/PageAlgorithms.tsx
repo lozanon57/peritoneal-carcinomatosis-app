@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GitBranch, RotateCcw, ChevronRight, ArrowLeft } from 'lucide-react'
+import { GitBranch, RotateCcw, ChevronRight, ArrowLeft, Search } from 'lucide-react'
 import { ALGORITHMS } from '../data/algorithms'
 import type { Algorithm, AlgorithmNode } from '../types'
 
@@ -49,6 +49,9 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
     referral: 'algo-warning',
   }
 
+  const totalNodes = algo.nodes.length
+  const stepNum = history.length + 1
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -60,23 +63,35 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
         </button>
       </div>
 
-      <div>
-        <h2 className="font-bold text-gray-900 text-lg">{algo.title}</h2>
-        <p className="text-xs text-gray-400 mt-0.5">{algo.subtitle}</p>
+      <div className="space-y-1.5">
+        <div className="flex justify-between items-center">
+          <span className="text-xs font-semibold text-gray-700 truncate max-w-[200px]">{algo.title}</span>
+          <span className="text-xs text-gray-400 whitespace-nowrap">Step {stepNum} / {totalNodes}</span>
+        </div>
+        <div className="w-full bg-gray-100 rounded-full h-1">
+          <div
+            className="bg-primary-500 h-1 rounded-full transition-all duration-300"
+            style={{ width: `${Math.min((stepNum / totalNodes) * 100, 100)}%` }}
+          />
+        </div>
       </div>
 
       {history.length > 0 && (
-        <div className="flex items-center gap-1 text-xs text-gray-400 flex-wrap">
-          {history.slice(-3).map((hId, i) => {
-            const node = algo.nodes.find(n => n.id === hId)
-            return (
-              <span key={i} className="flex items-center gap-1">
-                <span className="max-w-[80px] truncate">{node?.text.slice(0, 25) ?? hId}</span>
-                <ChevronRight size={10} />
-              </span>
-            )
-          })}
-          <span className="text-primary-600">now</span>
+        <div className="overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1 text-xs text-gray-400 flex-nowrap pb-1">
+            {history.slice(-4).map((hId) => {
+              const node = algo.nodes.find(n => n.id === hId)
+              return (
+                <span key={hId} className="flex items-center gap-1 flex-shrink-0">
+                  <span className="bg-gray-100 rounded px-1.5 py-0.5 max-w-[80px] truncate block">
+                    {node?.text?.slice(0, 22) ?? hId}
+                  </span>
+                  <ChevronRight size={10} />
+                </span>
+              )
+            })}
+            <span className="text-primary-600 font-medium flex-shrink-0">Now</span>
+          </div>
         </div>
       )}
 
@@ -161,6 +176,15 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function PageAlgorithms() {
   const [selected, setSelected] = useState<Algorithm | null>(null)
+  const [search, setSearch] = useState('')
+
+  const filtered = search
+    ? ALGORITHMS.filter(a =>
+        a.title.toLowerCase().includes(search.toLowerCase()) ||
+        a.subtitle?.toLowerCase().includes(search.toLowerCase()) ||
+        a.category?.toLowerCase().includes(search.toLowerCase())
+      )
+    : ALGORITHMS
 
   if (selected) {
     return (
@@ -177,8 +201,19 @@ export default function PageAlgorithms() {
         <p className="text-xs text-gray-400">{ALGORITHMS.length} clinical decision trees</p>
       </div>
 
+      <div className="relative">
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          type="search"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search algorithms…"
+          className="input-field pl-8 text-sm"
+        />
+      </div>
+
       <div className="space-y-2">
-        {ALGORITHMS.map(algo => (
+        {filtered.map(algo => (
           <button
             key={algo.id}
             onClick={() => setSelected(algo)}

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
 import type { QuizQuestion, QuizSession, QuizStats, QuizTopic } from '../types'
 
@@ -10,6 +10,20 @@ const EMPTY_STATS: QuizStats = {
   masteryByTopic: {} as QuizStats['masteryByTopic'],
   wrongQuestionIds: [],
   lastPlayed: 0,
+}
+
+const STORAGE_KEY = 'pc-quiz-stats'
+
+function loadStats(): QuizStats {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) return JSON.parse(raw) as QuizStats
+  } catch {}
+  return EMPTY_STATS
+}
+
+function saveStats(s: QuizStats): void {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {}
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -36,7 +50,7 @@ function pickQuestions(mode: QuizSession['mode'], topic?: QuizTopic, wrongIds?: 
 
 export function useQuiz() {
   const [session, setSession] = useState<QuizSession | null>(null)
-  const [stats, setStats] = useState<QuizStats>(EMPTY_STATS)
+  const [stats, setStats] = useState<QuizStats>(loadStats)
 
   const startSession = useCallback((mode: QuizSession['mode'], topic?: QuizTopic) => {
     const questions = pickQuestions(mode, topic, stats.wrongQuestionIds)
@@ -104,6 +118,14 @@ export function useQuiz() {
 
   const endSession = useCallback(() => setSession(null), [])
 
+  const resetStats = useCallback(() => {
+    const fresh = EMPTY_STATS
+    setStats(fresh)
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+  }, [])
+
+  React.useEffect(() => { saveStats(stats) }, [stats])
+
   const currentQuestion = useMemo(() =>
     session ? session.questions[session.currentIndex] ?? null : null,
     [session]
@@ -114,5 +136,5 @@ export function useQuiz() {
     return QUIZ_QUESTIONS[idx]
   }, [])
 
-  return { session, stats, currentQuestion, dailyQuestion, startSession, answer, reveal, next, endSession }
+  return { session, stats, currentQuestion, dailyQuestion, startSession, answer, reveal, next, endSession, resetStats }
 }
