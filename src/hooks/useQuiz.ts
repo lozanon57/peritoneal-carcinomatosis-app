@@ -66,7 +66,7 @@ export function useQuiz() {
     })
   }, [stats.wrongQuestionIds])
 
-  const answer = useCallback((questionId: string, choice: 'A' | 'B' | 'C' | 'D') => {
+  const answer = useCallback((questionId: string, choice: 'A' | 'B' | 'C' | 'D' | 'E') => {
     setSession(prev => {
       if (!prev) return prev
       return { ...prev, answers: { ...prev.answers, [questionId]: choice } }

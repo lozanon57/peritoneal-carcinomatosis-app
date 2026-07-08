@@ -115,8 +115,8 @@ export interface QuizQuestion {
   topic: QuizTopic
   difficulty: QuizDifficulty
   stem: string
-  options: { A: string; B: string; C: string; D: string }
-  correct: 'A' | 'B' | 'C' | 'D'
+  options: { A: string; B: string; C: string; D: string; E?: string }
+  correct: 'A' | 'B' | 'C' | 'D' | 'E'
   explanation: string
   guideline_ref?: string
   trial_ref?: string
@@ -128,7 +128,7 @@ export interface QuizSession {
   topic?: QuizTopic
   questions: QuizQuestion[]
   currentIndex: number
-  answers: Record<string, 'A' | 'B' | 'C' | 'D' | null>
+  answers: Record<string, 'A' | 'B' | 'C' | 'D' | 'E' | null>
   revealed: Record<string, boolean>
   startTime: number
   finished: boolean

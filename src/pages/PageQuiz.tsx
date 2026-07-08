@@ -155,9 +155,9 @@ function QuestionCard({
   total,
 }: {
   question: ReturnType<typeof useQuiz>['currentQuestion']
-  selectedAnswer?: 'A' | 'B' | 'C' | 'D'
+  selectedAnswer?: 'A' | 'B' | 'C' | 'D' | 'E'
   revealed: boolean
-  onAnswer: (choice: 'A' | 'B' | 'C' | 'D') => void
+  onAnswer: (choice: 'A' | 'B' | 'C' | 'D' | 'E') => void
   onReveal: () => void
   onNext: () => void
   index: number
@@ -165,9 +165,9 @@ function QuestionCard({
 }) {
   if (!question) return null
 
-  const opts = (['A', 'B', 'C', 'D'] as const)
+  const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(opt => opt in question.options) as ('A' | 'B' | 'C' | 'D' | 'E')[]
 
-  function optionClass(opt: typeof opts[number]) {
+  function optionClass(opt: 'A' | 'B' | 'C' | 'D' | 'E') {
     if (!revealed) {
       return selectedAnswer === opt ? 'quiz-option bg-primary-50 border-primary-300 text-primary-800' : 'quiz-option'
     }
@@ -336,7 +336,7 @@ export default function PageQuiz() {
   if (!currentQuestion) return null
 
   const revealed = !!session.revealed[currentQuestion.id]
-  const selectedAnswer = session.answers[currentQuestion.id] as 'A' | 'B' | 'C' | 'D' | undefined
+  const selectedAnswer = session.answers[currentQuestion.id] as 'A' | 'B' | 'C' | 'D' | 'E' | undefined
 
   return (
     <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
