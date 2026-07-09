@@ -1,20 +1,93 @@
 import { useNavigate } from 'react-router-dom'
-import { Search, GitBranch, BookOpen, GraduationCap, ChevronRight, Zap, AlertCircle } from 'lucide-react'
-import { useAppI18n } from '../App'
+import {
+  Search, GitBranch, BookOpen, GraduationCap, ChevronRight, Zap,
+  Sparkles, Layers, ArrowRight, Clock, Activity,
+} from 'lucide-react'
 import { useQuiz } from '../hooks/useQuiz'
 import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
+import { QUIZ_QUESTIONS } from '../data/quiz_questions'
+import { LEARN_CHAPTERS } from '../data/learn_content'
 
-function StatCard({ label, value, sub }: { label: string; value: string; sub?: string }) {
+// ── Hero ──────────────────────────────────────────────────────────────────────
+function Hero() {
+  const navigate = useNavigate()
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4 text-center">
-      <div className="text-2xl font-bold text-primary-600">{value}</div>
-      <div className="text-xs text-gray-500 font-medium">{label}</div>
-      {sub && <div className="text-[10px] text-gray-400 mt-0.5">{sub}</div>}
+    <section className="relative overflow-hidden bg-tsinghua-deep text-white rounded-b-[2rem] shadow-hero">
+      {/* energy orbits */}
+      <svg className="absolute -right-16 -top-20 opacity-40" width="320" height="320" viewBox="0 0 320 320" fill="none" aria-hidden>
+        <circle cx="160" cy="160" r="150" stroke="#dda92b" strokeWidth="1.2" opacity="0.5" />
+        <circle cx="160" cy="160" r="112" stroke="#ffffff" strokeWidth="1" opacity="0.25" />
+        <circle cx="160" cy="160" r="74" stroke="#dda92b" strokeWidth="1" opacity="0.4" />
+      </svg>
+      <div className="absolute -left-10 bottom-[-40px] w-56 h-56 rounded-full bg-primary-500/30 blur-3xl" aria-hidden />
+
+      <div className="relative max-w-lg mx-auto px-5 pt-7 pb-8">
+        <div className="eyebrow !text-gold-300 mb-3">
+          <Sparkles size={13} /> Beijing Tsinghua Changgung · HGUGM · MSKCC
+        </div>
+
+        <h1 className="font-serif text-[30px] leading-[1.08] font-bold text-balance">
+          Master Peritoneal<br />Surface Oncology
+        </h1>
+        <p className="mt-3 text-[13.5px] text-white/75 leading-relaxed max-w-[19rem]">
+          A board-level academy for CRS+HIPEC, PIPAC and cytoreductive surgery — from first principles to landmark evidence.
+        </p>
+
+        {/* faculty */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 bg-white/12 backdrop-blur rounded-full pl-1 pr-3 py-1 text-xs font-medium">
+            <span className="w-5 h-5 rounded-full bg-gold-sheen flex items-center justify-center text-[9px] font-bold text-ink">YL</span>
+            Prof. Yan Li
+          </span>
+          <span className="inline-flex items-center gap-1.5 bg-white/12 backdrop-blur rounded-full pl-1 pr-3 py-1 text-xs font-medium">
+            <span className="w-5 h-5 rounded-full bg-white/90 flex items-center justify-center text-[9px] font-bold text-primary-800">PL</span>
+            Dr. Pablo Lozano
+          </span>
+        </div>
+
+        {/* CTAs */}
+        <div className="mt-5 flex gap-2.5">
+          <button
+            onClick={() => navigate('/learn')}
+            className="flex-1 bg-gold-sheen text-ink font-bold text-sm rounded-xl py-3 flex items-center justify-center gap-2 shadow-[0_6px_20px_rgba(221,169,43,0.4)] active:scale-[0.98] transition-transform"
+          >
+            <Layers size={16} /> Start learning
+          </button>
+          <button
+            onClick={() => navigate('/quiz')}
+            className="px-4 bg-white/12 backdrop-blur border border-white/20 text-white font-semibold text-sm rounded-xl py-3 flex items-center justify-center gap-1.5 active:scale-[0.98] transition-transform"
+          >
+            <GraduationCap size={16} /> Quiz
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── Stat strip ────────────────────────────────────────────────────────────────
+function StatStrip() {
+  const stats = [
+    { value: String(LEARN_CHAPTERS.length), label: 'Chapters', Icon: Layers },
+    { value: `${QUIZ_QUESTIONS.length}`,    label: 'Questions', Icon: GraduationCap },
+    { value: String(LANDMARK_TRIALS.length),label: 'Trials',    Icon: BookOpen },
+    { value: String(PC_DISEASES.length),    label: 'Entities',  Icon: Activity },
+  ]
+  return (
+    <div className="grid grid-cols-4 gap-2 -mt-6 relative z-10 max-w-lg mx-auto px-4">
+      {stats.map(({ value, label, Icon }) => (
+        <div key={label} className="card px-1.5 py-3 flex flex-col items-center gap-0.5">
+          <Icon size={15} className="text-primary-600 mb-0.5" />
+          <div className="font-display text-lg font-bold text-ink leading-none">{value}</div>
+          <div className="text-[9.5px] font-semibold uppercase tracking-wide text-ink-muted">{label}</div>
+        </div>
+      ))}
     </div>
   )
 }
 
+// ── Daily question ────────────────────────────────────────────────────────────
 function DailyQuestion() {
   const { dailyQuestion } = useQuiz()
   const navigate = useNavigate()
@@ -22,95 +95,115 @@ function DailyQuestion() {
   return (
     <button
       onClick={() => navigate('/quiz')}
-      className="w-full text-left bg-primary-50 border border-primary-200 rounded-xl p-4"
+      className="w-full text-left card-interactive p-4 border-l-4 border-l-primary-600"
     >
       <div className="flex items-center gap-2 mb-2">
         <Zap size={14} className="text-primary-600" />
-        <span className="text-xs font-semibold text-primary-700 uppercase tracking-wide">Daily Question</span>
+        <span className="eyebrow">Daily Question</span>
       </div>
-      <p className="text-sm font-medium text-gray-800 line-clamp-2">{dailyQuestion.stem}</p>
-      <div className="flex items-center gap-1 mt-2 text-primary-600">
-        <span className="text-xs font-medium">Tap to answer</span>
-        <ChevronRight size={12} />
+      <p className="text-sm font-medium text-ink leading-snug line-clamp-2">{dailyQuestion.stem}</p>
+      <div className="flex items-center gap-1 mt-2 text-primary-700 font-semibold">
+        <span className="text-xs">Answer now</span>
+        <ChevronRight size={13} />
       </div>
     </button>
   )
 }
 
+// ── Pearl of the day ──────────────────────────────────────────────────────────
 function PearlOfDay() {
   const idx = Math.floor(Date.now() / 86_400_000) % PC_DISEASES.length
   const disease = PC_DISEASES[idx]
   if (!disease || !disease.clinical_pearls?.length) return null
   const pearl = disease.clinical_pearls[0]
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-      <div className="flex items-center gap-2 mb-2">
-        <AlertCircle size={14} className="text-amber-600" />
-        <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">Clinical Pearl · {disease.name_short}</span>
+    <div className="callout-pearl">
+      <div className="flex items-center gap-2 mb-1.5">
+        <Sparkles size={14} className="text-gold-600" />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-700">
+          Clinical Pearl · {disease.name_short}
+        </span>
       </div>
-      <p className="text-sm text-gray-800">{pearl}</p>
+      <p className="text-sm text-ink-soft leading-relaxed">{pearl}</p>
     </div>
   )
 }
 
+// ── Curriculum banner ─────────────────────────────────────────────────────────
+function CurriculumBanner() {
+  const navigate = useNavigate()
+  const mins = LEARN_CHAPTERS.reduce((s, c) => s + (c.reading_time_min ?? 0), 0)
+  return (
+    <button
+      onClick={() => navigate('/learn')}
+      className="w-full text-left relative overflow-hidden rounded-2xl bg-tsinghua p-4 text-white active:scale-[0.99] transition-transform shadow-lift"
+    >
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-20">
+        <Layers size={72} />
+      </div>
+      <div className="eyebrow !text-gold-300 mb-1.5"><BookOpen size={12} /> The Curriculum</div>
+      <div className="font-serif text-lg font-bold leading-tight">Six chapters, foundation to mastery</div>
+      <div className="flex items-center gap-3 mt-2 text-white/75 text-xs">
+        <span className="inline-flex items-center gap-1"><Clock size={12} /> {mins} min</span>
+        <span className="inline-flex items-center gap-1"><Layers size={12} /> {LEARN_CHAPTERS.length} chapters</span>
+        <span className="inline-flex items-center gap-1 text-gold-300 font-semibold">Begin <ArrowRight size={12} /></span>
+      </div>
+    </button>
+  )
+}
+
+// ── Quick access ──────────────────────────────────────────────────────────────
 const QUICK_LINKS = [
-  { to: '/search',     Icon: Search,       label: 'Disease Search',  color: 'bg-blue-50 text-blue-600 border-blue-100' },
-  { to: '/algorithms', Icon: GitBranch,    label: 'Algorithms',      color: 'bg-green-50 text-green-600 border-green-100' },
-  { to: '/trials',     Icon: BookOpen,     label: 'Landmark Trials', color: 'bg-purple-50 text-purple-600 border-purple-100' },
-  { to: '/quiz',       Icon: GraduationCap, label: 'E-Learning Quiz', color: 'bg-primary-50 text-primary-600 border-primary-100' },
+  { to: '/search',     Icon: Search,    label: 'Disease Atlas',   sub: `${PC_DISEASES.length} entities` },
+  { to: '/algorithms', Icon: GitBranch, label: 'Decision Paths',  sub: 'Clinical algorithms' },
+  { to: '/trials',     Icon: BookOpen,  label: 'Landmark Trials', sub: `${LANDMARK_TRIALS.length} studies` },
+  { to: '/quiz',       Icon: GraduationCap, label: 'E-Learning Quiz', sub: `${QUIZ_QUESTIONS.length} questions` },
 ]
 
-export default function PageHome() {
-  const { t } = useAppI18n()
+function QuickAccess() {
   const navigate = useNavigate()
-
   return (
-    <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-5">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 bg-primary-100 text-primary-700 text-xs font-semibold px-2.5 py-1 rounded-full mb-2">
-          <span>HGUGM · UCM</span>
-        </div>
-        <h1 className="text-2xl font-bold text-gray-900 leading-tight">
-          Peritoneal Carcinomatosis
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Clinical decision support · CRS+HIPEC · PIPAC
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="section-title text-base">Explore</span>
+        <span className="rule-gold" />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {QUICK_LINKS.map(({ to, Icon, label, sub }) => (
+          <button
+            key={to}
+            onClick={() => navigate(to)}
+            className="card-interactive p-4 text-left flex flex-col gap-2"
+          >
+            <span className="w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
+              <Icon size={18} className="text-primary-700" />
+            </span>
+            <div>
+              <div className="text-sm font-bold text-ink leading-tight">{label}</div>
+              <div className="text-[11px] text-ink-muted mt-0.5">{sub}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+export default function PageHome() {
+  return (
+    <div className="animate-fade-in">
+      <Hero />
+      <StatStrip />
+      <div className="max-w-lg mx-auto px-4 pt-5 pb-4 space-y-5">
+        <DailyQuestion />
+        <PearlOfDay />
+        <CurriculumBanner />
+        <QuickAccess />
+        <p className="text-[10px] text-ink-muted/70 text-center pt-1">
+          Educational tool only · Validated against NCCN · ESMO · PSOGI · Chicago Consensus 2020 · JPGA
         </p>
       </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatCard label="PC Entities" value={String(PC_DISEASES.length)} sub="Covered" />
-        <StatCard label="Algorithms" value="5" sub="Decision trees" />
-        <StatCard label="Trials" value={String(LANDMARK_TRIALS.length)} sub="Landmark" />
-      </div>
-
-      {/* Daily widgets */}
-      <DailyQuestion />
-      <PearlOfDay />
-
-      {/* Quick links */}
-      <div>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Quick Access</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {QUICK_LINKS.map(({ to, Icon, label, color }) => (
-            <button
-              key={to}
-              onClick={() => navigate(to)}
-              className={`flex flex-col items-center gap-2 p-4 rounded-xl border ${color} transition-opacity active:opacity-70`}
-            >
-              <Icon size={22} />
-              <span className="text-xs font-semibold text-center leading-tight">{label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Disclaimer */}
-      <p className="text-[10px] text-gray-400 text-center pb-2">
-        Educational tool only · Content validated against NCCN/ESMO/PSOGI 2024–2025
-      </p>
     </div>
   )
 }

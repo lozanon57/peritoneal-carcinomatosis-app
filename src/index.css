@@ -2,50 +2,142 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Peritoneal Carcinomatosis & CRS+HIPEC Academy
+   Design system — Tsinghua Purple (清华紫) · Imperial Gold · Stanford-grade rigor
+   ───────────────────────────────────────────────────────────────────────────── */
+
 @layer base {
   * { -webkit-tap-highlight-color: transparent; }
-  body { @apply antialiased text-gray-900 bg-gray-50; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply antialiased text-ink bg-[#f7f5fa];
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
   :root { --sat: env(safe-area-inset-top); --sab: env(safe-area-inset-bottom); }
+
+  h1, h2, h3, .font-serif { font-family: "Source Serif 4", Georgia, serif; }
+
+  ::selection { background: rgba(106,15,142,0.16); color: #3d0b52; }
 }
 
 @layer components {
-  .card { @apply bg-white rounded-2xl shadow-sm border border-gray-100; }
-  .badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium; }
-  .input-field { @apply w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all; }
-  .btn-primary { @apply w-full py-2.5 px-4 bg-primary-600 text-white rounded-xl text-sm font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2; }
-  .btn-secondary { @apply py-2.5 px-4 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors; }
+
+  /* ── Surfaces ──────────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-2xl border border-[#efe9f3] shadow-card;
+  }
+  .card-pad { @apply card p-4; }
+  .card-interactive {
+    @apply card transition-all duration-200 active:scale-[0.99] hover:shadow-lift hover:border-primary-200;
+  }
+
+  /* ── Section header (scholarly serif + gold rule) ──────────────────────── */
+  .eyebrow {
+    @apply inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-700;
+  }
+  .section-title {
+    @apply font-serif text-lg font-bold text-ink;
+  }
+  .rule-gold { @apply h-0.5 w-10 rounded-full bg-gold-sheen; }
+
+  /* ── Badges ────────────────────────────────────────────────────────────── */
+  .badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold; }
+  .badge-purple { @apply bg-primary-100 text-primary-800; }
+  .badge-blue   { @apply bg-primary-100 text-primary-800; }
+  .badge-gold   { @apply bg-gold-100 text-gold-800; }
+  .badge-green  { @apply bg-emerald-100 text-emerald-800; }
+  .badge-red    { @apply bg-cardinal-100 text-cardinal-700; }
+  .badge-gray   { @apply bg-gray-100 text-gray-600; }
+
+  /* ── Inputs ────────────────────────────────────────────────────────────── */
+  .input-field {
+    @apply w-full rounded-xl border border-[#e6def0] bg-white px-3 py-2.5 text-sm text-ink outline-none
+           focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all placeholder:text-ink-muted/60;
+  }
+
+  /* ── Buttons ───────────────────────────────────────────────────────────── */
+  .btn-primary {
+    @apply w-full py-2.5 px-4 bg-primary-700 text-white rounded-xl text-sm font-semibold
+           hover:bg-primary-800 active:scale-[0.99] transition-all flex items-center justify-center gap-2
+           shadow-[0_4px_14px_rgba(106,15,142,0.28)];
+  }
+  .btn-gold {
+    @apply w-full py-2.5 px-4 bg-gold-500 text-ink rounded-xl text-sm font-bold
+           hover:bg-gold-400 active:scale-[0.99] transition-all flex items-center justify-center gap-2
+           shadow-[0_4px_14px_rgba(221,169,43,0.35)];
+  }
+  .btn-secondary {
+    @apply py-2.5 px-4 bg-primary-50 text-primary-800 rounded-xl text-sm font-semibold
+           hover:bg-primary-100 transition-colors flex items-center justify-center gap-2;
+  }
+  .btn-ghost {
+    @apply py-2 px-3 text-primary-700 rounded-xl text-sm font-semibold hover:bg-primary-50 transition-colors;
+  }
+
+  /* ── Chips (filter pills) ──────────────────────────────────────────────── */
+  .chip {
+    @apply flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-all font-medium
+           bg-white text-ink-soft border-[#e6def0] hover:border-primary-300;
+  }
+  .chip-active {
+    @apply bg-primary-700 text-white border-primary-700 shadow-[0_2px_8px_rgba(106,15,142,0.28)];
+  }
+
   .pt-safe { padding-top: max(1rem, var(--sat)); }
   .pb-safe { padding-bottom: max(1rem, var(--sab)); }
-  /* Algorithm node styles */
+
+  /* ── Teaching callouts (residency-course pedagogy) ─────────────────────── */
+  .callout        { @apply rounded-2xl border p-4 text-sm leading-relaxed; }
+  .callout-trial  { @apply callout bg-primary-50/70 border-primary-200 text-ink-soft; }
+  .callout-pearl  { @apply callout bg-gold-50 border-gold-200 text-ink-soft; }
+  .callout-pitfall{ @apply callout bg-cardinal-50 border-cardinal-100 text-ink-soft; }
+  .callout-key    { @apply callout bg-white border-l-4 border-l-primary-600 border-[#efe9f3] text-ink-soft; }
+
+  /* ── Algorithm node styles ─────────────────────────────────────────────── */
   .algo-step      { @apply flex gap-3 p-3.5 bg-primary-50 border border-primary-200 rounded-xl; }
-  .algo-decision  { @apply flex gap-3 p-3.5 bg-amber-50 border border-amber-300 rounded-xl; }
+  .algo-decision  { @apply flex gap-3 p-3.5 bg-gold-50 border border-gold-300 rounded-xl; }
   .algo-action    { @apply flex gap-3 p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl; }
-  .algo-warning   { @apply flex gap-3 p-3.5 bg-red-50 border border-red-200 rounded-xl; }
-  /* Quiz answer buttons */
-  .quiz-option    { @apply w-full text-left p-3.5 rounded-xl border-2 border-gray-200 text-sm text-gray-800 hover:border-primary-300 hover:bg-primary-50 transition-all; }
-  .quiz-correct   { @apply border-emerald-500 bg-emerald-50 text-emerald-900; }
-  .quiz-wrong     { @apply border-red-400 bg-red-50 text-red-900; }
-  .quiz-neutral   { @apply border-gray-200 bg-gray-50 text-gray-500; }
-  /* Tags */
-  .tag-metastatic { @apply badge bg-red-100 text-red-800; }
-  .tag-primary    { @apply badge bg-purple-100 text-purple-800; }
-  .tag-borderline { @apply badge bg-yellow-100 text-yellow-800; }
-  .tag-standard   { @apply badge bg-emerald-100 text-emerald-800; }
-  .tag-selected   { @apply badge bg-blue-100 text-blue-800; }
-  .tag-investigational { @apply badge bg-orange-100 text-orange-800; }
-  .tag-contraindicated { @apply badge bg-gray-100 text-gray-600; }
-  /* Scrollbar utility */
-  .badge-gray { @apply bg-gray-100 text-gray-600; }
-  /* Quiz focus state */
-  .quiz-option:focus-visible {
-    @apply outline-none ring-2 ring-primary-400 ring-offset-1;
+  .algo-warning   { @apply flex gap-3 p-3.5 bg-cardinal-50 border border-cardinal-100 rounded-xl; }
+  .algo-progress-bar  { @apply w-full bg-primary-100 rounded-full h-1.5 overflow-hidden; }
+  .algo-progress-fill { @apply bg-gold-sheen h-1.5 rounded-full transition-all duration-500; }
+
+  /* ── Quiz answer buttons ───────────────────────────────────────────────── */
+  .quiz-option {
+    @apply w-full text-left p-3.5 rounded-xl border-2 border-[#e6def0] text-sm text-ink-soft
+           hover:border-primary-300 hover:bg-primary-50 transition-all;
   }
+  .quiz-correct { @apply border-emerald-500 bg-emerald-50 text-emerald-900; }
+  .quiz-wrong   { @apply border-cardinal-400 bg-cardinal-50 text-cardinal-700; }
+  .quiz-neutral { @apply border-gray-200 bg-gray-50 text-gray-500; }
+  .quiz-option:focus-visible { @apply outline-none ring-2 ring-primary-400 ring-offset-1; }
+
+  /* ── Eligibility tags ──────────────────────────────────────────────────── */
+  .tag-metastatic { @apply badge bg-cardinal-100 text-cardinal-700; }
+  .tag-primary    { @apply badge bg-primary-100 text-primary-800; }
+  .tag-borderline { @apply badge bg-gold-100 text-gold-800; }
+  .tag-standard   { @apply badge bg-emerald-100 text-emerald-800; }
+  .tag-selected   { @apply badge bg-primary-100 text-primary-800; }
+  .tag-investigational { @apply badge bg-gold-100 text-gold-800; }
+  .tag-contraindicated { @apply badge bg-gray-100 text-gray-600; }
 }
 
+/* ── Utilities ───────────────────────────────────────────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+.text-balance { text-wrap: balance; }
+
+.shimmer-gold {
+  background: linear-gradient(110deg, #dda92b 8%, #f6e6a8 30%, #dda92b 52%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
 @media print {
   nav, .bottom-nav, .no-print { display: none !important; }
-  .card { break-inside: avoid; border: 1px solid #e5e7eb; }
+  .card { break-inside: avoid; border: 1px solid #e5e7eb; box-shadow: none; }
 }

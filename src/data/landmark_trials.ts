@@ -355,7 +355,7 @@ export const LANDMARK_TRIALS: LandmarkTrial[] = [
     evidence_level: 'IIb',
     study_type: 'phase-III',
     full_citation: 'Koole SN, van Stein RM, Sikorska K, et al. Primary cytoreductive surgery with or without hyperthermic intraperitoneal chemotherapy for advanced ovarian cancer (OVHIPEC-2): a multicentre, open-label, randomised, phase 3 trial. Registration: NCT03772028.',
-    n_patients: null,
+    n_patients: undefined,
   },
   {
     id: 'solo-1',
@@ -413,7 +413,7 @@ export const LANDMARK_TRIALS: LandmarkTrial[] = [
     evidence_level: 'IV',
     study_type: 'registry',
     full_citation: 'Cortés-Guiral D, Hübner M, Alyami M, et al. Primary and metastatic peritoneal surface malignancies. Nat Rev Dis Primers. 2021;7(1):91. [Chicago Consensus referenced therein: Bhatt A, et al. Ann Surg Oncol. 2020;27(5):1561–1578.]',
-    n_patients: null,
+    n_patients: undefined,
   },
   {
     id: 'psogi-mpem-consensus-2022',
@@ -427,7 +427,7 @@ export const LANDMARK_TRIALS: LandmarkTrial[] = [
     evidence_level: 'IV',
     study_type: 'registry',
     full_citation: 'Sugarbaker PH, Turaga KK, Alexander HR Jr, et al. Management of malignant peritoneal mesothelioma using cytoreductive surgery and perioperative chemotherapy (PSOGI consensus). Ann Surg Oncol. 2022;29(5):2785–2801.',
-    n_patients: null,
+    n_patients: undefined,
   },
   {
     id: 'van-driel-ovhipec-longterm',

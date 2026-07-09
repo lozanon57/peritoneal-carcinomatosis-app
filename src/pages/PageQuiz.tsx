@@ -164,15 +164,16 @@ function QuestionCard({
   total: number
 }) {
   if (!question) return null
+  const q = question
 
-  const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(opt => opt in question.options) as ('A' | 'B' | 'C' | 'D' | 'E')[]
+  const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(opt => opt in q.options) as ('A' | 'B' | 'C' | 'D' | 'E')[]
 
   function optionClass(opt: 'A' | 'B' | 'C' | 'D' | 'E') {
     if (!revealed) {
       return selectedAnswer === opt ? 'quiz-option bg-primary-50 border-primary-300 text-primary-800' : 'quiz-option'
     }
-    if (opt === question.correct) return 'quiz-option quiz-correct'
-    if (opt === selectedAnswer && opt !== question.correct) return 'quiz-option quiz-wrong'
+    if (opt === q.correct) return 'quiz-option quiz-correct'
+    if (opt === selectedAnswer && opt !== q.correct) return 'quiz-option quiz-wrong'
     return 'quiz-option quiz-neutral'
   }
 

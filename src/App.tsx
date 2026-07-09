@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
-import { HashRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom'
-import { Home, Search, GitBranch, BookOpen, GraduationCap, Info } from 'lucide-react'
+import { HashRouter, Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Home, Search, GitBranch, BookOpen, GraduationCap, Info, Layers, Languages } from 'lucide-react'
 import { TRANSLATIONS } from './data/i18n'
 import type { Language } from './types'
 import PageHome from './pages/PageHome'
@@ -9,6 +9,7 @@ import PageAlgorithms from './pages/PageAlgorithms'
 import PageTrials from './pages/PageTrials'
 import PageQuiz from './pages/PageQuiz'
 import PageAbout from './pages/PageAbout'
+import PageLearn from './pages/PageLearn'
 
 // ─── i18n context ─────────────────────────────────────────────────────────────
 interface I18nCtx { lang: Language; t: (key: string) => string; toggleLang: () => void }
@@ -28,34 +29,94 @@ function resolve(obj: Record<string, unknown>, path: string): string {
   }, obj) as string ?? path
 }
 
+// ─── Brandmark ────────────────────────────────────────────────────────────────
+function Brandmark({ size = 30 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <rect width="40" height="40" rx="11" fill="url(#bm-grad)" />
+      {/* peritoneal / HIPEC ring motif */}
+      <circle cx="20" cy="20" r="10.5" stroke="#dda92b" strokeWidth="2.2" fill="none" opacity="0.95" />
+      <circle cx="20" cy="20" r="5" stroke="#ffffff" strokeWidth="2" fill="none" opacity="0.9" />
+      <circle cx="20" cy="20" r="1.6" fill="#dda92b" />
+      <defs>
+        <linearGradient id="bm-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#3d0b52" />
+          <stop offset="0.55" stopColor="#6a0f8e" />
+          <stop offset="1" stopColor="#8a1eb0" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
+}
+
+// ─── Top brand header ─────────────────────────────────────────────────────────
+function TopHeader() {
+  const { lang, toggleLang } = useAppI18n()
+  const navigate = useNavigate()
+  return (
+    <header className="sticky top-0 z-40 bg-white/85 backdrop-blur-lg border-b border-[#efe9f3] pt-safe">
+      <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+        <button onClick={() => navigate('/')} className="flex items-center gap-2.5 active:opacity-70 transition-opacity">
+          <Brandmark />
+          <div className="leading-none text-left">
+            <div className="font-display font-bold text-[15px] text-ink tracking-tight">PC Academy</div>
+            <div className="text-[9.5px] font-semibold uppercase tracking-[0.13em] text-primary-700/80">CRS · HIPEC · PIPAC</div>
+          </div>
+        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 text-xs font-semibold text-ink-soft bg-primary-50 px-2.5 py-1.5 rounded-full active:scale-95 transition-transform"
+            aria-label="Toggle language"
+          >
+            <Languages size={13} className="text-primary-700" />
+            {lang === 'en' ? 'EN' : 'ES'}
+          </button>
+          <button
+            onClick={() => navigate('/about')}
+            className="p-2 text-ink-muted hover:text-primary-700 transition-colors"
+            aria-label="About"
+          >
+            <Info size={18} />
+          </button>
+        </div>
+      </div>
+    </header>
+  )
+}
+
 // ─── Bottom nav ───────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { to: '/',           icon: Home,           label: 'nav.home' },
-  { to: '/search',     icon: Search,         label: 'nav.search' },
-  { to: '/algorithms', icon: GitBranch,      label: 'nav.algorithms' },
-  { to: '/trials',     icon: BookOpen,       label: 'nav.trials' },
-  { to: '/quiz',       icon: GraduationCap,  label: 'nav.quiz' },
-  { to: '/about',      icon: Info,           label: 'nav.about' },
+  { to: '/',           icon: Home,          label: 'Home' },
+  { to: '/learn',      icon: Layers,        label: 'Learn' },
+  { to: '/search',     icon: Search,        label: 'Atlas' },
+  { to: '/algorithms', icon: GitBranch,     label: 'Paths' },
+  { to: '/trials',     icon: BookOpen,      label: 'Trials' },
+  { to: '/quiz',       icon: GraduationCap, label: 'Quiz' },
 ]
 
 function BottomNav() {
-  const { t } = useAppI18n()
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 pb-safe">
-      <div className="flex">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-[#efe9f3] pb-safe">
+      <div className="max-w-lg mx-auto flex">
         {NAV_ITEMS.map(item => (
           <NavLink
             key={item.to}
             to={item.to}
             end={item.to === '/'}
             className={({ isActive }) =>
-              `flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
-                isActive ? 'text-primary-700' : 'text-gray-400 hover:text-gray-600'
+              `flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors relative ${
+                isActive ? 'text-primary-700' : 'text-ink-muted hover:text-ink-soft'
               }`
             }
           >
-            <item.icon size={20} strokeWidth={1.75} />
-            <span className="text-[10px] font-medium leading-none">{t(item.label)}</span>
+            {({ isActive }) => (
+              <>
+                {isActive && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-gold-sheen" />}
+                <item.icon size={20} strokeWidth={isActive ? 2.2 : 1.75} />
+                <span className="text-[10px] font-semibold leading-none">{item.label}</span>
+              </>
+            )}
           </NavLink>
         ))}
       </div>
@@ -74,9 +135,11 @@ function AppShell() {
   return (
     <>
       <ScrollTop />
-      <main className="min-h-screen pb-20">
+      <TopHeader />
+      <main className="min-h-screen pb-24">
         <Routes>
           <Route path="/"           element={<PageHome />} />
+          <Route path="/learn"      element={<PageLearn />} />
           <Route path="/search"     element={<PageSearch />} />
           <Route path="/algorithms" element={<PageAlgorithms />} />
           <Route path="/trials"     element={<PageTrials />} />
