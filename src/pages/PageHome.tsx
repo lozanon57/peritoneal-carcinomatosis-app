@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import {
-  Search, GitBranch, BookOpen, GraduationCap, ChevronRight, Zap,
+  Search, Stethoscope, BookOpen, GraduationCap, ChevronRight, Zap,
   Sparkles, Layers, ArrowRight, Clock, Activity,
 } from 'lucide-react'
 import { useQuiz } from '../hooks/useQuiz'
@@ -154,9 +154,9 @@ function CurriculumBanner() {
 
 // ── Quick access ──────────────────────────────────────────────────────────────
 const QUICK_LINKS = [
-  { to: '/search',     Icon: Search,    label: 'Disease Atlas',   sub: `${PC_DISEASES.length} entities` },
-  { to: '/algorithms', Icon: GitBranch, label: 'Decision Paths',  sub: 'Clinical algorithms' },
-  { to: '/trials',     Icon: BookOpen,  label: 'Landmark Trials', sub: `${LANDMARK_TRIALS.length} studies` },
+  { to: '/search',     Icon: Search,     label: 'Disease Atlas',   sub: `${PC_DISEASES.length} entities` },
+  { to: '/cases',      Icon: Stethoscope, label: 'Case Simulator', sub: 'Decision pathways' },
+  { to: '/trials',     Icon: BookOpen,   label: 'Landmark Trials', sub: `${LANDMARK_TRIALS.length} studies` },
   { to: '/quiz',       Icon: GraduationCap, label: 'E-Learning Quiz', sub: `${QUIZ_QUESTIONS.length} questions` },
 ]
 

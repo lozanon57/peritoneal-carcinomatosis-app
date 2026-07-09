@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ChevronRight, X, Search } from 'lucide-react'
+import { ChevronRight, X, Search, BookText } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import type { LandmarkTrial } from '../types'
 
@@ -105,6 +106,7 @@ function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => vo
 }
 
 export default function PageTrials() {
+  const navigate = useNavigate()
   const [filter, setFilter] = useState<HistFilter>('all')
   const [selected, setSelected] = useState<LandmarkTrial | null>(null)
   const [search, setSearch] = useState('')
@@ -124,9 +126,17 @@ export default function PageTrials() {
   return (
     <>
       <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4">
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">Landmark Trials</h1>
-          <p className="text-xs text-gray-400">{displayed.length} trials shown</p>
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Landmark Trials</h1>
+            <p className="text-xs text-gray-400">{displayed.length} trials shown</p>
+          </div>
+          <button
+            onClick={() => navigate('/library')}
+            className="mt-1 flex items-center gap-1.5 bg-primary-50 text-primary-800 font-semibold px-3 py-2 rounded-xl text-xs active:scale-95 transition-transform whitespace-nowrap"
+          >
+            <BookText size={14} /> Library
+          </button>
         </div>
 
         <div className="relative">

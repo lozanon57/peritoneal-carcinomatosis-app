@@ -1,4 +1,9 @@
 import type { LearnChapter } from '../types/learn'
+import { TECHNIQUE_CHAPTERS } from './learn/technique_regional_periop'
+import { DISEASE_CHAPTERS } from './learn/disease_deep'
+import { EVIDENCE_CHAPTERS } from './learn/evidence_trials'
+import { ACADEMIC_RESEARCH_CHAPTERS } from './learn/academic_research'
+import { ACADEMIC_WRITING_CHAPTERS } from './learn/academic_writing'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LEARN CURRICULUM — Peritoneal Surface Oncology
@@ -7,7 +12,7 @@ import type { LearnChapter } from '../types/learn'
 //          ESMO 2023–2024 · JPGA (Japanese Gastric Cancer) Guidelines
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const LEARN_CHAPTERS: LearnChapter[] = [
+const FOUNDATION_CHAPTERS: LearnChapter[] = [
   // ── CHAPTER 01 ────────────────────────────────────────────────────────────
   {
     id: 'ch1-foundations',
@@ -1053,4 +1058,16 @@ export const LEARN_CHAPTERS: LearnChapter[] = [
       },
     ],
   },
+]
+
+// ── Aggregated curriculum ─────────────────────────────────────────────────────
+// Foundations (01–06) + Technique/Regional/Perioperative (07–16) +
+// Disease-Specific (17–26) + Evidence & Trials (27–30) + Academic Surgery (31–45)
+export const LEARN_CHAPTERS: LearnChapter[] = [
+  ...FOUNDATION_CHAPTERS.map((c): LearnChapter => ({ track: 'Foundations', ...c })),
+  ...TECHNIQUE_CHAPTERS,
+  ...DISEASE_CHAPTERS,
+  ...EVIDENCE_CHAPTERS,
+  ...ACADEMIC_RESEARCH_CHAPTERS,
+  ...ACADEMIC_WRITING_CHAPTERS,
 ]

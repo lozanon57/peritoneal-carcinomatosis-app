@@ -29,6 +29,15 @@ export interface LearnSection {
   blocks: LearnBlock[]
 }
 
+export type LearnTrack =
+  | 'Foundations'
+  | 'Disease-Specific'
+  | 'Surgical Technique'
+  | 'Regional Therapy'
+  | 'Perioperative Care'
+  | 'Evidence & Trials'
+  | 'Academic Surgery'
+
 export interface LearnChapter {
   id: string
   number: string // e.g. "01"
@@ -37,6 +46,7 @@ export interface LearnChapter {
   icon: string // lucide icon name, e.g. 'Microscope'
   reading_time_min: number
   level: 'Foundation' | 'Core' | 'Advanced'
+  track?: LearnTrack // thematic grouping for the sidebar table of contents
   guidelines_version: string
   learning_objectives: string[]
   key_references: string[]

@@ -1,15 +1,16 @@
 import React, { createContext, useContext, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Home, Search, GitBranch, BookOpen, GraduationCap, Info, Layers, Languages } from 'lucide-react'
+import { Home, Search, Stethoscope, BookOpen, GraduationCap, Info, Layers, Languages } from 'lucide-react'
 import { TRANSLATIONS } from './data/i18n'
 import type { Language } from './types'
 import PageHome from './pages/PageHome'
 import PageSearch from './pages/PageSearch'
-import PageAlgorithms from './pages/PageAlgorithms'
+import PageCases from './pages/PageCases'
 import PageTrials from './pages/PageTrials'
 import PageQuiz from './pages/PageQuiz'
 import PageAbout from './pages/PageAbout'
 import PageLearn from './pages/PageLearn'
+import PageLibrary from './pages/PageLibrary'
 
 // ─── i18n context ─────────────────────────────────────────────────────────────
 interface I18nCtx { lang: Language; t: (key: string) => string; toggleLang: () => void }
@@ -89,8 +90,8 @@ function TopHeader() {
 const NAV_ITEMS = [
   { to: '/',           icon: Home,          label: 'Home' },
   { to: '/learn',      icon: Layers,        label: 'Learn' },
+  { to: '/cases',      icon: Stethoscope,   label: 'Cases' },
   { to: '/search',     icon: Search,        label: 'Atlas' },
-  { to: '/algorithms', icon: GitBranch,     label: 'Paths' },
   { to: '/trials',     icon: BookOpen,      label: 'Trials' },
   { to: '/quiz',       icon: GraduationCap, label: 'Quiz' },
 ]
@@ -140,10 +141,11 @@ function AppShell() {
         <Routes>
           <Route path="/"           element={<PageHome />} />
           <Route path="/learn"      element={<PageLearn />} />
+          <Route path="/cases"      element={<PageCases />} />
           <Route path="/search"     element={<PageSearch />} />
-          <Route path="/algorithms" element={<PageAlgorithms />} />
           <Route path="/trials"     element={<PageTrials />} />
           <Route path="/quiz"       element={<PageQuiz />} />
+          <Route path="/library"    element={<PageLibrary />} />
           <Route path="/about"      element={<PageAbout />} />
         </Routes>
       </main>

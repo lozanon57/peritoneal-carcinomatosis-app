@@ -15,20 +15,54 @@ import {
   Wind,
   BookMarked,
   Target,
+  List,
+  X,
+  Microscope,
+  Stethoscope,
+  Activity,
+  Dna,
+  Syringe,
+  HeartPulse,
+  ClipboardList,
+  FileText,
+  PenLine,
+  Presentation,
+  BarChart3,
+  Sigma,
+  BookText,
+  GraduationCap,
+  FlaskRound,
+  Beaker,
+  Pill,
+  Droplet,
+  Scale,
+  Users,
+  Search,
+  Award,
   type LucideIcon,
 } from 'lucide-react'
 import { LEARN_CHAPTERS } from '../data/learn_content'
-import type { LearnBlock, LearnChapter, LearnSection } from '../types/learn'
+import type { LearnBlock, LearnChapter, LearnSection, LearnTrack } from '../types/learn'
 
 // ── Icon resolution ──────────────────────────────────────────────────────────
 const ICON_MAP: Record<string, LucideIcon> = {
-  Layers,
-  ClipboardCheck,
-  Scissors,
-  Thermometer,
-  Wind,
-  BookMarked,
+  Layers, ClipboardCheck, Scissors, Thermometer, Wind, BookMarked, BookOpen,
+  Microscope, Stethoscope, Activity, Dna, Syringe, HeartPulse, ClipboardList,
+  FileText, PenLine, Presentation, BarChart3, Sigma, BookText, GraduationCap,
+  FlaskConical, FlaskRound, Beaker, Pill, Droplet, Scale, Users, Search, Award,
+  Target, Gem,
 }
+
+// ── Track order + accent for the sidebar ──────────────────────────────────────
+const TRACK_ORDER: LearnTrack[] = [
+  'Foundations',
+  'Disease-Specific',
+  'Surgical Technique',
+  'Regional Therapy',
+  'Perioperative Care',
+  'Evidence & Trials',
+  'Academic Surgery',
+]
 
 function chapterIcon(name: string): LucideIcon {
   return ICON_MAP[name] ?? BookOpen
@@ -168,7 +202,7 @@ function BlockView({ block }: { block: LearnBlock }) {
 // ── Section renderer ──────────────────────────────────────────────────────────
 function SectionView({ section }: { section: LearnSection }) {
   return (
-    <section className="space-y-4">
+    <section id={`sec-${section.id}`} className="space-y-4 scroll-mt-24">
       <div>
         <h2 className="section-title">{section.title}</h2>
         <div className="rule-gold mt-1.5" />
@@ -186,11 +220,13 @@ function ChapterReader({
   onBack,
   onNext,
   hasNext,
+  onOpenContents,
 }: {
   chapter: LearnChapter
   onBack: () => void
   onNext: () => void
   hasNext: boolean
+  onOpenContents: () => void
 }) {
   const Icon = chapterIcon(chapter.icon)
 
@@ -208,6 +244,13 @@ function ChapterReader({
             <Clock size={12} />
             {chapter.reading_time_min} min
           </span>
+          <button
+            onClick={onOpenContents}
+            className="ml-1 p-1.5 rounded-lg text-primary-700 bg-primary-50 active:scale-95 transition-transform"
+            aria-label="Table of contents"
+          >
+            <List size={16} />
+          </button>
         </div>
       </div>
 
@@ -305,45 +348,185 @@ function ChapterCard({ chapter, onOpen }: { chapter: LearnChapter; onOpen: () =>
   )
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
-export default function PageLearn() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+// ── Track grouping ────────────────────────────────────────────────────────────
+function tracksGrouped(): { track: LearnTrack; items: { chapter: LearnChapter; index: number }[] }[] {
+  const groups = new Map<LearnTrack, { chapter: LearnChapter; index: number }[]>()
+  LEARN_CHAPTERS.forEach((chapter, index) => {
+    const t = (chapter.track ?? 'Foundations') as LearnTrack
+    if (!groups.has(t)) groups.set(t, [])
+    groups.get(t)!.push({ chapter, index })
+  })
+  return TRACK_ORDER.filter(t => groups.has(t)).map(t => ({ track: t, items: groups.get(t)! }))
+}
 
-  const totalChapters = LEARN_CHAPTERS.length
-  const totalMinutes = LEARN_CHAPTERS.reduce((sum, c) => sum + c.reading_time_min, 0)
+// ── Sidebar (table of contents) ───────────────────────────────────────────────
+function Sidebar({
+  open, onClose, activeIndex, onJumpChapter,
+}: {
+  open: boolean
+  onClose: () => void
+  activeIndex: number | null
+  onJumpChapter: (index: number) => void
+}) {
+  const groups = tracksGrouped()
+  const activeChapter = activeIndex !== null ? LEARN_CHAPTERS[activeIndex] : null
 
-  if (activeIndex !== null) {
-    const chapter = LEARN_CHAPTERS[activeIndex]
-    const hasNext = activeIndex < totalChapters - 1
-    return (
-      <ChapterReader
-        chapter={chapter}
-        onBack={() => setActiveIndex(null)}
-        onNext={() => setActiveIndex(activeIndex + 1)}
-        hasNext={hasNext}
-      />
-    )
+  function jumpToSection(sectionId: string) {
+    onClose()
+    setTimeout(() => {
+      document.getElementById(`sec-${sectionId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 pb-16">
-      <header className="pt-6 pb-4">
-        <div className="eyebrow text-primary-700">CURRICULUM</div>
-        <h1 className="font-serif text-3xl font-bold text-ink mt-1">Learn</h1>
-        <p className="text-[15px] text-ink-soft leading-relaxed mt-1">
-          Structured peritoneal surface oncology — from foundations to mastery
-        </p>
-        <div className="rule-gold mt-3" />
-        <p className="text-xs text-ink-muted mt-3">
-          {totalChapters} chapters · {totalMinutes} min of reading
-        </p>
-      </header>
+    <div className={`fixed inset-0 z-[60] ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
+      <div
+        onClick={onClose}
+        className={`absolute inset-0 bg-ink/40 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
+      />
+      <aside
+        className={`absolute left-0 top-0 bottom-0 w-[86%] max-w-sm bg-white shadow-hero flex flex-col transition-transform duration-300 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="flex items-center justify-between px-4 py-3.5 border-b border-[#efe9f3] pt-safe">
+          <div>
+            <div className="eyebrow text-primary-700">Curriculum</div>
+            <div className="font-serif font-bold text-ink text-lg leading-none mt-0.5">Contents</div>
+          </div>
+          <button onClick={onClose} className="p-2 text-ink-muted" aria-label="Close"><X size={20} /></button>
+        </div>
 
-      <div className="space-y-3 animate-slide-up">
-        {LEARN_CHAPTERS.map((chapter, i) => (
-          <ChapterCard key={chapter.id} chapter={chapter} onOpen={() => setActiveIndex(i)} />
-        ))}
-      </div>
+        <div className="flex-1 overflow-y-auto px-3 py-3 no-scrollbar">
+          {activeChapter && (
+            <div className="mb-4 rounded-xl bg-primary-50/60 p-2.5">
+              <div className="eyebrow text-primary-700 px-1 mb-1.5">In this chapter</div>
+              <ul className="space-y-0.5">
+                {activeChapter.sections.map(s => (
+                  <li key={s.id}>
+                    <button
+                      onClick={() => jumpToSection(s.id)}
+                      className="w-full text-left text-[13px] text-ink-soft px-2 py-1.5 rounded-lg hover:bg-white active:bg-white transition-colors leading-snug"
+                    >
+                      {s.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {groups.map(({ track, items }) => (
+            <div key={track} className="mb-3">
+              <div className="eyebrow text-ink-muted px-2 mb-1.5">{track}</div>
+              <ul className="space-y-0.5">
+                {items.map(({ chapter, index }) => {
+                  const isActive = index === activeIndex
+                  return (
+                    <li key={chapter.id}>
+                      <button
+                        onClick={() => onJumpChapter(index)}
+                        className={`w-full text-left flex items-start gap-2.5 px-2 py-2 rounded-lg transition-colors ${
+                          isActive ? 'bg-primary-700' : 'hover:bg-primary-50'
+                        }`}
+                      >
+                        <span className={`font-mono text-[11px] font-bold mt-0.5 ${isActive ? 'text-gold-300' : 'text-primary-700'}`}>
+                          {chapter.number}
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block text-[13.5px] font-semibold leading-snug ${isActive ? 'text-white' : 'text-ink'}`}>
+                            {chapter.title}
+                          </span>
+                          <span className={`block text-[11px] mt-0.5 ${isActive ? 'text-white/70' : 'text-ink-muted'}`}>
+                            {chapter.reading_time_min} min · {chapter.sections.length} sections
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </aside>
     </div>
+  )
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+export default function PageLearn() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const totalChapters = LEARN_CHAPTERS.length
+  const totalMinutes = LEARN_CHAPTERS.reduce((sum, c) => sum + c.reading_time_min, 0)
+  const hours = Math.floor(totalMinutes / 60)
+  const groups = tracksGrouped()
+
+  function jumpChapter(index: number) {
+    setActiveIndex(index)
+    setSidebarOpen(false)
+    window.scrollTo(0, 0)
+  }
+
+  return (
+    <>
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} activeIndex={activeIndex} onJumpChapter={jumpChapter} />
+
+      {activeIndex !== null ? (
+        <ChapterReader
+          chapter={LEARN_CHAPTERS[activeIndex]}
+          onBack={() => setActiveIndex(null)}
+          onNext={() => { setActiveIndex(activeIndex + 1); window.scrollTo(0, 0) }}
+          hasNext={activeIndex < totalChapters - 1}
+          onOpenContents={() => setSidebarOpen(true)}
+        />
+      ) : (
+        <div className="max-w-lg mx-auto px-4 pb-16">
+          <header className="pt-6 pb-4">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <div className="eyebrow text-primary-700">CURRICULUM</div>
+                <h1 className="font-serif text-3xl font-bold text-ink mt-1">Learn</h1>
+              </div>
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="mt-1 flex items-center gap-1.5 bg-primary-50 text-primary-800 font-semibold px-3 py-2 rounded-xl text-xs active:scale-95 transition-transform"
+              >
+                <List size={15} /> Contents
+              </button>
+            </div>
+            <p className="text-[15px] text-ink-soft leading-relaxed mt-1.5">
+              The most detailed peritoneal surface oncology curriculum — foundations, disease mastery,
+              operative technique, evidence, and academic surgery.
+            </p>
+            <div className="rule-gold mt-3" />
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted mt-3">
+              <span className="font-semibold text-ink-soft">{totalChapters} chapters</span>
+              <span>{hours} h {totalMinutes % 60} min of reading</span>
+              <span>{groups.length} tracks</span>
+            </div>
+          </header>
+
+          <div className="space-y-7 animate-slide-up">
+            {groups.map(({ track, items }) => (
+              <div key={track}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="section-title text-base">{track}</span>
+                  <span className="rule-gold" />
+                  <span className="text-[11px] text-ink-muted ml-auto whitespace-nowrap">
+                    {items.length} ch · {items.reduce((s, i) => s + i.chapter.reading_time_min, 0)} min
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  {items.map(({ chapter, index }) => (
+                    <ChapterCard key={chapter.id} chapter={chapter} onOpen={() => jumpChapter(index)} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
