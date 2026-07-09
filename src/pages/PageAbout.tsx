@@ -3,6 +3,7 @@ import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
 import { LEARN_CHAPTERS } from '../data/learn_content'
+import { useAppI18n } from '../App'
 import { CreatorPhoto, InstitutionLogo } from '../components/Institutions'
 
 function FacultyCard({
@@ -35,18 +36,19 @@ function FacultyCard({
 }
 
 export default function PageAbout() {
+  const { t } = useAppI18n()
   return (
     <div className="px-4 pt-6 pb-8 max-w-lg mx-auto space-y-6 animate-fade-in">
       {/* Header */}
       <div>
-        <div className="eyebrow mb-1"><Award size={13} /> The Academy</div>
-        <h1 className="font-serif text-2xl font-bold text-ink">About & Faculty</h1>
+        <div className="eyebrow mb-1"><Award size={13} /> {t('about.the_academy')}</div>
+        <h1 className="font-serif text-2xl font-bold text-ink">{t('about.page_title')}</h1>
         <div className="rule-gold mt-2" />
       </div>
 
       {/* Ownership statement */}
       <div className="relative overflow-hidden rounded-2xl bg-tsinghua p-5 text-white shadow-lift">
-        <div className="eyebrow !text-gold-300 mb-2"><Copyright size={12} /> Ownership</div>
+        <div className="eyebrow !text-gold-300 mb-2"><Copyright size={12} /> {t('about.ownership')}</div>
         <p className="text-[15px] leading-[1.7] text-white/90">
           This application is the intellectual property of <strong className="text-white">Prof. Yan Li</strong> and
           {' '}<strong className="text-white">Dr. Pablo Lozano Lominchar</strong>, developed under
@@ -88,14 +90,14 @@ export default function PageAbout() {
           <a href="https://orcid.org/0000-0002-5413-8449" target="_blank" rel="noopener noreferrer"
             className="flex-1 btn-secondary text-sm"><Link2 size={14} /> ORCID</a>
           <a href="mailto:lozanon57@hotmail.com"
-            className="flex-1 btn-secondary text-sm"><Mail size={14} /> Contact</a>
+            className="flex-1 btn-secondary text-sm"><Mail size={14} /> {t('about.contact')}</a>
         </div>
       </div>
 
       {/* Institutions */}
       <div className="card p-5">
         <h2 className="section-title text-base mb-3.5 flex items-center gap-2">
-          <Globe size={16} className="text-primary-700" /> Institutions
+          <Globe size={16} className="text-primary-700" /> {t('about.institutions')}
         </h2>
         <div className="flex items-center justify-center gap-5 py-2 mb-3 rounded-xl bg-primary-50/50">
           <InstitutionLogo which="tsinghua" theme="light" className="h-10 max-w-[44%]" />
@@ -120,7 +122,7 @@ export default function PageAbout() {
       <div className="callout-key">
         <div className="flex items-center gap-2 mb-2">
           <GraduationCap size={16} className="text-primary-700" />
-          <span className="section-title text-base">Teaching Method</span>
+          <span className="section-title text-base">{t('about.teaching_method')}</span>
         </div>
         <p className="text-ink-soft">
           A structured curriculum with explicit learning objectives, landmark-trial and clinical-pearl callouts,
@@ -132,7 +134,7 @@ export default function PageAbout() {
       <div className="card p-5 border-l-4 border-l-primary-600">
         <div className="flex items-center gap-2 mb-3.5">
           <ShieldCheck size={16} className="text-primary-700" />
-          <h2 className="section-title text-base">Content Validation</h2>
+          <h2 className="section-title text-base">{t('about.content_validation')}</h2>
         </div>
         <div className="space-y-3.5 text-[15px] leading-[1.6] text-ink-soft">
           {[
@@ -164,7 +166,7 @@ export default function PageAbout() {
 
       {/* Version */}
       <div className="card p-5">
-        <h3 className="section-title text-base mb-3.5">Version & Changelog</h3>
+        <h3 className="section-title text-base mb-3.5">{t('about.version_changelog')}</h3>
         <div className="space-y-3.5">
           <div className="flex gap-3">
             <span className="text-xs font-mono font-semibold bg-primary-700 text-white px-2 py-0.5 rounded h-fit">v2.0</span>
@@ -182,9 +184,7 @@ export default function PageAbout() {
       {/* Disclaimer */}
       <div className="bg-primary-50/60 rounded-2xl p-5">
         <p className="text-[13px] text-ink-muted text-center leading-[1.7]">
-          For <strong className="text-ink-soft">educational purposes only</strong>. Does not constitute medical advice
-          and must not replace clinical judgment, individual patient assessment or institutional guidelines. Always
-          consult current guidelines and discuss cases in a multidisciplinary team.
+          {t('about.disclaimer_footer')}
         </p>
       </div>
 

@@ -5,21 +5,22 @@ import {
   Flame, X, BookMarked, FileText,
 } from 'lucide-react'
 import { useQuiz, TIMED_SECONDS } from '../hooks/useQuiz'
+import { useAppI18n } from '../App'
 import type { QuizMode, QuizQuestion, QuizStats, QuizTopic } from '../types'
 
 type Choice = 'A' | 'B' | 'C' | 'D' | 'E'
 
-const TOPICS: { id: QuizTopic; label: string }[] = [
-  { id: 'patient_selection', label: 'Patient Selection' },
-  { id: 'hipec_protocols', label: 'HIPEC Protocols' },
-  { id: 'pci_scoring', label: 'PCI Scoring' },
-  { id: 'completeness', label: 'Completeness (CC)' },
-  { id: 'landmark_trials', label: 'Landmark Trials' },
-  { id: 'molecular_markers', label: 'Molecular Markers' },
-  { id: 'pipac', label: 'PIPAC' },
-  { id: 'morbidity', label: 'Morbidity' },
-  { id: 'perioperative', label: 'Perioperative' },
-  { id: 'histology_specific', label: 'Histology-Specific' },
+const TOPICS: { id: QuizTopic; key: string }[] = [
+  { id: 'patient_selection', key: 'quiz.topic_patient_selection' },
+  { id: 'hipec_protocols', key: 'quiz.topic_hipec_protocols' },
+  { id: 'pci_scoring', key: 'quiz.topic_pci_scoring' },
+  { id: 'completeness', key: 'quiz.topic_completeness' },
+  { id: 'landmark_trials', key: 'quiz.topic_landmark_trials' },
+  { id: 'molecular_markers', key: 'quiz.topic_molecular_markers' },
+  { id: 'pipac', key: 'quiz.topic_pipac' },
+  { id: 'morbidity', key: 'quiz.topic_morbidity' },
+  { id: 'perioperative', key: 'quiz.topic_perioperative' },
+  { id: 'histology_specific', key: 'quiz.topic_histology_specific' },
 ]
 
 const COUNT_OPTIONS = [5, 10, 20] as const
@@ -27,9 +28,9 @@ const COUNT_OPTIONS = [5, 10, 20] as const
 // ─── Difficulty helper ─────────────────────────────────────────────────────────
 
 function difficultyMeta(d: number) {
-  if (d <= 1) return { label: 'Easy', cls: 'badge-green' }
-  if (d === 2) return { label: 'Medium', cls: 'badge-gold' }
-  return { label: 'Hard', cls: 'badge-red' }
+  if (d <= 1) return { labelKey: 'quiz.diff_easy', cls: 'badge-green' }
+  if (d === 2) return { labelKey: 'quiz.diff_medium', cls: 'badge-gold' }
+  return { labelKey: 'quiz.diff_hard', cls: 'badge-red' }
 }
 
 function fmtTime(secs: number): string {
@@ -51,6 +52,7 @@ function Configurator({
   onStart: (mode: QuizMode, opts?: { topic?: QuizTopic; count?: number }) => void
   onReset: () => void
 }) {
+  const { t } = useAppI18n()
   const [count, setCount] = useState<number>(10)
   const [topicOpen, setTopicOpen] = useState(false)
 
@@ -61,25 +63,25 @@ function Configurator({
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <div className="eyebrow mb-1">Board Review</div>
-        <h1 className="section-title text-2xl">E-Learning Quiz</h1>
+        <div className="eyebrow mb-1">{t('quiz.board_review')}</div>
+        <h1 className="section-title text-2xl">{t('quiz.title')}</h1>
         <div className="rule-gold mt-2" />
-        <p className="text-xs text-ink-muted mt-2">CRS+HIPEC · PIPAC · Peritoneal Surface Oncology</p>
+        <p className="text-xs text-ink-muted mt-2">{t('quiz.tagline')}</p>
       </div>
 
       {/* Overall stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="card p-3 text-center">
           <div className="text-2xl font-bold text-primary-700 font-serif">{stats.totalAnswered}</div>
-          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Answered</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">{t('quiz.stat_answered')}</div>
         </div>
         <div className="card p-3 text-center">
           <div className="text-2xl font-bold text-emerald-600 font-serif">{accuracy}%</div>
-          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Accuracy</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">{t('quiz.stat_accuracy')}</div>
         </div>
         <div className="card p-3 text-center">
           <div className="text-2xl font-bold text-gold-600 font-serif">{stats.bestStreak}</div>
-          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Best streak</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">{t('quiz.stat_best_streak')}</div>
         </div>
       </div>
 
@@ -87,13 +89,13 @@ function Configurator({
         <div className="flex items-center justify-center gap-2 text-sm">
           <Flame size={16} className="text-orange-500" />
           <span className="font-semibold text-ink-soft">{stats.streak}</span>
-          <span className="text-ink-muted">current streak</span>
+          <span className="text-ink-muted">{t('quiz.current_streak')}</span>
         </div>
       )}
 
       {/* Question count */}
       <div>
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted mb-2">Questions per session</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted mb-2">{t('quiz.questions_per_session')}</h2>
         <div className="flex gap-2">
           {COUNT_OPTIONS.map(n => (
             <button
@@ -109,27 +111,27 @@ function Configurator({
 
       {/* Modes */}
       <div className="space-y-2.5">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted">Choose a mode</h2>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted">{t('quiz.choose_mode')}</h2>
 
         <ModeCard
           icon={<Zap size={18} className="text-primary-700" />}
           tint="bg-primary-100"
-          title="Practice"
-          subtitle={`${count} questions · immediate feedback`}
+          title={t('quiz.mode_practice')}
+          subtitle={`${count} ${t('quiz.questions_word')} · ${t('quiz.immediate_feedback')}`}
           onClick={() => onStart('practice', { count })}
         />
         <ModeCard
           icon={<Timer size={18} className="text-cardinal-600" />}
           tint="bg-cardinal-100"
-          title="Timed"
-          subtitle={`${count} questions · ${TIMED_SECONDS}s each · board pressure`}
+          title={t('quiz.mode_timed')}
+          subtitle={`${count} ${t('quiz.questions_word')} · ${TIMED_SECONDS}s ${t('quiz.each')} · ${t('quiz.board_pressure')}`}
           onClick={() => onStart('timed', { count })}
         />
         <ModeCard
           icon={<ClipboardList size={18} className="text-gold-700" />}
           tint="bg-gold-100"
-          title="Exam"
-          subtitle="20 questions · no feedback until the end"
+          title={t('quiz.mode_exam')}
+          subtitle={t('quiz.mode_exam_sub')}
           onClick={() => onStart('exam', { count: 20 })}
         />
 
@@ -142,20 +144,20 @@ function Configurator({
             <BookOpen size={18} className="text-primary-700" />
           </div>
           <div className="min-w-0">
-            <p className="font-semibold text-ink text-[15px]">By Topic</p>
-            <p className="text-xs text-ink-muted">Focus one of 10 domains</p>
+            <p className="font-semibold text-ink text-[15px]">{t('quiz.mode_by_topic')}</p>
+            <p className="text-xs text-ink-muted">{t('quiz.mode_by_topic_sub')}</p>
           </div>
           <ChevronRight size={16} className={`ml-auto text-ink-muted transition-transform ${topicOpen ? 'rotate-90' : ''}`} />
         </button>
         {topicOpen && (
           <div className="grid grid-cols-2 gap-1.5 pl-1">
-            {TOPICS.map(t => (
+            {TOPICS.map(topic => (
               <button
-                key={t.id}
-                onClick={() => onStart('topic', { topic: t.id, count })}
+                key={topic.id}
+                onClick={() => onStart('topic', { topic: topic.id, count })}
                 className="text-left text-[13px] px-3 py-2.5 rounded-xl bg-primary-50/60 text-primary-800 font-medium hover:bg-primary-100 transition-colors"
               >
-                {t.label}
+                {t(topic.key)}
               </button>
             ))}
           </div>
@@ -165,8 +167,8 @@ function Configurator({
         <ModeCard
           icon={<AlertTriangle size={18} className="text-cardinal-600" />}
           tint="bg-cardinal-100"
-          title="Weak Areas"
-          subtitle={weakCount > 0 ? `${weakCount} questions in your review pool` : 'No questions flagged yet'}
+          title={t('quiz.mode_weak')}
+          subtitle={weakCount > 0 ? `${weakCount} ${t('quiz.questions_word')} ${t('quiz.in_review_pool')}` : t('quiz.mode_weak_none')}
           disabled={weakCount === 0}
           onClick={() => onStart('weak', { count: Math.max(count, weakCount) })}
         />
@@ -175,15 +177,15 @@ function Configurator({
         <ModeCard
           icon={<BookMarked size={18} className="text-gold-700" />}
           tint="bg-gold-100"
-          title="Bookmarked"
-          subtitle={bookmarkCount > 0 ? `${bookmarkCount} starred questions` : 'Star questions to review them here'}
+          title={t('quiz.mode_bookmarked')}
+          subtitle={bookmarkCount > 0 ? `${bookmarkCount} ${t('quiz.starred_questions')}` : t('quiz.mode_bookmarked_none')}
           disabled={bookmarkCount === 0}
           onClick={() => onStart('bookmark', { count: Math.max(count, bookmarkCount) })}
         />
       </div>
 
       <button onClick={onReset} className="text-xs text-ink-muted underline w-full text-center pt-2">
-        Reset all progress
+        {t('quiz.reset_progress')}
       </button>
     </div>
   )
@@ -244,6 +246,7 @@ function QuestionRunner({
   onToggleBookmark: () => void
   onNext: () => void
 }) {
+  const { t } = useAppI18n()
   const isExam = mode === 'exam'
   const isTimed = mode === 'timed'
   const answered = selected !== undefined
@@ -308,7 +311,7 @@ function QuestionRunner({
     <div className="space-y-4">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <span className={`badge ${diff.cls}`}>{diff.label}</span>
+        <span className={`badge ${diff.cls}`}>{t(diff.labelKey)}</span>
         <div className="flex items-center gap-2">
           {isTimed && !revealed && (
             <span className={`inline-flex items-center gap-1 text-sm font-semibold tabular-nums ${timeLeft <= 10 ? 'text-cardinal-600' : 'text-ink-soft'}`}>
@@ -328,7 +331,7 @@ function QuestionRunner({
       {/* Progress */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-ink-muted">Question {index + 1} of {total}</span>
+          <span className="text-xs text-ink-muted">{t('quiz.q_label')} {index + 1} {t('quiz.q_of')} {total}</span>
           <span className="badge badge-gray text-[10px]">{question.topic.replace(/_/g, ' ')}</span>
         </div>
         <div className="w-full bg-primary-100 rounded-full h-1.5 overflow-hidden">
@@ -370,10 +373,10 @@ function QuestionRunner({
               : <XCircle size={18} className="text-cardinal-500 flex-shrink-0" />}
             <span className={`font-semibold text-sm ${correct ? 'text-emerald-700' : 'text-cardinal-700'}`}>
               {correct
-                ? 'Correct'
+                ? t('quiz.correct_short')
                 : selected == null
-                  ? `Time's up — Correct answer: ${question.correct}`
-                  : `Incorrect — Correct answer: ${question.correct}`}
+                  ? `${t('quiz.times_up')} ${question.correct}`
+                  : `${t('quiz.incorrect_answer')} ${question.correct}`}
             </span>
           </div>
 
@@ -382,7 +385,7 @@ function QuestionRunner({
             <div className="callout-pearl flex gap-2.5">
               <Lightbulb size={18} className="text-gold-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-gold-700 mb-1">Teaching point</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-gold-700 mb-1">{t('quiz.teaching_point')}</p>
                 <p className="text-[15px] leading-relaxed">{question.pearl}</p>
               </div>
             </div>
@@ -390,7 +393,7 @@ function QuestionRunner({
 
           {/* Explanation */}
           <div className="callout-key">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary-700 mb-1">Explanation</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary-700 mb-1">{t('quiz.explanation_h')}</p>
             <p className="text-[15px] leading-relaxed">{question.explanation}</p>
           </div>
 
@@ -410,13 +413,13 @@ function QuestionRunner({
 
       {/* Exam: subtle recorded hint */}
       {isExam && answered && !revealed && (
-        <p className="text-xs text-ink-muted text-center">Answer recorded — feedback shown at the end.</p>
+        <p className="text-xs text-ink-muted text-center">{t('quiz.answer_recorded')}</p>
       )}
 
       {/* Next / Finish */}
       {showNext && (
         <button onClick={onNext} className="btn-primary">
-          {isLast ? 'Finish' : 'Next'} <ChevronRight size={16} />
+          {isLast ? t('quiz.finish') : t('quiz.next')} <ChevronRight size={16} />
         </button>
       )}
     </div>
@@ -434,12 +437,13 @@ function ScoreScreen({
   onRestart: () => void
   onReview: () => void
 }) {
+  const { t } = useAppI18n()
   const total = questions.length
   const correct = questions.filter(q => answers[q.id] === q.correct).length
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0
-  const grade = pct >= 80 ? { label: 'Excellent', color: '#059669', text: 'text-emerald-600' } :
-                pct >= 60 ? { label: 'Good', color: '#dda92b', text: 'text-gold-600' } :
-                { label: 'Needs review', color: '#c0392b', text: 'text-cardinal-600' }
+  const grade = pct >= 80 ? { label: t('quiz.grade_excellent'), color: '#059669', text: 'text-emerald-600' } :
+                pct >= 60 ? { label: t('quiz.grade_good'), color: '#dda92b', text: 'text-gold-600' } :
+                { label: t('quiz.grade_needs_review'), color: '#c0392b', text: 'text-cardinal-600' }
   const wrong = total - correct
 
   return (
@@ -468,23 +472,23 @@ function ScoreScreen({
           </div>
         </div>
         <div className={`text-lg font-semibold mt-2 font-serif ${grade.text}`}>{grade.label}</div>
-        <div className="text-sm text-ink-muted mt-0.5">{correct} / {total} correct · {mode} mode</div>
+        <div className="text-sm text-ink-muted mt-0.5">{correct} / {total} {t('quiz.correct_word')} · {mode} {t('quiz.mode')}</div>
       </div>
 
       {wrong > 0 && (
         <div className="callout-key text-left">
           <p className="text-[13px] leading-relaxed text-ink-soft">
-            <span className="font-semibold text-cardinal-600">{wrong}</span> wrong {wrong === 1 ? 'answer' : 'answers'} added to your spaced-repetition pool for targeted review.
+            <span className="font-semibold text-cardinal-600">{wrong}</span> {t('quiz.wrong_pool_suffix')}
           </p>
         </div>
       )}
 
       <div className="space-y-2.5">
         {mode === 'exam' && (
-          <button onClick={onReview} className="btn-secondary w-full">Review answers</button>
+          <button onClick={onReview} className="btn-secondary w-full">{t('quiz.review_answers')}</button>
         )}
         <button onClick={onRestart} className="btn-primary">
-          <RotateCcw size={16} /> New quiz
+          <RotateCcw size={16} /> {t('quiz.new_quiz')}
         </button>
       </div>
     </div>
@@ -500,11 +504,12 @@ function ExamReview({
   answers: Record<string, Choice | null>
   onBack: () => void
 }) {
+  const { t } = useAppI18n()
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="section-title text-xl">Review answers</h1>
-        <button onClick={onBack} className="text-xs text-ink-muted flex items-center gap-1"><X size={14} /> Close</button>
+        <h1 className="section-title text-xl">{t('quiz.review_answers')}</h1>
+        <button onClick={onBack} className="text-xs text-ink-muted flex items-center gap-1"><X size={14} /> {t('common.close')}</button>
       </div>
       <div className="rule-gold" />
       {questions.map((q, i) => {
@@ -516,8 +521,8 @@ function ExamReview({
             <div className="flex items-center gap-2">
               <span className="text-xs text-ink-muted">Q{i + 1}</span>
               {correct
-                ? <span className="badge badge-green text-[10px]">Correct</span>
-                : <span className="badge badge-red text-[10px]">Incorrect</span>}
+                ? <span className="badge badge-green text-[10px]">{t('quiz.correct_badge')}</span>
+                : <span className="badge badge-red text-[10px]">{t('quiz.incorrect_badge')}</span>}
             </div>
             <p className="text-[15px] leading-relaxed text-ink font-serif">{q.stem}</p>
             <div className="space-y-1.5">
@@ -550,7 +555,7 @@ function ExamReview({
           </div>
         )
       })}
-      <button onClick={onBack} className="btn-primary">Back to results</button>
+      <button onClick={onBack} className="btn-primary">{t('quiz.back_to_results')}</button>
     </div>
   )
 }
@@ -564,10 +569,11 @@ export default function PageQuiz() {
     toggleBookmark, isBookmarked, resetStats,
   } = useQuiz()
 
+  const { t } = useAppI18n()
   const [reviewing, setReviewing] = useState(false)
 
   function handleReset() {
-    if (window.confirm('Reset all quiz progress, streaks and bookmarks?')) resetStats()
+    if (window.confirm(t('quiz.reset_confirm'))) resetStats()
   }
 
   // Configurator
@@ -633,9 +639,9 @@ export default function PageQuiz() {
     <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
       <div className="flex items-center justify-between mb-4">
         <button onClick={endSession} className="text-xs text-ink-muted flex items-center gap-1">
-          <X size={14} /> Exit
+          <X size={14} /> {t('quiz.exit')}
         </button>
-        <span className="text-xs text-ink-muted capitalize">{session.mode} mode</span>
+        <span className="text-xs text-ink-muted capitalize">{session.mode} {t('quiz.mode')}</span>
       </div>
 
       <QuestionRunner

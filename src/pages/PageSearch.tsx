@@ -1,34 +1,36 @@
 import { useState } from 'react'
 import { Search, X, ChevronDown, ChevronUp, Layers, FlaskConical, Beaker } from 'lucide-react'
 import { useSearch } from '../hooks/useSearch'
+import { useAppI18n } from '../App'
 import { HIPECProtocolCard } from '../components/HIPECProtocolCard'
 import type { PCDisease } from '../types'
 
-function eligibilityBadge(e: PCDisease['hipec_eligibility']) {
+function eligibilityBadge(e: PCDisease['hipec_eligibility'], t: (k: string) => string) {
   const map: Record<string, string> = {
     standard: 'tag-standard',
     selected: 'tag-selected',
     investigational: 'tag-investigational',
     contraindicated: 'tag-contraindicated',
   }
-  const labels: Record<string, string> = {
-    standard: 'Standard HIPEC',
-    selected: 'Selected cases',
-    investigational: 'Investigational',
-    contraindicated: 'Contraindicated',
+  const labelKeys: Record<string, string> = {
+    standard: 'search.elig_standard',
+    selected: 'search.elig_selected',
+    investigational: 'search.elig_investigational',
+    contraindicated: 'search.elig_contraindicated',
   }
-  return <span className={`badge ${map[e] ?? 'badge-gray'}`}>{labels[e] ?? e}</span>
+  return <span className={`badge ${map[e] ?? 'badge-gray'}`}>{labelKeys[e] ? t(labelKeys[e]) : e}</span>
 }
 
 type Tab = 'overview' | 'hipec' | 'pearls'
 
 function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () => void }) {
+  const { t } = useAppI18n()
   const [tab, setTab] = useState<Tab>('overview')
 
   const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
-    { id: 'overview', label: 'Overview', Icon: Layers },
-    { id: 'hipec', label: 'HIPEC/PIPAC', Icon: FlaskConical },
-    { id: 'pearls', label: 'Pearls', Icon: Beaker },
+    { id: 'overview', label: t('search.tab_overview'), Icon: Layers },
+    { id: 'hipec', label: t('search.tab_hipec'), Icon: FlaskConical },
+    { id: 'pearls', label: t('search.tab_pearls'), Icon: Beaker },
   ]
 
   return (
@@ -44,7 +46,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           </button>
         </div>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
-          {eligibilityBadge(disease.hipec_eligibility)}
+          {eligibilityBadge(disease.hipec_eligibility, t)}
           <span className="badge badge-purple">{disease.origin}</span>
         </div>
       </div>
@@ -68,28 +70,28 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         {tab === 'overview' && (
           <>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-1 text-base">Description</h3>
+              <h3 className="font-semibold text-ink mb-1 text-base">{t('search.field_description')}</h3>
               <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.description}</p>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-2 text-base">PCI Threshold</h3>
+              <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_pci_threshold')}</h3>
               <div className="flex items-center gap-3">
                 <div className="bg-primary-50 rounded-xl p-3 text-center min-w-[64px]">
                   <div className="text-2xl font-bold text-primary-600">
                     {disease.pci_threshold?.match(/\d+/)?.[0] ?? '—'}
                   </div>
-                  <div className="text-[10px] text-primary-400 font-medium">max PCI</div>
+                  <div className="text-[10px] text-primary-400 font-medium">{t('search.field_max_pci')}</div>
                 </div>
                 <p className="text-[15px] text-ink-soft leading-[1.7] flex-1">{disease.pci_threshold}</p>
               </div>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-2 text-base">Prognosis</h3>
+              <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_prognosis')}</h3>
               <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.prognosis}</p>
             </div>
             {disease.ihc.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">IHC Profile</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_ihc')}</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {disease.ihc.map(m => (
                     <span key={m} className="badge badge-purple">{m}</span>
@@ -99,7 +101,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             )}
             {disease.molecular_markers.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">Molecular Markers</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_molecular')}</h3>
                 <div className="space-y-1.5">
                   {disease.molecular_markers.map((m, i) => (
                     <div key={i} className="text-[15px] leading-relaxed">
@@ -114,7 +116,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               </div>
             )}
             <div className="card">
-              <h3 className="font-semibold text-ink mb-1 text-base">Patient Selection</h3>
+              <h3 className="font-semibold text-ink mb-1 text-base">{t('search.field_patient_selection')}</h3>
               <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.patient_selection}</p>
             </div>
           </>
@@ -124,25 +126,25 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <>
             {disease.hipec_protocols.length > 0 ? (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-3 text-base">HIPEC Protocols</h3>
+                <h3 className="font-semibold text-ink mb-3 text-base">{t('search.field_hipec_protocols')}</h3>
                 <div className="space-y-2">
                   {disease.hipec_protocols.map((p, i) => <HIPECProtocolCard key={i} protocol={p} index={i} />)}
                 </div>
               </div>
             ) : (
               <div className="card text-center text-ink-muted text-sm py-6">
-                No established HIPEC protocol for this entity
+                {t('search.no_hipec')}
               </div>
             )}
             {disease.pipac_indication && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">PIPAC</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_pipac')}</h3>
                 <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.pipac_indication}</p>
               </div>
             )}
             {disease.systemic_treatment && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">Systemic Treatment</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_systemic')}</h3>
                 <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.systemic_treatment}</p>
               </div>
             )}
@@ -157,7 +159,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               </div>
             ))}
             {disease.clinical_pearls.length === 0 && (
-              <div className="text-center text-ink-muted text-sm py-6">No pearls available</div>
+              <div className="text-center text-ink-muted text-sm py-6">{t('search.no_pearls')}</div>
             )}
           </div>
         )}
@@ -167,6 +169,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
 }
 
 function DiseaseCard({ disease, onClick }: { disease: PCDisease; onClick: () => void }) {
+  const { t } = useAppI18n()
   return (
     <button
       onClick={onClick}
@@ -176,7 +179,7 @@ function DiseaseCard({ disease, onClick }: { disease: PCDisease; onClick: () => 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-ink text-sm">{disease.name_short}</span>
-            {eligibilityBadge(disease.hipec_eligibility)}
+            {eligibilityBadge(disease.hipec_eligibility, t)}
           </div>
           <p className="text-xs text-ink-muted mt-0.5 line-clamp-1">{disease.name}</p>
         </div>
@@ -193,6 +196,7 @@ const ORIGINS = ['all', 'colorectal', 'appendiceal', 'ovarian', 'gastric', 'meso
 const HIPEC_OPTS = ['all', 'standard', 'selected', 'investigational', 'contraindicated'] as const
 
 export default function PageSearch() {
+  const { t } = useAppI18n()
   const { filters, results, updateFilter, resetFilters } = useSearch()
   const [selected, setSelected] = useState<PCDisease | null>(null)
   const [showFilters, setShowFilters] = useState(false)
@@ -201,8 +205,8 @@ export default function PageSearch() {
     <>
       <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-xl font-bold text-ink">Disease Search</h1>
-          <p className="text-xs text-ink-muted">{results.length} entities</p>
+          <h1 className="text-xl font-bold text-ink">{t('search.page_title')}</h1>
+          <p className="text-xs text-ink-muted">{results.length} {t('search.entities_word')}</p>
         </div>
 
         <div className="relative">
@@ -211,7 +215,7 @@ export default function PageSearch() {
             type="search"
             value={filters.query}
             onChange={e => updateFilter('query', e.target.value)}
-            placeholder="Search by name, marker, tag…"
+            placeholder={t('search.placeholder')}
             className="input-field pl-9"
           />
           {filters.query && (
@@ -226,13 +230,13 @@ export default function PageSearch() {
           className="flex items-center gap-1.5 text-xs font-medium text-ink-soft"
         >
           {showFilters ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          Filters {(filters.origin !== 'all' || filters.hipec !== 'all') ? '(active)' : ''}
+          {t('search.filters')} {(filters.origin !== 'all' || filters.hipec !== 'all') ? t('search.filters_active') : ''}
         </button>
 
         {showFilters && (
           <div className="space-y-3 p-3 bg-primary-50/40 rounded-xl">
             <div>
-              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">Origin</label>
+              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">{t('search.origin')}</label>
               <div className="flex flex-wrap gap-1.5">
                 {ORIGINS.map(o => (
                   <button
@@ -242,13 +246,13 @@ export default function PageSearch() {
                       filters.origin === o ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
                     }`}
                   >
-                    {o === 'all' ? 'All' : o.charAt(0).toUpperCase() + o.slice(1)}
+                    {o === 'all' ? t('common.all') : o.charAt(0).toUpperCase() + o.slice(1)}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">HIPEC Eligibility</label>
+              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">{t('search.hipec_eligibility')}</label>
               <div className="flex flex-wrap gap-1.5">
                 {HIPEC_OPTS.map(h => (
                   <button
@@ -258,18 +262,18 @@ export default function PageSearch() {
                       filters.hipec === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
                     }`}
                   >
-                    {h === 'all' ? 'All' : h.charAt(0).toUpperCase() + h.slice(1)}
+                    {h === 'all' ? t('common.all') : h.charAt(0).toUpperCase() + h.slice(1)}
                   </button>
                 ))}
               </div>
             </div>
-            <button onClick={resetFilters} className="text-xs text-ink-muted underline">Reset filters</button>
+            <button onClick={resetFilters} className="text-xs text-ink-muted underline">{t('common.reset_filters')}</button>
           </div>
         )}
 
         <div className="space-y-2">
           {results.length === 0 && (
-            <div className="text-center py-10 text-ink-muted text-sm">No results found</div>
+            <div className="text-center py-10 text-ink-muted text-sm">{t('search.no_results')}</div>
           )}
           {results.map(d => (
             <DiseaseCard key={d.id} disease={d} onClick={() => setSelected(d)} />

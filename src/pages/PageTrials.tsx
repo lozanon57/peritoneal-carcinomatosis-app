@@ -2,16 +2,24 @@ import { useState } from 'react'
 import { ChevronRight, X, Search, BookText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
+import { useAppI18n } from '../App'
 import type { LandmarkTrial } from '../types'
 
 const HIST_FILTERS = ['all', 'cpm', 'ovarian', 'mesothelioma', 'appendiceal/PMP', 'gastric', 'general'] as const
 type HistFilter = typeof HIST_FILTERS[number]
 
-function evidenceBadge(level: LandmarkTrial['evidence_level']) {
+const PICO_KEY: Record<string, string> = {
+  population: 'trials.pico_population',
+  intervention: 'trials.pico_intervention',
+  comparator: 'trials.pico_comparator',
+  outcome: 'trials.pico_outcome',
+}
+
+function evidenceBadge(level: LandmarkTrial['evidence_level'], t: (k: string) => string) {
   const positive = ['Ib', 'Ia']
   return (
     <span className={`badge border ${positive.includes(level) ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
-      Level {level}
+      {t('trials.level')} {level}
     </span>
   )
 }
@@ -37,9 +45,10 @@ const PICO_META = [
 ] as const
 
 function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
+  const { t } = useAppI18n()
   return (
     <div>
-      <p className="eyebrow mb-2">PICO framework</p>
+      <p className="eyebrow mb-2">{t('trials.pico_framework')}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {PICO_META.map(m => {
           const text = pico[m.key]
@@ -50,7 +59,7 @@ function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
                 {m.letter}
               </span>
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">{m.label}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">{t(PICO_KEY[m.key])}</p>
                 <p className="text-[15px] text-ink-soft leading-relaxed mt-0.5">{text}</p>
               </div>
             </div>
@@ -62,6 +71,7 @@ function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
 }
 
 function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => void }) {
+  const { t } = useAppI18n()
   const practiceChange = trial.practice_change ?? trial.practice_impact
   return (
     <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
@@ -76,7 +86,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
           </button>
         </div>
         <div className="flex gap-2 mt-2 flex-wrap">
-          {evidenceBadge(trial.evidence_level)}
+          {evidenceBadge(trial.evidence_level, t)}
           {studyTypeBadge(trial.study_type)}
           <span className="badge badge-gray">{trial.year}</span>
         </div>
@@ -87,7 +97,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 
         {trial.background && (
           <div className="card">
-            <h3 className="section-title mb-1">Why this trial</h3>
+            <h3 className="section-title mb-1">{t('trials.why')}</h3>
             <div className="rule-gold mb-2" />
             <p className="text-[15px] text-ink-soft leading-relaxed">{trial.background}</p>
           </div>
@@ -95,45 +105,45 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 
         {trial.design && (
           <div className="card">
-            <h3 className="section-title mb-1">Design &amp; methods</h3>
+            <h3 className="section-title mb-1">{t('trials.design')}</h3>
             <div className="rule-gold mb-2" />
             <p className="text-[15px] text-ink-soft leading-relaxed">{trial.design}</p>
           </div>
         )}
 
         <div className="card">
-          <h3 className="section-title mb-1">Clinical question</h3>
+          <h3 className="section-title mb-1">{t('trials.clinical_question_h')}</h3>
           <div className="rule-gold mb-2" />
           <p className="text-[15px] text-ink-soft leading-relaxed">{trial.clinical_question}</p>
         </div>
 
         <div className="card">
-          <h3 className="section-title mb-1">Detailed results</h3>
+          <h3 className="section-title mb-1">{t('trials.detailed_results')}</h3>
           <div className="rule-gold mb-2" />
           <p className="text-[15px] text-ink-soft leading-relaxed">{trial.results_detail ?? trial.key_result}</p>
           {trial.results_detail && trial.key_result && (
             <p className="text-[13px] text-ink-muted leading-relaxed mt-2 pt-2 border-t border-[#efe9f3]">
-              <span className="font-semibold text-ink-muted">In brief: </span>{trial.key_result}
+              <span className="font-semibold text-ink-muted">{t('trials.in_brief')} </span>{trial.key_result}
             </p>
           )}
         </div>
 
         {practiceChange && (
           <div className="callout-key">
-            <h3 className="font-semibold text-base text-primary-800 mb-1">How it changed practice</h3>
+            <h3 className="font-semibold text-base text-primary-800 mb-1">{t('trials.changed_practice')}</h3>
             <p className="text-[15px] text-ink-soft leading-relaxed">{practiceChange}</p>
           </div>
         )}
 
         {trial.criticisms && (
           <div className="callout-pitfall">
-            <h3 className="font-semibold text-base mb-1">Criticisms &amp; caveats</h3>
+            <h3 className="font-semibold text-base mb-1">{t('trials.criticisms')}</h3>
             <p className="text-[15px] leading-relaxed">{trial.criticisms}</p>
           </div>
         )}
 
         <div className="card">
-          <h3 className="section-title mb-1">Full citation</h3>
+          <h3 className="section-title mb-1">{t('trials.full_citation')}</h3>
           <div className="rule-gold mb-2" />
           <p className="text-[15px] text-ink-muted leading-relaxed">{trial.full_citation}</p>
           {trial.doi && (
@@ -150,8 +160,8 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 
         <div className="card bg-primary-50/40">
           <div className="flex gap-4 text-xs text-ink-soft flex-wrap">
-            <span><strong>Histologies:</strong> {trial.histologies.join(', ')}</span>
-            <span><strong>Evidence:</strong> {trial.evidence_level}</span>
+            <span><strong>{t('trials.histologies')}</strong> {trial.histologies.join(', ')}</span>
+            <span><strong>{t('trials.evidence_label')}</strong> {trial.evidence_level}</span>
           </div>
         </div>
       </div>
@@ -160,6 +170,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 }
 
 function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => void }) {
+  const { t } = useAppI18n()
   return (
     <button onClick={onClick} className="w-full text-left card-interactive">
       <div className="flex items-start justify-between gap-2">
@@ -178,7 +189,7 @@ function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => vo
         <span>·</span>
         <span>n={trial.n_patients ?? '?'}</span>
         <span>·</span>
-        {evidenceBadge(trial.evidence_level)}
+        {evidenceBadge(trial.evidence_level, t)}
       </div>
     </button>
   )
@@ -217,6 +228,7 @@ function groupByHistology(trials: LandmarkTrial[]): { label: string; trials: Lan
 }
 
 export default function PageTrials() {
+  const { t } = useAppI18n()
   const navigate = useNavigate()
   const [filter, setFilter] = useState<HistFilter>('all')
   const [selected, setSelected] = useState<LandmarkTrial | null>(null)
@@ -239,14 +251,14 @@ export default function PageTrials() {
       <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h1 className="text-xl font-bold text-ink">Landmark Trials</h1>
-            <p className="text-xs text-ink-muted">{displayed.length} trials shown</p>
+            <h1 className="text-xl font-bold text-ink">{t('trials.page_title')}</h1>
+            <p className="text-xs text-ink-muted">{displayed.length} {t('trials.trials_shown')}</p>
           </div>
           <button
             onClick={() => navigate('/library')}
             className="mt-1 flex items-center gap-1.5 bg-primary-50 text-primary-800 font-semibold px-3 py-2 rounded-xl text-xs active:scale-95 transition-transform whitespace-nowrap"
           >
-            <BookText size={14} /> Library
+            <BookText size={14} /> {t('trials.library')}
           </button>
         </div>
 
@@ -256,7 +268,7 @@ export default function PageTrials() {
             type="search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search trials…"
+            placeholder={t('trials.search_placeholder')}
             className="input-field pl-8 text-sm"
           />
         </div>
@@ -270,7 +282,7 @@ export default function PageTrials() {
                 filter === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
               }`}
             >
-              {h === 'all' ? 'All' : h}
+              {h === 'all' ? t('common.all') : h}
             </button>
           ))}
         </div>
@@ -291,7 +303,7 @@ export default function PageTrials() {
             </div>
           ))}
           {displayed.length === 0 && (
-            <div className="text-center py-8 text-ink-muted text-sm">No trials for this filter</div>
+            <div className="text-center py-8 text-ink-muted text-sm">{t('trials.no_trials')}</div>
           )}
         </div>
       </div>

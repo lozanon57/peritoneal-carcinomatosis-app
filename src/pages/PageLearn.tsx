@@ -42,7 +42,23 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { LEARN_CHAPTERS } from '../data/learn_content'
+import { useAppI18n } from '../App'
 import type { LearnBlock, LearnChapter, LearnSection, LearnTrack } from '../types/learn'
+
+// ── Level label i18n key map ───────────────────────────────────────────────────
+const LEVEL_KEY: Record<LearnChapter['level'], string> = {
+  Foundation: 'learn.level_foundation',
+  Core: 'learn.level_core',
+  Advanced: 'learn.level_advanced',
+}
+
+// ── Callout eyebrow i18n key map ───────────────────────────────────────────────
+const CALLOUT_KEY: Record<'trial' | 'pearl' | 'pitfall' | 'key', string> = {
+  trial: 'learn.callout_trial',
+  pearl: 'learn.callout_pearl',
+  pitfall: 'learn.callout_pitfall',
+  key: 'learn.callout_key',
+}
 
 // ── Icon resolution ──────────────────────────────────────────────────────────
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -111,6 +127,7 @@ const CALLOUT_META: Record<
 
 // ── Block renderer ────────────────────────────────────────────────────────────
 function BlockView({ block }: { block: LearnBlock }) {
+  const { t } = useAppI18n()
   switch (block.type) {
     case 'text':
       return (
@@ -129,7 +146,7 @@ function BlockView({ block }: { block: LearnBlock }) {
         <div className={meta.wrap}>
           <div className={`eyebrow ${meta.eyebrow} mb-1.5`}>
             <Icon size={13} />
-            {meta.label}
+            {t(CALLOUT_KEY[block.type])}
           </div>
           {block.title ? <p className="font-serif font-bold text-ink text-[15px] mb-1">{block.title}</p> : null}
           {block.content ? <p className="text-[15px] leading-[1.7]">{renderInline(block.content)}</p> : null}
@@ -252,6 +269,7 @@ function ChapterReader({
   hasNext: boolean
   onOpenContents: () => void
 }) {
+  const { t } = useAppI18n()
   const Icon = chapterIcon(chapter.icon)
 
   return (
@@ -261,13 +279,13 @@ function ChapterReader({
       <div className="sticky top-0 z-10 -mx-4 px-4 py-3 bg-[#f7f5fa]/90 backdrop-blur border-b border-[#efe9f3] flex items-center justify-between">
         <button onClick={onBack} className="btn-ghost -ml-3 flex items-center gap-1">
           <ArrowLeft size={16} />
-          Curriculum
+          {t('learn.curriculum')}
         </button>
         <div className="flex items-center gap-2">
-          <span className={`badge ${levelBadgeClass(chapter.level)}`}>{chapter.level}</span>
+          <span className={`badge ${levelBadgeClass(chapter.level)}`}>{t(LEVEL_KEY[chapter.level])}</span>
           <span className="inline-flex items-center gap-1 text-xs text-ink-muted">
             <Clock size={12} />
-            {chapter.reading_time_min} min
+            {chapter.reading_time_min} {t('common.min')}
           </span>
           <button
             onClick={onOpenContents}
@@ -297,7 +315,7 @@ function ChapterReader({
         <div className="callout-key">
           <div className="eyebrow text-primary-700 mb-2">
             <Target size={13} />
-            LEARNING OBJECTIVES
+            {t('learn.learning_objectives')}
           </div>
           <ul className="space-y-2">
             {chapter.learning_objectives.map((obj, i) => (
@@ -316,7 +334,7 @@ function ChapterReader({
 
         {/* Key references */}
         <section className="space-y-2">
-          <div className="eyebrow text-ink-muted">KEY REFERENCES</div>
+          <div className="eyebrow text-ink-muted">{t('learn.key_references')}</div>
           <ul className="space-y-1">
             {chapter.key_references.map((ref, i) => (
               <li key={i} className="text-[11px] text-ink-muted leading-relaxed">
@@ -330,12 +348,12 @@ function ChapterReader({
         <div className="space-y-2.5 pt-2">
           {hasNext ? (
             <button onClick={onNext} className="btn-primary">
-              Next chapter
+              {t('learn.next_chapter')}
               <ArrowRight size={16} />
             </button>
           ) : null}
           <button onClick={onBack} className="btn-secondary w-full">
-            Back to curriculum
+            {t('learn.back_to_curriculum')}
           </button>
         </div>
       </div>
@@ -345,6 +363,7 @@ function ChapterReader({
 
 // ── Chapter list ──────────────────────────────────────────────────────────────
 function ChapterCard({ chapter, onOpen }: { chapter: LearnChapter; onOpen: () => void }) {
+  const { t } = useAppI18n()
   const Icon = chapterIcon(chapter.icon)
   return (
     <button onClick={onOpen} className="card-interactive w-full text-left p-4">
@@ -355,17 +374,17 @@ function ChapterCard({ chapter, onOpen }: { chapter: LearnChapter; onOpen: () =>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Icon size={15} className="text-primary-700 flex-shrink-0" />
-            <span className={`badge ${levelBadgeClass(chapter.level)}`}>{chapter.level}</span>
+            <span className={`badge ${levelBadgeClass(chapter.level)}`}>{t(LEVEL_KEY[chapter.level])}</span>
           </div>
           <h3 className="font-serif font-bold text-ink leading-snug text-balance">{chapter.title}</h3>
           <p className="text-sm text-ink-soft leading-relaxed mt-1">{chapter.subtitle}</p>
           <div className="flex items-center gap-3 mt-2.5 text-[11px] text-ink-muted">
             <span className="inline-flex items-center gap-1">
               <Clock size={11} />
-              {chapter.reading_time_min} min
+              {chapter.reading_time_min} {t('common.min')}
             </span>
-            <span>{chapter.sections.length} sections</span>
-            <span>{chapter.learning_objectives.length} objectives</span>
+            <span>{chapter.sections.length} {t('learn.sections_word')}</span>
+            <span>{chapter.learning_objectives.length} {t('learn.objectives_word')}</span>
           </div>
         </div>
       </div>
@@ -393,6 +412,7 @@ function Sidebar({
   activeIndex: number | null
   onJumpChapter: (index: number) => void
 }) {
+  const { t } = useAppI18n()
   const groups = tracksGrouped()
   const activeChapter = activeIndex !== null ? LEARN_CHAPTERS[activeIndex] : null
 
@@ -414,8 +434,8 @@ function Sidebar({
       >
         <div className="flex items-center justify-between px-4 py-3.5 border-b border-[#efe9f3] pt-safe">
           <div>
-            <div className="eyebrow text-primary-700">Curriculum</div>
-            <div className="font-serif font-bold text-ink text-lg leading-none mt-0.5">Contents</div>
+            <div className="eyebrow text-primary-700">{t('learn.curriculum')}</div>
+            <div className="font-serif font-bold text-ink text-lg leading-none mt-0.5">{t('learn.contents')}</div>
           </div>
           <button onClick={onClose} className="p-2 text-ink-muted" aria-label="Close"><X size={20} /></button>
         </div>
@@ -423,7 +443,7 @@ function Sidebar({
         <div className="flex-1 overflow-y-auto px-3 py-3 no-scrollbar">
           {activeChapter && (
             <div className="mb-4 rounded-xl bg-primary-50/60 p-2.5">
-              <div className="eyebrow text-primary-700 px-1 mb-1.5">In this chapter</div>
+              <div className="eyebrow text-primary-700 px-1 mb-1.5">{t('learn.in_this_chapter')}</div>
               <ul className="space-y-0.5">
                 {activeChapter.sections.map(s => (
                   <li key={s.id}>
@@ -461,7 +481,7 @@ function Sidebar({
                             {chapter.title}
                           </span>
                           <span className={`block text-[11px] mt-0.5 ${isActive ? 'text-white/70' : 'text-ink-muted'}`}>
-                            {chapter.reading_time_min} min · {chapter.sections.length} sections
+                            {chapter.reading_time_min} {t('common.min')} · {chapter.sections.length} {t('learn.sections_word')}
                           </span>
                         </span>
                       </button>
@@ -479,6 +499,7 @@ function Sidebar({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function PageLearn() {
+  const { t } = useAppI18n()
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -510,25 +531,24 @@ export default function PageLearn() {
           <header className="pt-6 pb-4">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="eyebrow text-primary-700">CURRICULUM</div>
-                <h1 className="font-serif text-3xl font-bold text-ink mt-1">Learn</h1>
+                <div className="eyebrow text-primary-700">{t('learn.eyebrow_curriculum')}</div>
+                <h1 className="font-serif text-3xl font-bold text-ink mt-1">{t('learn.title')}</h1>
               </div>
               <button
                 onClick={() => setSidebarOpen(true)}
                 className="mt-1 flex items-center gap-1.5 bg-primary-50 text-primary-800 font-semibold px-3 py-2 rounded-xl text-xs active:scale-95 transition-transform"
               >
-                <List size={15} /> Contents
+                <List size={15} /> {t('learn.contents')}
               </button>
             </div>
             <p className="text-[15px] text-ink-soft leading-relaxed mt-1.5">
-              The most detailed peritoneal surface oncology curriculum — foundations, disease mastery,
-              operative technique, evidence, and academic surgery.
+              {t('learn.subtitle')}
             </p>
             <div className="rule-gold mt-3" />
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted mt-3">
-              <span className="font-semibold text-ink-soft">{totalChapters} chapters</span>
-              <span>{hours} h {totalMinutes % 60} min of reading</span>
-              <span>{groups.length} tracks</span>
+              <span className="font-semibold text-ink-soft">{totalChapters} {t('learn.chapters_word')}</span>
+              <span>{hours} {t('learn.hours_short')} {totalMinutes % 60} {t('common.min')} {t('learn.of_reading')}</span>
+              <span>{groups.length} {t('learn.tracks_word')}</span>
             </div>
           </header>
 
@@ -539,7 +559,7 @@ export default function PageLearn() {
                   <span className="section-title text-base">{track}</span>
                   <span className="rule-gold" />
                   <span className="text-[11px] text-ink-muted ml-auto whitespace-nowrap">
-                    {items.length} ch · {items.reduce((s, i) => s + i.chapter.reading_time_min, 0)} min
+                    {items.length} {t('learn.ch_short')} · {items.reduce((s, i) => s + i.chapter.reading_time_min, 0)} {t('common.min')}
                   </span>
                 </div>
                 <div className="space-y-3">

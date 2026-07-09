@@ -20,7 +20,16 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { CASE_SIMULATIONS } from '../data/case_simulations'
+import { useAppI18n } from '../App'
 import type { CaseSimulation, CaseNode, CaseOption, CaseVerdict } from '../types/cases'
+
+// ── Verdict label i18n key map ─────────────────────────────────────────────────
+const VERDICT_KEY: Record<CaseVerdict, string> = {
+  optimal: 'cases.verdict_optimal',
+  acceptable: 'cases.verdict_acceptable',
+  suboptimal: 'cases.verdict_suboptimal',
+  harmful: 'cases.verdict_harmful',
+}
 
 // ── Icon lookup (data stores icon by lucide name) ────────────────────────────
 const ICONS: Record<string, LucideIcon> = {
@@ -90,6 +99,7 @@ function VitalsChips({ vitals }: { vitals: { label: string; value: string }[] })
 
 // ── Case runner ──────────────────────────────────────────────────────────────
 function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }) {
+  const { t } = useAppI18n()
   const [currentId, setCurrentId] = useState(sim.startNodeId)
   const [chosenId, setChosenId] = useState<string | null>(null) // option id revealed at a decision
   const [trail, setTrail] = useState<TrailStep[]>([])
@@ -122,8 +132,8 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
   if (!node) {
     return (
       <div className="text-center py-12">
-        <p className="text-ink-muted text-sm">Node not found.</p>
-        <button onClick={onExit} className="btn-primary mt-4">Back to cases</button>
+        <p className="text-ink-muted text-sm">{t('cases.node_not_found')}</p>
+        <button onClick={onExit} className="btn-primary mt-4">{t('cases.back_to_cases')}</button>
       </div>
     )
   }
@@ -135,10 +145,10 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
       {/* top bar */}
       <div className="flex items-center justify-between mb-4">
         <button onClick={onExit} className="flex items-center gap-1.5 text-sm text-ink-soft">
-          <ArrowLeft size={16} /> Cases
+          <ArrowLeft size={16} /> {t('cases.back_cases')}
         </button>
         <button onClick={restart} className="flex items-center gap-1.5 text-xs text-ink-muted">
-          <RotateCcw size={13} /> Restart
+          <RotateCcw size={13} /> {t('common.restart')}
         </button>
       </div>
 
@@ -170,7 +180,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
             onClick={() => node.next && goToNode(node.next)}
             className="btn-primary w-full mt-5 flex items-center justify-center gap-2"
           >
-            Continue <ArrowRight size={16} />
+            {t('common.continue')} <ArrowRight size={16} />
           </button>
         </div>
       )}
@@ -222,7 +232,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
 
                   {isChosen && meta && (
                     <div className={`mt-2 ml-1 rounded-xl border ${meta.ring} p-3.5 animate-slide-up`}>
-                      <span className={`badge ${meta.badge} mb-2 inline-block`}>{meta.label}</span>
+                      <span className={`badge ${meta.badge} mb-2 inline-block`}>{t(VERDICT_KEY[opt.verdict!])}</span>
                       {opt.feedback && (
                         <p className="text-[13.5px] leading-[1.65] text-ink-soft">
                           <RichText text={opt.feedback} />
@@ -240,7 +250,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
               onClick={() => goToNode(chosenOption.next)}
               className="btn-primary w-full mt-4 flex items-center justify-center gap-2 animate-slide-up"
             >
-              Continue <ArrowRight size={16} />
+              {t('common.continue')} <ArrowRight size={16} />
             </button>
           )}
         </div>
@@ -268,7 +278,9 @@ function OutcomeView({
   onRestart: () => void
   onExit: () => void
 }) {
+  const { t } = useAppI18n()
   const meta = node.verdict ? VERDICT_META[node.verdict] : VERDICT_META.acceptable
+  const verdictKey = VERDICT_KEY[node.verdict ?? 'acceptable']
   const maxScore = trail.length * 2
 
   return (
@@ -276,9 +288,9 @@ function OutcomeView({
       {/* verdict banner */}
       <div className={`rounded-2xl border ${meta.ring} p-5`}>
         <div className="flex items-center justify-between">
-          <span className={`badge ${meta.badge}`}>{meta.label} pathway</span>
+          <span className={`badge ${meta.badge}`}>{t(verdictKey)} {t('cases.pathway')}</span>
           <div className="text-right">
-            <div className="text-[10px] uppercase tracking-wide text-ink-muted">Score</div>
+            <div className="text-[10px] uppercase tracking-wide text-ink-muted">{t('cases.score')}</div>
             <div className={`font-serif text-lg font-semibold ${meta.text}`}>
               {score}
               <span className="text-ink-muted text-sm font-normal"> / {maxScore}</span>
@@ -294,7 +306,7 @@ function OutcomeView({
       {/* outcome summary */}
       {node.outcomeSummary && (
         <div className="card">
-          <div className="eyebrow mb-1.5">Outcome</div>
+          <div className="eyebrow mb-1.5">{t('cases.outcome')}</div>
           <p className="text-[15px] leading-[1.7] text-ink-soft">
             <RichText text={node.outcomeSummary} />
           </p>
@@ -304,7 +316,7 @@ function OutcomeView({
       {/* teaching points */}
       {node.teachingPoints && node.teachingPoints.length > 0 && (
         <div className="callout-key">
-          <div className="eyebrow mb-2">Teaching points</div>
+          <div className="eyebrow mb-2">{t('cases.teaching_points')}</div>
           <ul className="space-y-2">
             {node.teachingPoints.map((tp, i) => (
               <li key={i} className="flex items-start gap-2.5">
@@ -321,7 +333,7 @@ function OutcomeView({
       {/* decision trail recap */}
       {trail.length > 0 && (
         <div className="card">
-          <div className="eyebrow mb-3">Your decision trail</div>
+          <div className="eyebrow mb-3">{t('cases.decision_trail')}</div>
           <ol className="space-y-2.5">
             {trail.map((step, i) => {
               const m = VERDICT_META[step.verdict]
@@ -331,7 +343,7 @@ function OutcomeView({
                   <div className="min-w-0">
                     <div className="text-[11px] uppercase tracking-wide text-ink-muted">{step.nodeTitle}</div>
                     <div className="text-[13.5px] leading-snug text-ink">{step.optionLabel}</div>
-                    <span className={`text-[11px] font-medium ${m.text}`}>{m.label}</span>
+                    <span className={`text-[11px] font-medium ${m.text}`}>{t(VERDICT_KEY[step.verdict])}</span>
                   </div>
                 </li>
               )
@@ -343,7 +355,7 @@ function OutcomeView({
       {/* references */}
       {node.references && node.references.length > 0 && (
         <div className="card">
-          <div className="eyebrow mb-2">Evidence</div>
+          <div className="eyebrow mb-2">{t('cases.evidence')}</div>
           <ul className="space-y-1.5">
             {node.references.map((ref, i) => (
               <li key={i} className="text-[12.5px] leading-snug text-ink-muted flex items-start gap-2">
@@ -358,10 +370,10 @@ function OutcomeView({
       {/* actions */}
       <div className="flex gap-3 pt-1">
         <button onClick={onRestart} className="btn-secondary flex-1 flex items-center justify-center gap-2">
-          <RotateCcw size={15} /> Restart case
+          <RotateCcw size={15} /> {t('cases.restart_case')}
         </button>
         <button onClick={onExit} className="btn-primary flex-1 flex items-center justify-center gap-2">
-          Back to cases
+          {t('cases.back_to_cases')}
         </button>
       </div>
     </div>
@@ -383,6 +395,7 @@ function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
 }
 
 function CaseCard({ sim, onStart }: { sim: CaseSimulation; onStart: () => void }) {
+  const { t } = useAppI18n()
   const Icon = iconFor(sim.icon)
   return (
     <button onClick={onStart} className="card-interactive w-full text-left">
@@ -407,10 +420,10 @@ function CaseCard({ sim, onStart }: { sim: CaseSimulation; onStart: () => void }
 
       <div className="flex items-center gap-4 mt-3 text-[12px] text-ink-muted">
         <span className="flex items-center gap-1.5">
-          <Clock size={13} /> {sim.estMinutes} min
+          <Clock size={13} /> {sim.estMinutes} {t('common.min')}
         </span>
         <span className="flex items-center gap-1.5">
-          <Layers size={13} /> {sim.nodes.length} nodes
+          <Layers size={13} /> {sim.nodes.length} {t('cases.nodes_word')}
         </span>
       </div>
     </button>
@@ -419,6 +432,7 @@ function CaseCard({ sim, onStart }: { sim: CaseSimulation; onStart: () => void }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default function PageCases() {
+  const { t } = useAppI18n()
   const [activeId, setActiveId] = useState<string | null>(null)
   const active = CASE_SIMULATIONS.find(s => s.id === activeId) ?? null
 
@@ -428,10 +442,10 @@ export default function PageCases() {
 
   return (
     <div className="max-w-lg mx-auto px-4 pt-6 pb-16 animate-slide-up">
-      <div className="eyebrow">Simulator</div>
-      <h1 className="section-title font-serif mt-1">Clinical Cases</h1>
+      <div className="eyebrow">{t('cases.eyebrow_simulator')}</div>
+      <h1 className="section-title font-serif mt-1">{t('cases.title')}</h1>
       <p className="text-[14px] text-ink-soft mt-1">
-        Branching decision pathways — think like a peritoneal surgeon
+        {t('cases.subtitle')}
       </p>
       <div className="rule-gold my-5" />
 

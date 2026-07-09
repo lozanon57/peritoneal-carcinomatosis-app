@@ -4,6 +4,7 @@ import {
   Sparkles, Layers, ArrowRight, Clock, Activity,
 } from 'lucide-react'
 import { useQuiz } from '../hooks/useQuiz'
+import { useAppI18n } from '../App'
 import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
@@ -13,6 +14,7 @@ import { InstitutionLogo, CreatorPhoto } from '../components/Institutions'
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function Hero() {
   const navigate = useNavigate()
+  const { t } = useAppI18n()
   return (
     <section className="relative overflow-hidden bg-tsinghua-deep text-white rounded-b-[2rem] shadow-hero">
       {/* energy orbits */}
@@ -32,14 +34,14 @@ function Hero() {
         </div>
 
         <div className="eyebrow !text-gold-300 mb-3">
-          <Sparkles size={13} /> Peritoneal Surface Oncology Academy
+          <Sparkles size={13} /> {t('home.hero_eyebrow')}
         </div>
 
         <h1 className="font-serif text-[31px] leading-[1.1] font-bold text-balance">
-          Master Peritoneal<br />Surface Oncology
+          {t('home.hero_title_1')}<br />{t('home.hero_title_2')}
         </h1>
         <p className="mt-3.5 text-[15px] text-white/80 leading-[1.65] max-w-[20rem]">
-          A board-level academy for CRS+HIPEC, PIPAC and cytoreductive surgery — from first principles to landmark evidence.
+          {t('home.hero_subtitle')}
         </p>
 
         {/* faculty */}
@@ -66,13 +68,13 @@ function Hero() {
             onClick={() => navigate('/learn')}
             className="flex-1 bg-gold-sheen text-ink font-bold text-sm rounded-xl py-3 flex items-center justify-center gap-2 shadow-[0_6px_20px_rgba(221,169,43,0.4)] active:scale-[0.98] transition-transform"
           >
-            <Layers size={16} /> Start learning
+            <Layers size={16} /> {t('home.start_learning')}
           </button>
           <button
             onClick={() => navigate('/quiz')}
             className="px-4 bg-white/12 backdrop-blur border border-white/20 text-white font-semibold text-sm rounded-xl py-3 flex items-center justify-center gap-1.5 active:scale-[0.98] transition-transform"
           >
-            <GraduationCap size={16} /> Quiz
+            <GraduationCap size={16} /> {t('home.quiz')}
           </button>
         </div>
       </div>
@@ -82,11 +84,12 @@ function Hero() {
 
 // ── Stat strip ────────────────────────────────────────────────────────────────
 function StatStrip() {
+  const { t } = useAppI18n()
   const stats = [
-    { value: String(LEARN_CHAPTERS.length), label: 'Chapters', Icon: Layers },
-    { value: `${QUIZ_QUESTIONS.length}`,    label: 'Questions', Icon: GraduationCap },
-    { value: String(LANDMARK_TRIALS.length),label: 'Trials',    Icon: BookOpen },
-    { value: String(PC_DISEASES.length),    label: 'Entities',  Icon: Activity },
+    { value: String(LEARN_CHAPTERS.length), label: t('home.stat_chapters'), Icon: Layers },
+    { value: `${QUIZ_QUESTIONS.length}`,    label: t('home.stat_questions'), Icon: GraduationCap },
+    { value: String(LANDMARK_TRIALS.length),label: t('home.stat_trials'),    Icon: BookOpen },
+    { value: String(PC_DISEASES.length),    label: t('home.stat_entities'),  Icon: Activity },
   ]
   return (
     <div className="grid grid-cols-4 gap-2 -mt-6 relative z-10 max-w-lg mx-auto px-4">
@@ -105,6 +108,7 @@ function StatStrip() {
 function DailyQuestion() {
   const { dailyQuestion } = useQuiz()
   const navigate = useNavigate()
+  const { t } = useAppI18n()
   if (!dailyQuestion) return null
   return (
     <button
@@ -113,11 +117,11 @@ function DailyQuestion() {
     >
       <div className="flex items-center gap-2 mb-2">
         <Zap size={14} className="text-primary-600" />
-        <span className="eyebrow">Daily Question</span>
+        <span className="eyebrow">{t('home.daily_question')}</span>
       </div>
       <p className="text-sm font-medium text-ink leading-snug line-clamp-2">{dailyQuestion.stem}</p>
       <div className="flex items-center gap-1 mt-2 text-primary-700 font-semibold">
-        <span className="text-xs">Answer now</span>
+        <span className="text-xs">{t('home.answer_now')}</span>
         <ChevronRight size={13} />
       </div>
     </button>
@@ -126,6 +130,7 @@ function DailyQuestion() {
 
 // ── Pearl of the day ──────────────────────────────────────────────────────────
 function PearlOfDay() {
+  const { t } = useAppI18n()
   const idx = Math.floor(Date.now() / 86_400_000) % PC_DISEASES.length
   const disease = PC_DISEASES[idx]
   if (!disease || !disease.clinical_pearls?.length) return null
@@ -135,7 +140,7 @@ function PearlOfDay() {
       <div className="flex items-center gap-2 mb-1.5">
         <Sparkles size={14} className="text-gold-600" />
         <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-700">
-          Clinical Pearl · {disease.name_short}
+          {t('home.clinical_pearl')} · {disease.name_short}
         </span>
       </div>
       <p className="text-sm text-ink-soft leading-relaxed">{pearl}</p>
@@ -146,6 +151,7 @@ function PearlOfDay() {
 // ── Curriculum banner ─────────────────────────────────────────────────────────
 function CurriculumBanner() {
   const navigate = useNavigate()
+  const { t } = useAppI18n()
   const mins = LEARN_CHAPTERS.reduce((s, c) => s + (c.reading_time_min ?? 0), 0)
   return (
     <button
@@ -155,31 +161,31 @@ function CurriculumBanner() {
       <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-20">
         <Layers size={72} />
       </div>
-      <div className="eyebrow !text-gold-300 mb-1.5"><BookOpen size={12} /> The Curriculum</div>
-      <div className="font-serif text-lg font-bold leading-tight">Six chapters, foundation to mastery</div>
+      <div className="eyebrow !text-gold-300 mb-1.5"><BookOpen size={12} /> {t('home.curriculum_banner')}</div>
+      <div className="font-serif text-lg font-bold leading-tight">{t('home.curriculum_headline')}</div>
       <div className="flex items-center gap-3 mt-2 text-white/75 text-xs">
-        <span className="inline-flex items-center gap-1"><Clock size={12} /> {mins} min</span>
-        <span className="inline-flex items-center gap-1"><Layers size={12} /> {LEARN_CHAPTERS.length} chapters</span>
-        <span className="inline-flex items-center gap-1 text-gold-300 font-semibold">Begin <ArrowRight size={12} /></span>
+        <span className="inline-flex items-center gap-1"><Clock size={12} /> {mins} {t('common.min')}</span>
+        <span className="inline-flex items-center gap-1"><Layers size={12} /> {LEARN_CHAPTERS.length} {t('home.chapters_word')}</span>
+        <span className="inline-flex items-center gap-1 text-gold-300 font-semibold">{t('home.begin')} <ArrowRight size={12} /></span>
       </div>
     </button>
   )
 }
 
 // ── Quick access ──────────────────────────────────────────────────────────────
-const QUICK_LINKS = [
-  { to: '/search',     Icon: Search,     label: 'Disease Atlas',   sub: `${PC_DISEASES.length} entities` },
-  { to: '/cases',      Icon: Stethoscope, label: 'Case Simulator', sub: 'Decision pathways' },
-  { to: '/trials',     Icon: BookOpen,   label: 'Landmark Trials', sub: `${LANDMARK_TRIALS.length} studies` },
-  { to: '/quiz',       Icon: GraduationCap, label: 'E-Learning Quiz', sub: `${QUIZ_QUESTIONS.length} questions` },
-]
-
 function QuickAccess() {
   const navigate = useNavigate()
+  const { t } = useAppI18n()
+  const QUICK_LINKS = [
+    { to: '/search',     Icon: Search,     label: t('home.ql_atlas'),   sub: `${PC_DISEASES.length} ${t('home.entities_word')}` },
+    { to: '/cases',      Icon: Stethoscope, label: t('home.ql_cases'), sub: t('home.ql_cases_sub') },
+    { to: '/trials',     Icon: BookOpen,   label: t('home.ql_trials'), sub: `${LANDMARK_TRIALS.length} ${t('home.studies_word')}` },
+    { to: '/quiz',       Icon: GraduationCap, label: t('home.ql_quiz'), sub: `${QUIZ_QUESTIONS.length} ${t('home.questions_word')}` },
+  ]
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <span className="section-title text-base">Explore</span>
+        <span className="section-title text-base">{t('home.explore')}</span>
         <span className="rule-gold" />
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -205,6 +211,7 @@ function QuickAccess() {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function PageHome() {
+  const { t } = useAppI18n()
   return (
     <div className="animate-fade-in">
       <Hero />
@@ -215,7 +222,7 @@ export default function PageHome() {
         <CurriculumBanner />
         <QuickAccess />
         <p className="text-[10px] text-ink-muted/70 text-center pt-1">
-          Educational tool only · Validated against NCCN · ESMO · PSOGI · Chicago Consensus 2020 · JPGA
+          {t('home.disclaimer_line')}
         </p>
       </div>
     </div>
