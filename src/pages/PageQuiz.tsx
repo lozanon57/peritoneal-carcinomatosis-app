@@ -64,7 +64,7 @@ function Configurator({
       {/* Header */}
       <div>
         <div className="eyebrow mb-1">{t('quiz.board_review')}</div>
-        <h1 className="section-title text-2xl lg:text-4xl">{t('quiz.title')}</h1>
+        <h1 className="t-h1">{t('quiz.title')}</h1>
         <div className="rule-gold mt-2" />
         <p className="text-xs text-ink-muted mt-2">{t('quiz.tagline')}</p>
       </div>
@@ -289,20 +289,20 @@ function QuestionRunner({
     if (revealed) {
       if (opt === question.correct) return 'border-emerald-500 bg-emerald-50'
       if (opt === selected) return 'border-cardinal-400 bg-cardinal-50'
-      return 'border-[#efe9f3] bg-gray-50 opacity-60'
+      return 'border-line bg-surface2 opacity-60'
     }
     if (opt === selected) return 'border-primary-500 bg-primary-50'
-    return 'border-[#e6def0] hover:border-primary-300 hover:bg-primary-50/50'
+    return 'border-line hover:border-primary-300 hover:bg-primary-50/50'
   }
 
   function badgeClass(opt: Choice): string {
     if (revealed) {
       if (opt === question.correct) return 'bg-emerald-500 text-white border-emerald-500'
       if (opt === selected) return 'bg-cardinal-500 text-white border-cardinal-500'
-      return 'bg-white text-ink-muted border-[#e6def0]'
+      return 'bg-surface text-ink-muted border-line'
     }
     if (opt === selected) return 'bg-primary-600 text-white border-primary-600'
-    return 'bg-white text-ink-soft border-[#e6def0]'
+    return 'bg-surface text-ink-soft border-line'
   }
 
   const showNext = revealed || (isExam && answered)

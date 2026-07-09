@@ -34,12 +34,12 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
   ]
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
-      <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
+    <div className="fixed inset-0 z-50 bg-app flex flex-col animate-fade-in">
+      <div className="bg-surface border-b border-line px-4 pt-safe-top pb-3">
         <div className="max-w-3xl mx-auto w-full flex items-start justify-between mt-3">
           <div>
-            <h2 className="text-lg font-bold text-ink leading-tight">{disease.name_short}</h2>
-            <p className="text-xs text-ink-muted">{disease.name}</p>
+            <h2 className="t-h3 leading-tight">{disease.name_short}</h2>
+            <p className="t-small">{disease.name}</p>
           </div>
           <button onClick={onClose} className="p-2 -mr-2 text-ink-muted">
             <X size={20} />
@@ -51,7 +51,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         </div>
       </div>
 
-      <div className="flex border-b border-[#efe9f3] bg-white max-w-3xl mx-auto w-full">
+      <div className="flex border-b border-line bg-surface max-w-3xl mx-auto w-full">
         {tabs.map(({ id, label, Icon }) => (
           <button
             key={id}
@@ -70,11 +70,11 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         {tab === 'overview' && (
           <>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-1 text-base">{t('search.field_description')}</h3>
-              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.description}</p>
+              <h3 className="t-h3 mb-1">{t('search.field_description')}</h3>
+              <p className="t-body">{disease.description}</p>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_pci_threshold')}</h3>
+              <h3 className="t-h3 mb-2">{t('search.field_pci_threshold')}</h3>
               <div className="flex items-center gap-3">
                 <div className="bg-primary-50 rounded-xl p-3 text-center min-w-[64px]">
                   <div className="text-2xl font-bold text-primary-600">
@@ -82,16 +82,16 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
                   </div>
                   <div className="text-[10px] text-primary-400 font-medium">{t('search.field_max_pci')}</div>
                 </div>
-                <p className="text-[15px] text-ink-soft leading-[1.7] flex-1">{disease.pci_threshold}</p>
+                <p className="t-body flex-1">{disease.pci_threshold}</p>
               </div>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_prognosis')}</h3>
-              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.prognosis}</p>
+              <h3 className="t-h3 mb-2">{t('search.field_prognosis')}</h3>
+              <p className="t-body">{disease.prognosis}</p>
             </div>
             {disease.ihc.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_ihc')}</h3>
+                <h3 className="t-h3 mb-2">{t('search.field_ihc')}</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {disease.ihc.map(m => (
                     <span key={m} className="badge badge-purple">{m}</span>
@@ -101,7 +101,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             )}
             {disease.molecular_markers.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_molecular')}</h3>
+                <h3 className="t-h3 mb-2">{t('search.field_molecular')}</h3>
                 <div className="space-y-1.5">
                   {disease.molecular_markers.map((m, i) => (
                     <div key={i} className="text-[15px] leading-relaxed">
@@ -116,8 +116,8 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               </div>
             )}
             <div className="card">
-              <h3 className="font-semibold text-ink mb-1 text-base">{t('search.field_patient_selection')}</h3>
-              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.patient_selection}</p>
+              <h3 className="t-h3 mb-1">{t('search.field_patient_selection')}</h3>
+              <p className="t-body">{disease.patient_selection}</p>
             </div>
           </>
         )}
@@ -126,7 +126,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <>
             {disease.hipec_protocols.length > 0 ? (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-3 text-base">{t('search.field_hipec_protocols')}</h3>
+                <h3 className="t-h3 mb-3">{t('search.field_hipec_protocols')}</h3>
                 <div className="space-y-2">
                   {disease.hipec_protocols.map((p, i) => <HIPECProtocolCard key={i} protocol={p} index={i} />)}
                 </div>
@@ -138,14 +138,14 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             )}
             {disease.pipac_indication && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_pipac')}</h3>
-                <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.pipac_indication}</p>
+                <h3 className="t-h3 mb-2">{t('search.field_pipac')}</h3>
+                <p className="t-body">{disease.pipac_indication}</p>
               </div>
             )}
             {disease.systemic_treatment && (
               <div className="card">
-                <h3 className="font-semibold text-ink mb-2 text-base">{t('search.field_systemic')}</h3>
-                <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.systemic_treatment}</p>
+                <h3 className="t-h3 mb-2">{t('search.field_systemic')}</h3>
+                <p className="t-body">{disease.systemic_treatment}</p>
               </div>
             )}
           </>
@@ -155,7 +155,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <div className="space-y-3">
             {disease.clinical_pearls.map((pearl, i) => (
               <div key={i} className="card border-l-4 border-l-amber-400">
-                <p className="text-[15px] text-ink-soft leading-[1.7]">{pearl}</p>
+                <p className="t-body">{pearl}</p>
               </div>
             ))}
             {disease.clinical_pearls.length === 0 && (
@@ -205,8 +205,8 @@ export default function PageSearch() {
     <>
       <div className="wrap pt-6 lg:pt-12 pb-4 space-y-4 lg:space-y-6 animate-fade-in">
         <div>
-          <h1 className="text-xl lg:text-4xl font-bold text-ink">{t('search.page_title')}</h1>
-          <p className="text-xs lg:text-sm text-ink-muted">{results.length} {t('search.entities_word')}</p>
+          <h1 className="t-h1">{t('search.page_title')}</h1>
+          <p className="t-small">{results.length} {t('search.entities_word')}</p>
         </div>
 
         <div className="relative">
@@ -243,7 +243,7 @@ export default function PageSearch() {
                     key={o}
                     onClick={() => updateFilter('origin', o as typeof filters.origin)}
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      filters.origin === o ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
+                      filters.origin === o ? 'bg-primary-600 text-white border-primary-600' : 'bg-surface text-ink-soft border-line'
                     }`}
                   >
                     {o === 'all' ? t('common.all') : o.charAt(0).toUpperCase() + o.slice(1)}
@@ -259,7 +259,7 @@ export default function PageSearch() {
                     key={h}
                     onClick={() => updateFilter('hipec', h as typeof filters.hipec)}
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      filters.hipec === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
+                      filters.hipec === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-surface text-ink-soft border-line'
                     }`}
                   >
                     {h === 'all' ? t('common.all') : h.charAt(0).toUpperCase() + h.slice(1)}

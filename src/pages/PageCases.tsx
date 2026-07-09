@@ -167,7 +167,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
       {(node.type === 'scenario' || node.type === 'info') && (
         <div className="card animate-slide-up">
           {node.title && <div className="eyebrow mb-1.5">{node.title}</div>}
-          <p className="text-[15px] leading-[1.7] text-ink-soft">
+          <p className="t-body">
             <RichText text={node.body} />
           </p>
           {node.detail && (
@@ -213,7 +213,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
                     disabled={!!chosenId}
                     className={[
                       'w-full text-left rounded-2xl border p-4 transition-all',
-                      isChosen && meta ? meta.ring : 'border-line bg-white',
+                      isChosen && meta ? meta.ring : 'border-line bg-surface',
                       !chosenId ? 'active:scale-[0.99] card-interactive' : '',
                       dim ? 'opacity-40' : '',
                     ].join(' ')}
@@ -297,8 +297,8 @@ function OutcomeView({
             </div>
           </div>
         </div>
-        {node.title && <h2 className="font-serif text-xl font-semibold text-ink mt-3">{node.title}</h2>}
-        <p className="text-[15px] leading-[1.7] text-ink-soft mt-1">
+        {node.title && <h2 className="t-h3 mt-3">{node.title}</h2>}
+        <p className="t-body mt-1">
           <RichText text={node.body} />
         </p>
       </div>
@@ -307,7 +307,7 @@ function OutcomeView({
       {node.outcomeSummary && (
         <div className="card">
           <div className="eyebrow mb-1.5">{t('cases.outcome')}</div>
-          <p className="text-[15px] leading-[1.7] text-ink-soft">
+          <p className="t-body">
             <RichText text={node.outcomeSummary} />
           </p>
         </div>
@@ -409,14 +409,14 @@ function CaseCard({ sim, onStart }: { sim: CaseSimulation; onStart: () => void }
               <span className="badge badge-purple">{sim.histology}</span>
               <DifficultyDots level={sim.difficulty} />
             </div>
-            <h3 className="font-serif text-[17px] font-semibold text-ink leading-tight">{sim.title}</h3>
-            <p className="text-[13px] text-ink-muted mt-0.5">{sim.subtitle}</p>
+            <h3 className="t-h3 leading-tight">{sim.title}</h3>
+            <p className="t-small mt-0.5">{sim.subtitle}</p>
           </div>
         </div>
         <ChevronRight size={18} className="text-ink-muted flex-shrink-0 mt-1" />
       </div>
 
-      <p className="text-[14px] leading-[1.6] text-ink-soft mt-3">{sim.summary}</p>
+      <p className="t-body mt-3">{sim.summary}</p>
 
       <div className="flex items-center gap-4 mt-3 text-[12px] text-ink-muted">
         <span className="flex items-center gap-1.5">
@@ -443,8 +443,8 @@ export default function PageCases() {
   return (
     <div className="wrap pt-6 lg:pt-12 pb-16 animate-slide-up">
       <div className="eyebrow">{t('cases.eyebrow_simulator')}</div>
-      <h1 className="section-title font-serif mt-1 lg:text-4xl">{t('cases.title')}</h1>
-      <p className="text-[14px] lg:text-lg text-ink-soft mt-1">
+      <h1 className="t-h1 mt-1">{t('cases.title')}</h1>
+      <p className="t-lead mt-1">
         {t('cases.subtitle')}
       </p>
       <div className="rule-gold my-5" />

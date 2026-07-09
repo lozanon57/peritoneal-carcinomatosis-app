@@ -265,10 +265,10 @@ function ChapterReader({
   const Icon = chapterIcon(chapter.icon)
 
   return (
-    <div className="wrap-read pb-16">
+    <div className="wrap pb-16">
       <ReadingProgress />
       {/* Top bar */}
-      <div className="sticky top-0 z-10 -mx-4 px-4 py-3 bg-[#f7f5fa]/90 backdrop-blur border-b border-[#efe9f3] flex items-center justify-between">
+      <div className="sticky top-14 lg:top-16 z-20 -mx-4 px-4 lg:mx-0 lg:px-0 py-3 bg-app/90 backdrop-blur border-b border-line flex items-center justify-between">
         <button onClick={onBack} className="btn-ghost -ml-3 flex items-center gap-1">
           <ArrowLeft size={16} />
           {t('learn.curriculum')}
@@ -281,7 +281,7 @@ function ChapterReader({
           </span>
           <button
             onClick={onOpenContents}
-            className="ml-1 p-1.5 rounded-lg text-primary-700 bg-primary-50 active:scale-95 transition-transform"
+            className="lg:hidden ml-1 p-1.5 rounded-lg text-primary-700 bg-primary-50 active:scale-95 transition-transform"
             aria-label="Table of contents"
           >
             <List size={16} />
@@ -289,7 +289,26 @@ function ChapterReader({
         </div>
       </div>
 
-      <div className="animate-slide-up space-y-8 pt-6">
+      <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+        {/* Desktop sticky table of contents */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-32 pt-8 space-y-3">
+            <div className="eyebrow text-ink-muted">{t('learn.on_this_page')}</div>
+            <nav className="space-y-0.5 border-l border-line">
+              {chapter.sections.map(s => (
+                <button
+                  key={s.id}
+                  onClick={() => document.getElementById(`sec-${s.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  className="block w-full text-left text-[13px] text-ink-soft hover:text-primary-700 -ml-px pl-3 py-1.5 border-l-2 border-transparent hover:border-primary-500 leading-snug transition-colors"
+                >
+                  {s.title}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </aside>
+
+      <div className="animate-slide-up space-y-8 pt-6 min-w-0 lg:max-w-3xl">
         {/* Hero */}
         <header className="space-y-2">
           <div className="flex items-center gap-3">
@@ -348,7 +367,8 @@ function ChapterReader({
             {t('learn.back_to_curriculum')}
           </button>
         </div>
-      </div>
+      </div>{/* /reading column */}
+      </div>{/* /reader grid */}
     </div>
   )
 }

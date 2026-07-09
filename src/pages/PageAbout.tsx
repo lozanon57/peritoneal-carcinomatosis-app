@@ -18,12 +18,12 @@ function FacultyCard({
           <CreatorPhoto file={file} initials={initials} size={56} ring={accent === 'gold' ? 'gold' : 'white'} objectPosition={objectPosition} />
         </div>
         <div className="min-w-0">
-          <h2 className="font-serif font-bold text-ink text-lg leading-tight">{name}</h2>
+          <h2 className="t-h3 leading-tight">{name}</h2>
           <p className="text-xs font-semibold text-primary-700 mt-1">{role}</p>
-          <p className="text-xs text-ink-muted mt-0.5">{meta}</p>
+          <p className="t-small mt-0.5">{meta}</p>
         </div>
       </div>
-      <div className="mt-3.5 space-y-2 text-[15px] text-ink-soft leading-[1.7]">
+      <div className="mt-3.5 space-y-2 t-body">
         {bio.map((b, i) => <p key={i}>{b}</p>)}
       </div>
       {tags.length > 0 && (
@@ -42,7 +42,7 @@ export default function PageAbout() {
       {/* Header */}
       <div>
         <div className="eyebrow mb-1"><Award size={13} /> {t('about.the_academy')}</div>
-        <h1 className="font-serif text-2xl lg:text-4xl font-bold text-ink">{t('about.page_title')}</h1>
+        <h1 className="t-h1">{t('about.page_title')}</h1>
         <div className="rule-gold mt-2" />
       </div>
 
@@ -108,7 +108,7 @@ export default function PageAbout() {
         </h2>
         <div className="flex items-center justify-center gap-5 py-2 mb-3 rounded-xl bg-primary-50/50">
           <InstitutionLogo which="tsinghua" theme="light" className="h-10 max-w-[44%]" />
-          <span className="w-px h-9 bg-[#e6def0]" />
+          <span className="w-px h-9 bg-line" />
           <InstitutionLogo which="btch" theme="light" className="h-10 max-w-[50%]" />
         </div>
         <div className="space-y-3.5 text-[15px] leading-[1.6]">

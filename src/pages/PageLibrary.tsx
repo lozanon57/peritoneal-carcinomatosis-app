@@ -16,11 +16,11 @@ function RefCard({ r }: { r: Reference }) {
       ? `https://pubmed.ncbi.nlm.nih.gov/${r.pmid}/`
       : undefined
   return (
-    <div className="card p-4">
-      <p className="text-[13px] font-semibold text-primary-800">{r.authors} <span className="text-ink-muted font-normal">· {r.year}</span></p>
-      <h3 className="font-serif font-bold text-ink text-[15px] leading-snug mt-1">{r.title}</h3>
-      <p className="text-[12px] text-ink-muted italic mt-1">{r.journal}</p>
-      <p className="text-[14px] text-ink-soft leading-[1.6] mt-2">{r.takeaway}</p>
+    <div className="card p-4 lg:p-5">
+      <p className="t-small font-semibold text-primary-800">{r.authors} <span className="text-ink-muted font-normal">· {r.year}</span></p>
+      <h3 className="font-serif font-bold text-ink text-[15px] lg:text-base leading-snug mt-1">{r.title}</h3>
+      <p className="t-small italic mt-1">{r.journal}</p>
+      <p className="t-body text-[14px] lg:text-[15px] mt-2">{r.takeaway}</p>
       <div className="flex items-center gap-3 mt-2.5">
         {href && (
           <a href={href} target="_blank" rel="noopener noreferrer"
@@ -63,8 +63,8 @@ export default function PageLibrary() {
           <ArrowLeft size={16} /> Back
         </button>
         <div className="eyebrow text-primary-700"><BookText size={13} /> Bibliography</div>
-        <h1 className="font-serif text-3xl lg:text-5xl font-bold text-ink mt-1">Library</h1>
-        <p className="text-[15px] text-ink-soft leading-relaxed mt-1.5">
+        <h1 className="t-display mt-1">Library</h1>
+        <p className="t-lead mt-1.5">
           {totalRefs} PubMed-verified references across {ALL_TOPICS.length} topics — landmark trials,
           consensus guidelines and key reviews in peritoneal surface oncology, including
           {' '}<strong className="text-primary-800">{chinaRefs} Chinese-authored references</strong> from
@@ -83,7 +83,7 @@ export default function PageLibrary() {
         />
       </div>
 
-      {query && <p className="text-xs text-ink-muted mb-3">{shown} matching references</p>}
+      {query && <p className="t-small mb-3">{shown} matching references</p>}
 
       <div className="space-y-7">
         {topics.map(topic => (

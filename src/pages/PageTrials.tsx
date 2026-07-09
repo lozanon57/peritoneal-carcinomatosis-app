@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, X, Search, BookText } from 'lucide-react'
+import { ChevronRight, ChevronDown, X, Search, BookText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { useAppI18n } from '../App'
@@ -70,6 +70,33 @@ function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
   )
 }
 
+// Presentational progressive-disclosure section (collapsed by default).
+function Collapsible({
+  title, children, defaultOpen = false, wrapClass = 'card p-4 lg:p-5', titleClass = 't-h3',
+}: {
+  title: string; children: React.ReactNode; defaultOpen?: boolean; wrapClass?: string; titleClass?: string
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className={wrapClass}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        className="w-full flex items-center justify-between gap-3 text-left"
+      >
+        <h3 className={titleClass}>{title}</h3>
+        <ChevronDown size={18} className={`flex-shrink-0 text-ink-muted transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="mt-2.5 animate-fade-in">
+          <div className="rule-gold mb-2.5" />
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => void }) {
   const { t } = useAppI18n()
   const practiceChange = trial.practice_change ?? trial.practice_impact
@@ -104,11 +131,9 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
         )}
 
         {trial.design && (
-          <div className="card p-4 lg:p-5">
-            <h3 className="t-h3 mb-1">{t('trials.design')}</h3>
-            <div className="rule-gold mb-2.5" />
+          <Collapsible title={t('trials.design')}>
             <p className="t-body">{trial.design}</p>
-          </div>
+          </Collapsible>
         )}
 
         <div className="card p-4 lg:p-5">
@@ -136,15 +161,12 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
         )}
 
         {trial.criticisms && (
-          <div className="callout-pitfall">
-            <h3 className="t-h3 mb-1.5">{t('trials.criticisms')}</h3>
+          <Collapsible title={t('trials.criticisms')} wrapClass="callout-pitfall">
             <p className="t-body">{trial.criticisms}</p>
-          </div>
+          </Collapsible>
         )}
 
-        <div className="card p-4 lg:p-5">
-          <h3 className="t-h3 mb-1">{t('trials.full_citation')}</h3>
-          <div className="rule-gold mb-2.5" />
+        <Collapsible title={t('trials.full_citation')}>
           <p className="t-small">{trial.full_citation}</p>
           {trial.doi && (
             <a
@@ -156,7 +178,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
               DOI: {trial.doi}
             </a>
           )}
-        </div>
+        </Collapsible>
 
         <div className="card p-4 bg-primary-50/40">
           <div className="flex gap-4 t-small flex-wrap">
