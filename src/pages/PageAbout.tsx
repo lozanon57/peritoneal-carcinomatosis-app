@@ -46,14 +46,19 @@ export default function PageAbout() {
         <div className="rule-gold mt-2" />
       </div>
 
-      {/* Ownership statement */}
+      {/* Authorship & Copyright statement */}
       <div className="relative overflow-hidden rounded-2xl bg-tsinghua p-5 text-white shadow-lift">
-        <div className="eyebrow !text-gold-300 mb-2"><Copyright size={12} /> {t('about.ownership')}</div>
+        <div className="eyebrow !text-gold-300 mb-2"><Copyright size={12} /> {t('about.copyright_label')}</div>
         <p className="text-[15px] leading-[1.7] text-white/90">
-          This application is the intellectual property of <strong className="text-white">Prof. Yan Li</strong> and
-          {' '}<strong className="text-white">Dr. Pablo Lozano Lominchar</strong>, developed under
+          Authored and developed by <strong className="text-white">Dr. Pablo Lozano Lominchar</strong> (author),
+          in collaboration with <strong className="text-white">Prof. Yan Li</strong> (co-author), in association with
           {' '}<strong className="text-white">Tsinghua University</strong> and
           {' '}<strong className="text-white">Beijing Tsinghua Changgung Hospital (清华长庚医院)</strong>.
+        </p>
+        <p className="mt-2.5 text-[12.5px] leading-[1.6] text-white/70">
+          © 2026 Dr. Pablo Lozano Lominchar &amp; Prof. Yan Li. All rights reserved. Provided for educational use only;
+          no part of the content, design or code may be reproduced, redistributed or commercialised without the
+          authors' written permission.
         </p>
       </div>
 
@@ -64,7 +69,7 @@ export default function PageAbout() {
           file="yan-li.jpg"
           initials="YL"
           name="Prof. Yan Li, MD PhD"
-          role="Author & Owner · Senior Faculty"
+          role="Co-Author · Senior Faculty"
           meta="Peritoneal Surface Malignancy · Tsinghua University · BTCH"
           bio={[
             'Internationally recognised authority in cytoreductive surgery and HIPEC, leading one of the largest peritoneal surface malignancy programmes in China at Beijing Tsinghua Changgung Hospital.',
@@ -77,7 +82,7 @@ export default function PageAbout() {
           file="pablo-lozano.jpg"
           initials="PL"
           name="Pablo Lozano Lominchar, MD, PhD, EBPSM"
-          role="Consultant Surgeon – Surgical Oncology"
+          role="Author · Consultant Surgeon, Surgical Oncology"
           meta="Peritoneal Surface Malignancies, Sarcoma & Complex Pelvic Surgery"
           bio={[
             'Hospital General Universitario Gregorio Marañón, Madrid, Spain',
