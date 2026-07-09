@@ -42,10 +42,14 @@ export default {
           700: '#701010',
         },
         ink: {
-          DEFAULT: '#16121c',
-          soft: '#3a3341',
-          muted: '#6b6473',
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          soft: 'rgb(var(--ink-soft) / <alpha-value>)',
+          muted: 'rgb(var(--ink-muted) / <alpha-value>)',
         },
+        surface:  'rgb(var(--surface) / <alpha-value>)',
+        surface2: 'rgb(var(--surface-2) / <alpha-value>)',
+        app:      'rgb(var(--app-bg) / <alpha-value>)',
+        line:     'rgb(var(--line) / <alpha-value>)',
         pc: {
           teal:    '#0d9488',
           emerald: '#059669',

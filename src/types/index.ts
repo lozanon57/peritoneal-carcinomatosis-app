@@ -163,7 +163,7 @@ export interface QuizStats {
 
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 
-export type Language = 'en' | 'es'
+export type Language = 'en' | 'zh'
 
 export interface Translations {
   [key: string]: string | Translations

@@ -55,7 +55,7 @@ function Hero() {
             <CreatorPhoto file="pablo-lozano.jpg" initials="PL" size={44} ring="white" />
             <div className="leading-tight">
               <div className="text-sm font-semibold text-white">Dr. Pablo Lozano</div>
-              <div className="text-[10px] text-white/60">MD PhD · ESPSM</div>
+              <div className="text-[10px] text-white/60">MD PhD · EBPSM</div>
             </div>
           </div>
         </div>

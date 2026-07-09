@@ -1,4 +1,4 @@
-import { ShieldCheck, CheckCircle2, Globe, ClipboardList, GraduationCap, Award, Link2, Copyright } from 'lucide-react'
+import { ShieldCheck, CheckCircle2, Globe, ClipboardList, GraduationCap, Award, Link2, Mail, Copyright } from 'lucide-react'
 import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
@@ -25,9 +25,11 @@ function FacultyCard({
       <div className="mt-3.5 space-y-2 text-[15px] text-ink-soft leading-[1.7]">
         {bio.map((b, i) => <p key={i}>{b}</p>)}
       </div>
-      <div className="mt-3.5 flex flex-wrap gap-1.5">
-        {tags.map(tag => <span key={tag} className="badge badge-purple">{tag}</span>)}
-      </div>
+      {tags.length > 0 && (
+        <div className="mt-3.5 flex flex-wrap gap-1.5">
+          {tags.map(tag => <span key={tag} className="badge badge-purple">{tag}</span>)}
+        </div>
+      )}
     </div>
   )
 }
@@ -72,17 +74,22 @@ export default function PageAbout() {
           accent="purple"
           file="pablo-lozano.jpg"
           initials="PL"
-          name="Pablo Lozano Lominchar, MD PhD"
-          role="Author & Owner · Course Director"
-          meta="Peritoneal Surface Oncology · ESPSM · Tsinghua University · BTCH"
+          name="Pablo Lozano Lominchar, MD, PhD, EBPSM"
+          role="Consultant Surgeon – Surgical Oncology"
+          meta="Peritoneal Surface Malignancies, Sarcoma & Complex Pelvic Surgery"
           bio={[
-            'Surgical oncologist specialised in peritoneal surface oncology — CRS+HIPEC, PIPAC and cytoreductive surgery for sarcoma and complex retroperitoneal tumours.',
-            'Author and director of the academy curriculum, translating landmark evidence into structured, board-level teaching.',
+            'Hospital General Universitario Gregorio Marañón, Madrid, Spain',
+            'Associate Professor of Surgery – Complutense University of Madrid',
+            'Board Member – Spanish Association of Surgeons (AEC), Section of Sarcoma and Mesenchymal Tumors',
           ]}
-          tags={['CRS+HIPEC', 'PIPAC', 'ESPSM', 'Sarcoma', 'Curriculum']}
+          tags={[]}
         />
-        <a href="https://orcid.org/0000-0003-0614-6329" target="_blank" rel="noopener noreferrer"
-          className="btn-secondary w-full text-sm"><Link2 size={14} /> ORCID · Dr. Pablo Lozano</a>
+        <div className="flex gap-2">
+          <a href="https://orcid.org/0000-0002-5413-8449" target="_blank" rel="noopener noreferrer"
+            className="flex-1 btn-secondary text-sm"><Link2 size={14} /> ORCID</a>
+          <a href="mailto:lozanon57@hotmail.com"
+            className="flex-1 btn-secondary text-sm"><Mail size={14} /> Contact</a>
+        </div>
       </div>
 
       {/* Institutions */}

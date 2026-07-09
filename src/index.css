@@ -10,22 +10,48 @@
 @layer base {
   * { -webkit-tap-highlight-color: transparent; }
   html { -webkit-text-size-adjust: 100%; }
+
+  /* ── Theme tokens (light) ─────────────────────────────────────────────── */
+  :root {
+    --sat: env(safe-area-inset-top);
+    --sab: env(safe-area-inset-bottom);
+    --ink: 22 18 28;
+    --ink-soft: 58 51 65;
+    --ink-muted: 107 100 115;
+    --surface: 255 255 255;
+    --surface-2: 250 247 252;
+    --app-bg: 247 245 250;
+    --line: 239 233 243;
+    color-scheme: light;
+  }
+
+  /* ── Theme tokens (dark) ──────────────────────────────────────────────── */
+  :root.dark {
+    --ink: 236 232 242;
+    --ink-soft: 201 195 211;
+    --ink-muted: 150 142 163;
+    --surface: 32 24 43;
+    --surface-2: 42 31 55;
+    --app-bg: 20 14 28;
+    --line: 56 44 72;
+    color-scheme: dark;
+  }
+
   body {
-    @apply antialiased text-ink bg-[#f7f5fa];
+    @apply antialiased text-ink bg-app;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
-  :root { --sat: env(safe-area-inset-top); --sab: env(safe-area-inset-bottom); }
 
   h1, h2, h3, .font-serif { font-family: "Source Serif 4", Georgia, serif; }
 
-  ::selection { background: rgba(106,15,142,0.16); color: #3d0b52; }
+  ::selection { background: rgba(106,15,142,0.28); color: rgb(var(--ink)); }
 }
 
 @layer components {
 
   /* ── Surfaces ──────────────────────────────────────────────────────────── */
   .card {
-    @apply bg-white rounded-2xl border border-[#efe9f3] shadow-card;
+    @apply bg-surface rounded-2xl border border-line shadow-card;
   }
   .card-pad { @apply card p-5; }
   .card-interactive {
@@ -55,7 +81,7 @@
 
   /* ── Inputs ────────────────────────────────────────────────────────────── */
   .input-field {
-    @apply w-full rounded-xl border border-[#e6def0] bg-white px-3.5 py-3 text-[15px] text-ink outline-none
+    @apply w-full rounded-xl border border-line bg-surface px-3.5 py-3 text-[15px] text-ink outline-none
            focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all placeholder:text-ink-muted/60;
   }
 
@@ -81,7 +107,7 @@
   /* ── Chips (filter pills) ──────────────────────────────────────────────── */
   .chip {
     @apply flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-all font-medium
-           bg-white text-ink-soft border-[#e6def0] hover:border-primary-300;
+           bg-surface text-ink-soft border-line hover:border-primary-300;
   }
   .chip-active {
     @apply bg-primary-700 text-white border-primary-700 shadow-[0_2px_8px_rgba(106,15,142,0.28)];
@@ -107,7 +133,7 @@
 
   /* ── Quiz answer buttons ───────────────────────────────────────────────── */
   .quiz-option {
-    @apply w-full text-left p-4 rounded-xl border-2 border-[#e6def0] text-[15px] leading-relaxed text-ink-soft
+    @apply w-full text-left p-4 rounded-xl border-2 border-line text-[15px] leading-relaxed text-ink-soft
            hover:border-primary-300 hover:bg-primary-50 transition-all;
   }
   .quiz-correct { @apply border-emerald-500 bg-emerald-50 text-emerald-900; }
@@ -139,6 +165,48 @@
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s linear infinite;
 }
+
+/* ── Dark-mode overrides ─────────────────────────────────────────────────────
+   Remap literal light-surface utilities used across pages so they flip.
+   (`.bg-white` here does NOT match opacity variants like `bg-white/12`,
+   which stay as decorative white on the always-purple hero.) */
+.dark .bg-white { background-color: rgb(var(--surface)); }
+.dark .bg-\[\#f7f5fa\] { background-color: rgb(var(--app-bg)); }
+.dark .border-\[\#efe9f3\] { border-color: rgb(var(--line)); }
+.dark .border-\[\#e6def0\] { border-color: rgb(var(--line)); }
+.dark .bg-gray-50 { background-color: rgb(var(--surface-2)); }
+.dark .bg-gray-100 { background-color: rgb(var(--surface-2)); }
+.dark .bg-gray-50\/50 { background-color: rgb(var(--surface-2) / 0.5); }
+.dark .border-gray-100 { border-color: rgb(var(--line)); }
+.dark .border-gray-200 { border-color: rgb(var(--line)); }
+
+/* Leftover neutral grays → ink tokens */
+.dark .text-gray-900, .dark .text-gray-800 { color: rgb(var(--ink)); }
+.dark .text-gray-700, .dark .text-gray-600 { color: rgb(var(--ink-soft)); }
+.dark .text-gray-500, .dark .text-gray-400, .dark .text-gray-300 { color: rgb(var(--ink-muted)); }
+
+/* Light purple accent tint → subtle dark purple */
+.dark .bg-primary-50 { background-color: rgba(106, 15, 142, 0.22); }
+.dark .bg-primary-50\/40 { background-color: rgba(106, 15, 142, 0.16); }
+.dark .bg-primary-50\/50 { background-color: rgba(106, 15, 142, 0.18); }
+.dark .bg-primary-50\/60 { background-color: rgba(106, 15, 142, 0.2); }
+
+/* Teaching callouts on dark */
+.dark .callout-trial   { background-color: rgba(106, 15, 142, 0.22); border-color: rgba(138, 30, 176, 0.5); }
+.dark .callout-pearl   { background-color: rgba(221, 169, 43, 0.14); border-color: rgba(194, 137, 28, 0.45); }
+.dark .callout-pitfall { background-color: rgba(140, 21, 21, 0.22); border-color: rgba(183, 28, 28, 0.4); }
+.dark .callout-key     { background-color: rgb(var(--surface)); }
+
+/* Buttons / badges / algorithm nodes on dark */
+.dark .btn-secondary { background-color: rgba(106, 15, 142, 0.3); color: rgb(var(--ink)); }
+.dark .badge-gray { background-color: rgba(255, 255, 255, 0.08); color: rgb(var(--ink-muted)); }
+.dark .algo-step     { background-color: rgba(106, 15, 142, 0.22); border-color: rgba(138, 30, 176, 0.45); }
+.dark .algo-decision { background-color: rgba(221, 169, 43, 0.14); border-color: rgba(194, 137, 28, 0.4); }
+.dark .algo-action   { background-color: rgba(5, 150, 105, 0.16); border-color: rgba(5, 150, 105, 0.4); }
+.dark .algo-warning  { background-color: rgba(140, 21, 21, 0.22); border-color: rgba(183, 28, 28, 0.4); }
+
+/* Quiz neutral (dimmed) option on dark */
+.dark .quiz-neutral { background-color: rgba(255, 255, 255, 0.04); border-color: rgb(var(--line)); color: rgb(var(--ink-muted)); }
 
 @media print {
   nav, .bottom-nav, .no-print { display: none !important; }
