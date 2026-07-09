@@ -29,13 +29,11 @@ export function InstitutionLogo({
       </div>
     )
   }
+  // Logos ship on a purple background → present as a neat rounded branded tile
   return (
-    <img
-      src={src}
-      alt={label.en}
-      onError={() => setFailed(true)}
-      className={`object-contain ${className}`}
-    />
+    <span className={`inline-flex items-center rounded-lg overflow-hidden ring-1 ring-white/15 shadow-sm ${className}`}>
+      <img src={src} alt={label.en} onError={() => setFailed(true)} className="h-full w-auto object-contain" />
+    </span>
   )
 }
 
