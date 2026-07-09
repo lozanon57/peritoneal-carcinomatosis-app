@@ -75,93 +75,93 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
   const practiceChange = trial.practice_change ?? trial.practice_impact
   return (
     <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
-      <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
-        <div className="max-w-3xl mx-auto w-full flex items-start justify-between mt-3">
+      <div className="bg-surface border-b border-line px-4 pt-safe-top pb-4">
+        <div className="max-w-3xl mx-auto w-full flex items-start justify-between gap-3 mt-3">
           <div>
-            <h2 className="text-lg font-bold text-ink font-serif">{trial.name}</h2>
-            <p className="text-xs text-ink-muted">{trial.publication} · n={trial.n_patients ?? '?'}</p>
+            <h2 className="t-h2 text-balance">{trial.name}</h2>
+            <p className="t-small mt-1">{trial.publication} · n={trial.n_patients ?? '?'}</p>
           </div>
-          <button onClick={onClose} className="p-2 -mr-2 text-ink-muted">
+          <button onClick={onClose} aria-label="Close" className="p-2 -mr-2 rounded-lg text-ink-muted hover:text-ink hover:bg-primary-50 transition-colors flex-shrink-0">
             <X size={20} />
           </button>
         </div>
-        <div className="max-w-3xl mx-auto w-full flex gap-2 mt-2 flex-wrap">
+        <div className="max-w-3xl mx-auto w-full flex gap-2 mt-3 flex-wrap">
           {evidenceBadge(trial.evidence_level, t)}
           {studyTypeBadge(trial.study_type)}
           <span className="badge badge-gray">{trial.year}</span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 max-w-3xl mx-auto w-full">
+      <div className="flex-1 overflow-y-auto px-4 py-5 lg:py-8 space-y-4 lg:space-y-5 max-w-3xl mx-auto w-full">
         {trial.pico && <PicoBlock pico={trial.pico} />}
 
         {trial.background && (
-          <div className="card">
-            <h3 className="section-title mb-1">{t('trials.why')}</h3>
-            <div className="rule-gold mb-2" />
-            <p className="text-[15px] text-ink-soft leading-relaxed">{trial.background}</p>
+          <div className="card p-4 lg:p-5">
+            <h3 className="t-h3 mb-1">{t('trials.why')}</h3>
+            <div className="rule-gold mb-2.5" />
+            <p className="t-body">{trial.background}</p>
           </div>
         )}
 
         {trial.design && (
-          <div className="card">
-            <h3 className="section-title mb-1">{t('trials.design')}</h3>
-            <div className="rule-gold mb-2" />
-            <p className="text-[15px] text-ink-soft leading-relaxed">{trial.design}</p>
+          <div className="card p-4 lg:p-5">
+            <h3 className="t-h3 mb-1">{t('trials.design')}</h3>
+            <div className="rule-gold mb-2.5" />
+            <p className="t-body">{trial.design}</p>
           </div>
         )}
 
-        <div className="card">
-          <h3 className="section-title mb-1">{t('trials.clinical_question_h')}</h3>
-          <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-ink-soft leading-relaxed">{trial.clinical_question}</p>
+        <div className="card p-4 lg:p-5">
+          <h3 className="t-h3 mb-1">{t('trials.clinical_question_h')}</h3>
+          <div className="rule-gold mb-2.5" />
+          <p className="t-body">{trial.clinical_question}</p>
         </div>
 
-        <div className="card">
-          <h3 className="section-title mb-1">{t('trials.detailed_results')}</h3>
-          <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-ink-soft leading-relaxed">{trial.results_detail ?? trial.key_result}</p>
+        <div className="card p-4 lg:p-5">
+          <h3 className="t-h3 mb-1">{t('trials.detailed_results')}</h3>
+          <div className="rule-gold mb-2.5" />
+          <p className="t-body">{trial.results_detail ?? trial.key_result}</p>
           {trial.results_detail && trial.key_result && (
-            <p className="text-[13px] text-ink-muted leading-relaxed mt-2 pt-2 border-t border-[#efe9f3]">
-              <span className="font-semibold text-ink-muted">{t('trials.in_brief')} </span>{trial.key_result}
+            <p className="t-small mt-3 pt-3 border-t border-line">
+              <span className="font-semibold text-ink-soft">{t('trials.in_brief')} </span>{trial.key_result}
             </p>
           )}
         </div>
 
         {practiceChange && (
           <div className="callout-key">
-            <h3 className="font-semibold text-base text-primary-800 mb-1">{t('trials.changed_practice')}</h3>
-            <p className="text-[15px] text-ink-soft leading-relaxed">{practiceChange}</p>
+            <h3 className="t-h3 text-primary-800 mb-1.5">{t('trials.changed_practice')}</h3>
+            <p className="t-body">{practiceChange}</p>
           </div>
         )}
 
         {trial.criticisms && (
           <div className="callout-pitfall">
-            <h3 className="font-semibold text-base mb-1">{t('trials.criticisms')}</h3>
-            <p className="text-[15px] leading-relaxed">{trial.criticisms}</p>
+            <h3 className="t-h3 mb-1.5">{t('trials.criticisms')}</h3>
+            <p className="t-body">{trial.criticisms}</p>
           </div>
         )}
 
-        <div className="card">
-          <h3 className="section-title mb-1">{t('trials.full_citation')}</h3>
-          <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-ink-muted leading-relaxed">{trial.full_citation}</p>
+        <div className="card p-4 lg:p-5">
+          <h3 className="t-h3 mb-1">{t('trials.full_citation')}</h3>
+          <div className="rule-gold mb-2.5" />
+          <p className="t-small">{trial.full_citation}</p>
           {trial.doi && (
             <a
               href={`https://doi.org/${trial.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block text-xs text-primary-700 mt-2 underline"
+              className="inline-block text-xs font-semibold text-primary-700 mt-2 underline"
             >
               DOI: {trial.doi}
             </a>
           )}
         </div>
 
-        <div className="card bg-primary-50/40">
-          <div className="flex gap-4 text-xs text-ink-soft flex-wrap">
-            <span><strong>{t('trials.histologies')}</strong> {trial.histologies.join(', ')}</span>
-            <span><strong>{t('trials.evidence_label')}</strong> {trial.evidence_level}</span>
+        <div className="card p-4 bg-primary-50/40">
+          <div className="flex gap-4 t-small flex-wrap">
+            <span><strong className="text-ink-soft">{t('trials.histologies')}</strong> {trial.histologies.join(', ')}</span>
+            <span><strong className="text-ink-soft">{t('trials.evidence_label')}</strong> {trial.evidence_level}</span>
           </div>
         </div>
       </div>

@@ -67,6 +67,28 @@
   }
   .rule-gold { @apply h-0.5 w-10 rounded-full bg-gold-sheen; }
 
+  /* ── Type scale (design system) ─────────────────────────────────────────────
+     Documented, responsive, semantic. Serif for headings (scholarly), Inter for
+     body. Additive utilities — existing classes are untouched.
+       t-display  page hero title         | t-h1  page title
+       t-h2       major section           | t-h3  card / sub-section title
+       t-lead     intro paragraph         | t-body reading body
+       t-small    secondary / meta        | t-caption micro-labels               */
+  .t-display { @apply font-serif font-bold text-ink text-3xl lg:text-5xl leading-[1.08] tracking-tight; }
+  .t-h1      { @apply font-serif font-bold text-ink text-2xl lg:text-4xl leading-tight; }
+  .t-h2      { @apply font-serif font-bold text-ink text-xl lg:text-2xl leading-snug; }
+  .t-h3      { @apply font-serif font-semibold text-ink text-lg lg:text-xl leading-snug; }
+  .t-lead    { @apply text-ink-soft text-[16px] lg:text-lg leading-[1.7]; }
+  .t-body    { @apply text-ink-soft text-[15px] lg:text-[16px] leading-[1.75]; }
+  .t-small   { @apply text-ink-muted text-[13px] leading-relaxed; }
+  .t-caption { @apply text-ink-muted text-[11px] leading-relaxed; }
+
+  /* ── Readable data table (design system) ───────────────────────────────────── */
+  .tbl { @apply w-full text-[13.5px] lg:text-sm border-collapse; }
+  .tbl thead th { @apply text-left font-semibold px-3 py-2.5 bg-primary-50 text-primary-800 border border-line whitespace-nowrap; }
+  .tbl tbody td { @apply px-3 py-2.5 border border-line text-ink-soft align-top leading-relaxed; }
+  .tbl tbody tr:nth-child(even) td { @apply bg-surface2; }
+
   /* ── Badges ────────────────────────────────────────────────────────────── */
   .badge { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold; }
   .badge-purple { @apply bg-primary-100 text-primary-800; }
@@ -213,6 +235,9 @@
 
 /* Quiz neutral (dimmed) option on dark */
 .dark .quiz-neutral { background-color: rgba(255, 255, 255, 0.04); border-color: rgb(var(--line)); color: rgb(var(--ink-muted)); }
+
+/* Data-table header readable on dark (AA contrast) */
+.dark .tbl thead th { background-color: rgba(106, 15, 142, 0.38); color: rgb(var(--ink)); }
 
 @media print {
   nav, .bottom-nav, .no-print { display: none !important; }

@@ -173,32 +173,24 @@ function BlockView({ block }: { block: LearnBlock }) {
     case 'table':
       return (
         <div>
-          {block.title ? <p className="font-serif font-semibold text-ink text-base mb-2">{block.title}</p> : null}
-          <div className="overflow-x-auto -mx-4 px-4 no-scrollbar">
-            <table className="w-full text-xs border-collapse">
+          {block.title ? <p className="t-h3 mb-2.5">{block.title}</p> : null}
+          <div className="overflow-x-auto -mx-4 px-4 lg:mx-0 lg:px-0 no-scrollbar rounded-xl ring-1 ring-line">
+            <table className="tbl">
               <thead>
-                <tr className="bg-primary-50 text-primary-800">
-                  {(block.headers ?? []).map((h, i) => (
-                    <th key={i} className="text-left font-semibold px-3 py-2 border border-primary-100 whitespace-nowrap">
-                      {h}
-                    </th>
-                  ))}
+                <tr>
+                  {(block.headers ?? []).map((h, i) => <th key={i}>{h}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {(block.rows ?? []).map((row, r) => (
-                  <tr key={r} className={r % 2 === 0 ? 'bg-white' : 'bg-[#faf7fc]'}>
-                    {row.map((cell, c) => (
-                      <td key={c} className="px-3 py-2 border border-[#efe9f3] text-ink-soft align-top">
-                        {renderInline(cell)}
-                      </td>
-                    ))}
+                  <tr key={r}>
+                    {row.map((cell, c) => <td key={c}>{renderInline(cell)}</td>)}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          {block.ref ? <p className="mt-2 text-[11px] text-ink-muted italic">{block.ref}</p> : null}
+          {block.ref ? <p className="mt-2 t-caption italic">{block.ref}</p> : null}
         </div>
       )
 
@@ -306,7 +298,7 @@ function ChapterReader({
             </span>
             <Icon size={22} className="text-primary-700" />
           </div>
-          <h1 className="font-serif text-2xl lg:text-4xl font-bold text-ink leading-tight text-balance">{chapter.title}</h1>
+          <h1 className="t-h1 text-balance">{chapter.title}</h1>
           <p className="text-[15px] text-ink-soft leading-relaxed">{chapter.subtitle}</p>
           <p className="text-[11px] text-ink-muted italic pt-1">{chapter.guidelines_version}</p>
         </header>
