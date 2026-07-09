@@ -76,7 +76,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
   return (
     <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
       <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
-        <div className="flex items-start justify-between mt-3">
+        <div className="max-w-3xl mx-auto w-full flex items-start justify-between mt-3">
           <div>
             <h2 className="text-lg font-bold text-ink font-serif">{trial.name}</h2>
             <p className="text-xs text-ink-muted">{trial.publication} · n={trial.n_patients ?? '?'}</p>
@@ -85,14 +85,14 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
             <X size={20} />
           </button>
         </div>
-        <div className="flex gap-2 mt-2 flex-wrap">
+        <div className="max-w-3xl mx-auto w-full flex gap-2 mt-2 flex-wrap">
           {evidenceBadge(trial.evidence_level, t)}
           {studyTypeBadge(trial.study_type)}
           <span className="badge badge-gray">{trial.year}</span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 max-w-3xl mx-auto w-full">
         {trial.pico && <PicoBlock pico={trial.pico} />}
 
         {trial.background && (
@@ -248,11 +248,11 @@ export default function PageTrials() {
 
   return (
     <>
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
+      <div className="wrap pt-6 lg:pt-12 pb-4 space-y-4 lg:space-y-6 animate-fade-in">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h1 className="text-xl font-bold text-ink">{t('trials.page_title')}</h1>
-            <p className="text-xs text-ink-muted">{displayed.length} {t('trials.trials_shown')}</p>
+            <h1 className="text-xl lg:text-4xl font-bold text-ink">{t('trials.page_title')}</h1>
+            <p className="text-xs lg:text-sm text-ink-muted">{displayed.length} {t('trials.trials_shown')}</p>
           </div>
           <button
             onClick={() => navigate('/library')}
@@ -291,11 +291,11 @@ export default function PageTrials() {
           {groupByHistology(displayed).map(group => (
             <div key={group.label}>
               <div className="flex items-center gap-2 mb-2.5">
-                <span className="section-title text-base">{group.label}</span>
+                <span className="section-title text-base lg:text-xl">{group.label}</span>
                 <span className="rule-gold" />
                 <span className="text-[11px] text-ink-muted ml-auto">{group.trials.length}</span>
               </div>
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-5">
                 {group.trials.map(t => (
                   <TrialCard key={t.id} trial={t} onClick={() => setSelected(t)} />
                 ))}

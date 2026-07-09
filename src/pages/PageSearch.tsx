@@ -36,7 +36,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
   return (
     <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
       <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
-        <div className="flex items-start justify-between mt-3">
+        <div className="max-w-3xl mx-auto w-full flex items-start justify-between mt-3">
           <div>
             <h2 className="text-lg font-bold text-ink leading-tight">{disease.name_short}</h2>
             <p className="text-xs text-ink-muted">{disease.name}</p>
@@ -45,13 +45,13 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             <X size={20} />
           </button>
         </div>
-        <div className="flex items-center gap-2 mt-2 flex-wrap">
+        <div className="max-w-3xl mx-auto w-full flex items-center gap-2 mt-2 flex-wrap">
           {eligibilityBadge(disease.hipec_eligibility, t)}
           <span className="badge badge-purple">{disease.origin}</span>
         </div>
       </div>
 
-      <div className="flex border-b border-[#efe9f3] bg-white">
+      <div className="flex border-b border-[#efe9f3] bg-white max-w-3xl mx-auto w-full">
         {tabs.map(({ id, label, Icon }) => (
           <button
             key={id}
@@ -66,7 +66,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 max-w-3xl mx-auto w-full">
         {tab === 'overview' && (
           <>
             <div className="card">
@@ -203,10 +203,10 @@ export default function PageSearch() {
 
   return (
     <>
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
+      <div className="wrap pt-6 lg:pt-12 pb-4 space-y-4 lg:space-y-6 animate-fade-in">
         <div>
-          <h1 className="text-xl font-bold text-ink">{t('search.page_title')}</h1>
-          <p className="text-xs text-ink-muted">{results.length} {t('search.entities_word')}</p>
+          <h1 className="text-xl lg:text-4xl font-bold text-ink">{t('search.page_title')}</h1>
+          <p className="text-xs lg:text-sm text-ink-muted">{results.length} {t('search.entities_word')}</p>
         </div>
 
         <div className="relative">
@@ -271,9 +271,9 @@ export default function PageSearch() {
           </div>
         )}
 
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-5">
           {results.length === 0 && (
-            <div className="text-center py-10 text-ink-muted text-sm">{t('search.no_results')}</div>
+            <div className="text-center py-10 text-ink-muted text-sm lg:col-span-2 xl:col-span-3">{t('search.no_results')}</div>
           )}
           {results.map(d => (
             <DiseaseCard key={d.id} disease={d} onClick={() => setSelected(d)} />

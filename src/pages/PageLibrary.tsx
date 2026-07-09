@@ -57,13 +57,13 @@ export default function PageLibrary() {
   const shown = topics.reduce((s, t) => s + t.references.length, 0)
 
   return (
-    <div className="max-w-lg mx-auto px-4 pb-16 animate-fade-in">
-      <header className="pt-6 pb-4">
+    <div className="wrap pb-16 animate-fade-in">
+      <header className="pt-6 lg:pt-12 pb-4">
         <button onClick={() => navigate(-1)} className="btn-ghost -ml-3 mb-1 flex items-center gap-1">
           <ArrowLeft size={16} /> Back
         </button>
         <div className="eyebrow text-primary-700"><BookText size={13} /> Bibliography</div>
-        <h1 className="font-serif text-3xl font-bold text-ink mt-1">Library</h1>
+        <h1 className="font-serif text-3xl lg:text-5xl font-bold text-ink mt-1">Library</h1>
         <p className="text-[15px] text-ink-soft leading-relaxed mt-1.5">
           {totalRefs} PubMed-verified references across {ALL_TOPICS.length} topics — landmark trials,
           consensus guidelines and key reviews in peritoneal surface oncology, including
@@ -89,12 +89,12 @@ export default function PageLibrary() {
         {topics.map(topic => (
           <div key={topic.id}>
             <div className="flex items-center gap-2 mb-3">
-              <span className="section-title text-base">{topic.topic}</span>
+              <span className="section-title text-base lg:text-xl">{topic.topic}</span>
               {isChina(topic.id) && <span className="badge badge-red">中国 · China</span>}
               <span className="rule-gold" />
               <span className="text-[11px] text-ink-muted ml-auto">{topic.references.length}</span>
             </div>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
               {topic.references.map((r, i) => <RefCard key={i} r={r} />)}
             </div>
           </div>

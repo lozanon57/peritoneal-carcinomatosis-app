@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { HashRouter, Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Home, Search, Stethoscope, BookOpen, GraduationCap, Info, Layers, Languages, Moon, Sun } from 'lucide-react'
+import { Home, Search, Stethoscope, BookOpen, GraduationCap, Info, Layers, Languages, Moon, Sun, BookText } from 'lucide-react'
 import { TRANSLATIONS } from './data/i18n'
 import type { Language } from './types'
 import PageHome from './pages/PageHome'
@@ -53,21 +53,52 @@ function Brandmark({ size = 30 }: { size?: number }) {
   )
 }
 
-// ─── Top brand header ─────────────────────────────────────────────────────────
+// ─── Navigation items ─────────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { to: '/',           icon: Home,          key: 'home' },
+  { to: '/learn',      icon: Layers,        key: 'learn' },
+  { to: '/cases',      icon: Stethoscope,   key: 'cases' },
+  { to: '/search',     icon: Search,        key: 'atlas' },
+  { to: '/trials',     icon: BookOpen,      key: 'trials' },
+  { to: '/quiz',       icon: GraduationCap, key: 'quiz' },
+]
+// Library is shown on the desktop top-nav (no room on the mobile bottom bar)
+const DESKTOP_NAV = [...NAV_ITEMS, { to: '/library', icon: BookText, key: 'library' }]
+
+// ─── Top brand header + desktop nav ────────────────────────────────────────────
 function TopHeader() {
-  const { lang, toggleLang, dark, toggleTheme } = useAppI18n()
+  const { lang, toggleLang, dark, toggleTheme, t } = useAppI18n()
   const navigate = useNavigate()
   return (
     <header className="sticky top-0 z-40 bg-surface/85 backdrop-blur-lg border-b border-line pt-safe">
-      <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
-        <button onClick={() => navigate('/')} className="flex items-center gap-2.5 active:opacity-70 transition-opacity">
+      <div className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 h-14 lg:h-16 flex items-center justify-between gap-6">
+        <button onClick={() => navigate('/')} className="flex items-center gap-2.5 active:opacity-70 transition-opacity flex-shrink-0">
           <Brandmark />
           <div className="leading-none text-left">
-            <div className="font-display font-bold text-[15px] text-ink tracking-tight">PSM Academy</div>
+            <div className="font-display font-bold text-[15px] lg:text-[17px] text-ink tracking-tight">PSM Academy</div>
             <div className="text-[9.5px] font-semibold uppercase tracking-[0.13em] text-primary-700/80">CRS · HIPEC · PIPAC</div>
           </div>
         </button>
-        <div className="flex items-center gap-1">
+
+        {/* Desktop horizontal nav */}
+        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+          {DESKTOP_NAV.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  isActive ? 'text-primary-700 bg-primary-50' : 'text-ink-soft hover:text-primary-700 hover:bg-primary-50/60'
+                }`
+              }
+            >
+              {t(`nav.${item.key}`)}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={toggleTheme}
             className="p-2 text-ink-muted hover:text-primary-700 transition-colors"
@@ -96,20 +127,11 @@ function TopHeader() {
   )
 }
 
-// ─── Bottom nav ───────────────────────────────────────────────────────────────
-const NAV_ITEMS = [
-  { to: '/',           icon: Home,          key: 'home' },
-  { to: '/learn',      icon: Layers,        key: 'learn' },
-  { to: '/cases',      icon: Stethoscope,   key: 'cases' },
-  { to: '/search',     icon: Search,        key: 'atlas' },
-  { to: '/trials',     icon: BookOpen,      key: 'trials' },
-  { to: '/quiz',       icon: GraduationCap, key: 'quiz' },
-]
-
+// ─── Bottom nav (mobile only) ───────────────────────────────────────────────────
 function BottomNav() {
   const { t } = useAppI18n()
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-lg border-t border-line pb-safe">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-lg border-t border-line pb-safe">
       <div className="max-w-lg mx-auto flex">
         {NAV_ITEMS.map(item => (
           <NavLink
@@ -148,7 +170,7 @@ function AppShell() {
     <>
       <ScrollTop />
       <TopHeader />
-      <main className="min-h-screen pb-24">
+      <main className="min-h-screen pb-24 lg:pb-16">
         <Routes>
           <Route path="/"           element={<PageHome />} />
           <Route path="/learn"      element={<PageLearn />} />

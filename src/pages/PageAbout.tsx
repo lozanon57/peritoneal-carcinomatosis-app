@@ -38,11 +38,11 @@ function FacultyCard({
 export default function PageAbout() {
   const { t } = useAppI18n()
   return (
-    <div className="px-4 pt-6 pb-8 max-w-lg mx-auto space-y-6 animate-fade-in">
+    <div className="wrap-read pt-6 lg:pt-12 pb-8 space-y-6 lg:space-y-8 animate-fade-in">
       {/* Header */}
       <div>
         <div className="eyebrow mb-1"><Award size={13} /> {t('about.the_academy')}</div>
-        <h1 className="font-serif text-2xl font-bold text-ink">{t('about.page_title')}</h1>
+        <h1 className="font-serif text-2xl lg:text-4xl font-bold text-ink">{t('about.page_title')}</h1>
         <div className="rule-gold mt-2" />
       </div>
 
@@ -64,6 +64,7 @@ export default function PageAbout() {
 
       {/* Faculty */}
       <div className="space-y-3">
+        <div className="grid lg:grid-cols-2 gap-3 lg:gap-5">
         <FacultyCard
           accent="gold"
           file="yan-li.jpg"
@@ -91,6 +92,7 @@ export default function PageAbout() {
           ]}
           tags={[]}
         />
+        </div>
         <div className="flex gap-2">
           <a href="https://orcid.org/0000-0002-5413-8449" target="_blank" rel="noopener noreferrer"
             className="flex-1 btn-secondary text-sm"><Link2 size={14} /> ORCID</a>

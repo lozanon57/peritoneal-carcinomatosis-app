@@ -25,27 +25,32 @@ function Hero() {
       </svg>
       <div className="absolute -left-10 bottom-[-40px] w-56 h-56 rounded-full bg-primary-500/30 blur-3xl" aria-hidden />
 
-      <div className="relative max-w-lg mx-auto px-5 pt-6 pb-8">
+      <div className="relative max-w-lg lg:max-w-7xl mx-auto px-5 lg:px-10 pt-6 lg:pt-16 pb-8 lg:pb-20">
         {/* Institution logos */}
-        <div className="flex items-center gap-4 mb-5">
-          <InstitutionLogo which="tsinghua" theme="dark" className="h-10 max-w-[44%]" />
-          <span className="w-px h-9 bg-white/25" />
-          <InstitutionLogo which="btch" theme="dark" className="h-10 max-w-[52%]" />
+        <div className="flex items-center gap-4 lg:gap-6 mb-5 lg:mb-10">
+          <InstitutionLogo which="tsinghua" theme="dark" className="h-10 lg:h-12 max-w-[44%]" />
+          <span className="w-px h-9 lg:h-11 bg-white/25" />
+          <InstitutionLogo which="btch" theme="dark" className="h-10 lg:h-12 max-w-[52%]" />
         </div>
 
-        <div className="eyebrow !text-gold-300 mb-3">
-          <Sparkles size={13} /> {t('home.hero_eyebrow')}
-        </div>
+        <div className="lg:grid lg:grid-cols-12 lg:gap-12 lg:items-center">
+          <div className="lg:col-span-7">
+            <div className="eyebrow !text-gold-300 mb-3">
+              <Sparkles size={13} /> {t('home.hero_eyebrow')}
+            </div>
 
-        <h1 className="font-serif text-[31px] leading-[1.1] font-bold text-balance">
-          {t('home.hero_title_1')}<br />{t('home.hero_title_2')}
-        </h1>
-        <p className="mt-3.5 text-[15px] text-white/80 leading-[1.65] max-w-[20rem]">
-          {t('home.hero_subtitle')}
-        </p>
+            <h1 className="font-serif text-[31px] lg:text-6xl leading-[1.08] font-bold text-balance">
+              {t('home.hero_title_1')}<br />{t('home.hero_title_2')}
+            </h1>
+            <p className="mt-3.5 lg:mt-5 text-[15px] lg:text-xl text-white/80 leading-[1.65] max-w-[20rem] lg:max-w-2xl">
+              {t('home.hero_subtitle')}
+            </p>
+          </div>
+
+          <div className="lg:col-span-5 lg:pl-4">
 
         {/* faculty */}
-        <div className="mt-5 flex items-center gap-5">
+        <div className="mt-5 lg:mt-0 flex items-center gap-5">
           <div className="flex items-center gap-2.5">
             <CreatorPhoto file="yan-li.jpg" initials="YL" size={44} ring="gold" />
             <div className="leading-tight">
@@ -77,6 +82,8 @@ function Hero() {
             <GraduationCap size={16} /> {t('home.quiz')}
           </button>
         </div>
+          </div>{/* /right column */}
+        </div>{/* /hero grid */}
       </div>
     </section>
   )
@@ -92,12 +99,13 @@ function StatStrip() {
     { value: String(PC_DISEASES.length),    label: t('home.stat_entities'),  Icon: Activity },
   ]
   return (
-    <div className="grid grid-cols-4 gap-2 -mt-6 relative z-10 max-w-lg mx-auto px-4">
+    <div className="grid grid-cols-4 gap-2 lg:gap-5 -mt-6 lg:-mt-10 relative z-10 max-w-lg lg:max-w-5xl mx-auto px-4 lg:px-8">
       {stats.map(({ value, label, Icon }) => (
-        <div key={label} className="card px-1.5 py-3 flex flex-col items-center gap-0.5">
-          <Icon size={15} className="text-primary-600 mb-0.5" />
-          <div className="font-display text-lg font-bold text-ink leading-none">{value}</div>
-          <div className="text-[9.5px] font-semibold uppercase tracking-wide text-ink-muted">{label}</div>
+        <div key={label} className="card px-1.5 py-3 lg:py-7 flex flex-col items-center gap-0.5 lg:gap-1.5">
+          <Icon size={15} className="text-primary-600 mb-0.5 lg:hidden" />
+          <Icon size={22} className="text-primary-600 mb-1 hidden lg:block" />
+          <div className="font-display text-lg lg:text-4xl font-bold text-ink leading-none">{value}</div>
+          <div className="text-[9.5px] lg:text-xs font-semibold uppercase tracking-wide text-ink-muted">{label}</div>
         </div>
       ))}
     </div>
@@ -188,19 +196,20 @@ function QuickAccess() {
         <span className="section-title text-base">{t('home.explore')}</span>
         <span className="rule-gold" />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
         {QUICK_LINKS.map(({ to, Icon, label, sub }) => (
           <button
             key={to}
             onClick={() => navigate(to)}
-            className="card-interactive p-4 text-left flex flex-col gap-2"
+            className="card-interactive p-4 lg:p-6 text-left flex flex-col gap-2 lg:gap-3.5"
           >
-            <span className="w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center">
-              <Icon size={18} className="text-primary-700" />
+            <span className="w-9 h-9 lg:w-12 lg:h-12 rounded-xl bg-primary-50 flex items-center justify-center">
+              <Icon size={18} className="text-primary-700 lg:hidden" />
+              <Icon size={24} className="text-primary-700 hidden lg:block" />
             </span>
             <div>
-              <div className="text-sm font-bold text-ink leading-tight">{label}</div>
-              <div className="text-[11px] text-ink-muted mt-0.5">{sub}</div>
+              <div className="text-sm lg:text-lg font-bold text-ink leading-tight">{label}</div>
+              <div className="text-[11px] lg:text-sm text-ink-muted mt-0.5 lg:mt-1">{sub}</div>
             </div>
           </button>
         ))}
@@ -216,12 +225,14 @@ export default function PageHome() {
     <div className="animate-fade-in">
       <Hero />
       <StatStrip />
-      <div className="max-w-lg mx-auto px-4 pt-5 pb-4 space-y-5">
-        <DailyQuestion />
-        <PearlOfDay />
+      <div className="wrap pt-5 lg:pt-14 pb-4 space-y-5 lg:space-y-8">
+        <div className="grid lg:grid-cols-2 gap-5 lg:gap-6">
+          <DailyQuestion />
+          <PearlOfDay />
+        </div>
         <CurriculumBanner />
         <QuickAccess />
-        <p className="text-[10px] text-ink-muted/70 text-center pt-1">
+        <p className="text-[10px] lg:text-xs text-ink-muted/70 text-center pt-1">
           {t('home.disclaimer_line')}
         </p>
       </div>

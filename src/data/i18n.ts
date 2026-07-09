@@ -10,6 +10,7 @@ const en: Translations = {
     algorithms: 'Algorithms',
     trials: 'Trials',
     quiz: 'Quiz',
+    library: 'Library',
     about: 'About',
   },
   home: {
@@ -372,6 +373,7 @@ Object.assign(zh.nav as Record<string, string>, {
   algorithms: '算法',
   trials: '试验',
   quiz: '测验',
+  library: '文献',
   about: '关于',
 })
 

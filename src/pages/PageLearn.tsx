@@ -131,7 +131,7 @@ function BlockView({ block }: { block: LearnBlock }) {
   switch (block.type) {
     case 'text':
       return (
-        <p className="text-[16px] text-ink-soft leading-[1.85]">
+        <p className="text-[16px] lg:text-[17px] text-ink-soft leading-[1.85]">
           {block.content ? renderInline(block.content) : null}
         </p>
       )
@@ -221,7 +221,7 @@ function SectionView({ section }: { section: LearnSection }) {
   return (
     <section id={`sec-${section.id}`} className="space-y-4 scroll-mt-24">
       <div>
-        <h2 className="section-title">{section.title}</h2>
+        <h2 className="section-title lg:text-xl">{section.title}</h2>
         <div className="rule-gold mt-1.5" />
       </div>
       {section.blocks.map((block, i) => (
@@ -273,7 +273,7 @@ function ChapterReader({
   const Icon = chapterIcon(chapter.icon)
 
   return (
-    <div className="max-w-lg mx-auto px-4 pb-16">
+    <div className="wrap-read pb-16">
       <ReadingProgress />
       {/* Top bar */}
       <div className="sticky top-0 z-10 -mx-4 px-4 py-3 bg-[#f7f5fa]/90 backdrop-blur border-b border-[#efe9f3] flex items-center justify-between">
@@ -306,7 +306,7 @@ function ChapterReader({
             </span>
             <Icon size={22} className="text-primary-700" />
           </div>
-          <h1 className="font-serif text-2xl font-bold text-ink leading-tight text-balance">{chapter.title}</h1>
+          <h1 className="font-serif text-2xl lg:text-4xl font-bold text-ink leading-tight text-balance">{chapter.title}</h1>
           <p className="text-[15px] text-ink-soft leading-relaxed">{chapter.subtitle}</p>
           <p className="text-[11px] text-ink-muted italic pt-1">{chapter.guidelines_version}</p>
         </header>
@@ -527,12 +527,12 @@ export default function PageLearn() {
           onOpenContents={() => setSidebarOpen(true)}
         />
       ) : (
-        <div className="max-w-lg mx-auto px-4 pb-16">
-          <header className="pt-6 pb-4">
+        <div className="wrap pb-16">
+          <header className="pt-6 lg:pt-12 pb-4">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="eyebrow text-primary-700">{t('learn.eyebrow_curriculum')}</div>
-                <h1 className="font-serif text-3xl font-bold text-ink mt-1">{t('learn.title')}</h1>
+                <h1 className="font-serif text-3xl lg:text-5xl font-bold text-ink mt-1">{t('learn.title')}</h1>
               </div>
               <button
                 onClick={() => setSidebarOpen(true)}
@@ -556,13 +556,13 @@ export default function PageLearn() {
             {groups.map(({ track, items }) => (
               <div key={track}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="section-title text-base">{track}</span>
+                  <span className="section-title text-base lg:text-xl">{track}</span>
                   <span className="rule-gold" />
                   <span className="text-[11px] text-ink-muted ml-auto whitespace-nowrap">
                     {items.length} {t('learn.ch_short')} · {items.reduce((s, i) => s + i.chapter.reading_time_min, 0)} {t('common.min')}
                   </span>
                 </div>
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-5">
                   {items.map(({ chapter, index }) => (
                     <ChapterCard key={chapter.id} chapter={chapter} onOpen={() => jumpChapter(index)} />
                   ))}

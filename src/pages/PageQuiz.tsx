@@ -64,7 +64,7 @@ function Configurator({
       {/* Header */}
       <div>
         <div className="eyebrow mb-1">{t('quiz.board_review')}</div>
-        <h1 className="section-title text-2xl">{t('quiz.title')}</h1>
+        <h1 className="section-title text-2xl lg:text-4xl">{t('quiz.title')}</h1>
         <div className="rule-gold mt-2" />
         <p className="text-xs text-ink-muted mt-2">{t('quiz.tagline')}</p>
       </div>
@@ -340,8 +340,8 @@ function QuestionRunner({
       </div>
 
       {/* Stem */}
-      <div className="card p-5">
-        <p className="text-[16px] leading-relaxed text-ink font-serif">{question.stem}</p>
+      <div className="card p-5 lg:p-7">
+        <p className="text-[16px] lg:text-lg leading-relaxed text-ink font-serif">{question.stem}</p>
       </div>
 
       {/* Options */}
@@ -351,7 +351,7 @@ function QuestionRunner({
             key={opt}
             disabled={revealed}
             onClick={() => onSelect(opt)}
-            className={`w-full text-left flex items-start gap-3 p-4 rounded-xl border-2 transition-all ${optionClass(opt)}`}
+            className={`w-full text-left flex items-start gap-3 p-4 lg:p-5 rounded-xl border-2 transition-all ${optionClass(opt)}`}
           >
             <span className={`flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold ${badgeClass(opt)}`}>
               {opt}
@@ -579,7 +579,7 @@ export default function PageQuiz() {
   // Configurator
   if (!session) {
     return (
-      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
+      <div className="wrap-read pt-6 lg:pt-10 pb-10 animate-fade-in">
         <Configurator
           stats={stats}
           bookmarkCount={bookmarks.length}
@@ -594,7 +594,7 @@ export default function PageQuiz() {
   if (session.finished) {
     if (reviewing) {
       return (
-        <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
+        <div className="wrap-read pt-6 lg:pt-10 pb-10 animate-fade-in">
           <ExamReview
             questions={session.questions}
             answers={session.answers}
@@ -604,7 +604,7 @@ export default function PageQuiz() {
       )
     }
     return (
-      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
+      <div className="wrap-read pt-6 lg:pt-10 pb-10 animate-fade-in">
         <ScoreScreen
           questions={session.questions}
           answers={session.answers}

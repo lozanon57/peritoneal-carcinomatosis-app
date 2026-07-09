@@ -116,6 +116,12 @@
   .pt-safe { padding-top: max(1rem, var(--sat)); }
   .pb-safe { padding-bottom: max(1rem, var(--sab)); }
 
+  /* ── Responsive page containers ────────────────────────────────────────── */
+  /* mobile-first max-w-lg, widening on desktop for a full-website layout */
+  .wrap      { @apply w-full max-w-lg lg:max-w-6xl mx-auto px-4 lg:px-8; }
+  .wrap-wide { @apply w-full max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8; }
+  .wrap-read { @apply w-full max-w-lg lg:max-w-3xl mx-auto px-4 lg:px-6; }
+
   /* ── Teaching callouts (residency-course pedagogy) ─────────────────────── */
   .callout        { @apply rounded-2xl border p-5 text-[15px] leading-[1.75]; }
   .callout-trial  { @apply callout bg-primary-50/70 border-primary-200 text-ink-soft; }

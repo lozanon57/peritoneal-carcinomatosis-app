@@ -141,7 +141,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
   const chosenOption = node.options?.find(o => o.id === chosenId) ?? null
 
   return (
-    <div className="max-w-lg mx-auto px-4 pt-6 pb-16 animate-slide-up">
+    <div className="wrap-read pt-6 lg:pt-12 pb-16 animate-slide-up">
       {/* top bar */}
       <div className="flex items-center justify-between mb-4">
         <button onClick={onExit} className="flex items-center gap-1.5 text-sm text-ink-soft">
@@ -441,15 +441,15 @@ export default function PageCases() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 pt-6 pb-16 animate-slide-up">
+    <div className="wrap pt-6 lg:pt-12 pb-16 animate-slide-up">
       <div className="eyebrow">{t('cases.eyebrow_simulator')}</div>
-      <h1 className="section-title font-serif mt-1">{t('cases.title')}</h1>
-      <p className="text-[14px] text-ink-soft mt-1">
+      <h1 className="section-title font-serif mt-1 lg:text-4xl">{t('cases.title')}</h1>
+      <p className="text-[14px] lg:text-lg text-ink-soft mt-1">
         {t('cases.subtitle')}
       </p>
       <div className="rule-gold my-5" />
 
-      <div className="space-y-3.5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-5">
         {CASE_SIMULATIONS.map(sim => (
           <CaseCard key={sim.id} sim={sim} onStart={() => setActiveId(sim.id)} />
         ))}
