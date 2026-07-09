@@ -91,6 +91,17 @@ export interface LandmarkTrial {
   study_type: StudyType
   full_citation: string
   n_patients?: number
+  pico?: {
+    population: string       // P — who was studied (n, disease, setting)
+    intervention: string     // I — what the experimental arm received
+    comparator: string       // C — the control/comparison arm
+    outcome: string          // O — primary (and key secondary) endpoints
+  }
+  background?: string        // why the question mattered / prior evidence gap
+  design?: string            // design detail: randomisation, blinding, phase, sample size, follow-up
+  results_detail?: string    // detailed results with numbers (HR, CI, medians, p, subgroups)
+  practice_change?: string   // explicit: how it changed clinical practice (before → after)
+  criticisms?: string        // limitations, caveats, generalisability
 }
 
 // ─── Quiz types ───────────────────────────────────────────────────────────────
@@ -123,8 +134,10 @@ export interface QuizQuestion {
   pearl: string
 }
 
+export type QuizMode = 'practice' | 'timed' | 'exam' | 'topic' | 'weak' | 'bookmark'
+
 export interface QuizSession {
-  mode: 'quick' | 'topic' | 'exam'
+  mode: QuizMode
   topic?: QuizTopic
   questions: QuizQuestion[]
   currentIndex: number
@@ -132,6 +145,8 @@ export interface QuizSession {
   revealed: Record<string, boolean>
   startTime: number
   finished: boolean
+  /** Per-question countdown in seconds (timed mode only). */
+  secondsPerQuestion?: number
 }
 
 export interface QuizStats {
@@ -141,6 +156,8 @@ export interface QuizStats {
   bestStreak: number
   masteryByTopic: Record<QuizTopic, { correct: number; total: number }>
   wrongQuestionIds: string[]
+  /** Question ids the user has starred/bookmarked. */
+  bookmarks?: string[]
   lastPlayed: number
 }
 

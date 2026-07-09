@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
-import type { QuizQuestion, QuizSession, QuizStats, QuizTopic } from '../types'
+import type { QuizMode, QuizQuestion, QuizSession, QuizStats, QuizTopic } from '../types'
 
 const EMPTY_STATS: QuizStats = {
   totalAnswered: 0,
@@ -9,21 +9,44 @@ const EMPTY_STATS: QuizStats = {
   bestStreak: 0,
   masteryByTopic: {} as QuizStats['masteryByTopic'],
   wrongQuestionIds: [],
+  bookmarks: [],
   lastPlayed: 0,
 }
 
 const STORAGE_KEY = 'pc-quiz-stats'
+const BOOKMARKS_KEY = 'pc-quiz-bookmarks'
+
+/** Default per-question countdown for Timed mode. */
+export const TIMED_SECONDS = 75
 
 function loadStats(): QuizStats {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as QuizStats
+    if (raw) {
+      const parsed = JSON.parse(raw) as QuizStats
+      return { ...EMPTY_STATS, ...parsed }
+    }
   } catch {}
   return EMPTY_STATS
 }
 
 function saveStats(s: QuizStats): void {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {}
+}
+
+function loadBookmarks(): string[] {
+  try {
+    const raw = localStorage.getItem(BOOKMARKS_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) return parsed as string[]
+    }
+  } catch {}
+  return []
+}
+
+function saveBookmarks(ids: string[]): void {
+  try { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(ids)) } catch {}
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -35,38 +58,61 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-function pickQuestions(mode: QuizSession['mode'], topic?: QuizTopic, wrongIds?: string[]): QuizQuestion[] {
+export interface StartOptions {
+  topic?: QuizTopic
+  count?: number
+}
+
+function pickQuestions(
+  mode: QuizMode,
+  opts: StartOptions,
+  wrongIds: string[],
+  bookmarks: string[],
+): QuizQuestion[] {
   let pool = QUIZ_QUESTIONS
-  if (mode === 'topic' && topic) pool = pool.filter(q => q.topic === topic)
-  // Weight wrong questions: add them twice for spaced repetition
-  if (wrongIds && wrongIds.length > 0) {
-    const wrong = pool.filter(q => wrongIds.includes(q.id))
-    pool = [...pool, ...wrong]
+
+  if (mode === 'topic' && opts.topic) {
+    pool = pool.filter(q => q.topic === opts.topic)
+  } else if (mode === 'weak') {
+    pool = pool.filter(q => wrongIds.includes(q.id))
+  } else if (mode === 'bookmark') {
+    pool = pool.filter(q => bookmarks.includes(q.id))
+  } else if (mode === 'practice' || mode === 'timed' || mode === 'exam') {
+    // Weight previously-wrong questions for spaced repetition.
+    if (wrongIds.length > 0) {
+      const wrong = pool.filter(q => wrongIds.includes(q.id))
+      pool = [...pool, ...wrong]
+    }
   }
+
   const shuffled = shuffle(pool)
-  const count = mode === 'quick' ? 5 : mode === 'exam' ? 20 : Math.min(10, shuffled.length)
+  const defaultCount = mode === 'exam' ? 20 : 10
+  const requested = opts.count ?? defaultCount
+  const count = Math.min(requested, shuffled.length)
   return shuffled.slice(0, count)
 }
 
 export function useQuiz() {
   const [session, setSession] = useState<QuizSession | null>(null)
   const [stats, setStats] = useState<QuizStats>(loadStats)
+  const [bookmarks, setBookmarks] = useState<string[]>(loadBookmarks)
 
-  const startSession = useCallback((mode: QuizSession['mode'], topic?: QuizTopic) => {
-    const questions = pickQuestions(mode, topic, stats.wrongQuestionIds)
+  const startSession = useCallback((mode: QuizMode, opts: StartOptions = {}) => {
+    const questions = pickQuestions(mode, opts, stats.wrongQuestionIds, bookmarks)
     setSession({
       mode,
-      topic,
+      topic: opts.topic,
       questions,
       currentIndex: 0,
       answers: {},
       revealed: {},
       startTime: Date.now(),
       finished: false,
+      secondsPerQuestion: mode === 'timed' ? TIMED_SECONDS : undefined,
     })
-  }, [stats.wrongQuestionIds])
+  }, [stats.wrongQuestionIds, bookmarks])
 
-  const answer = useCallback((questionId: string, choice: 'A' | 'B' | 'C' | 'D' | 'E') => {
+  const answer = useCallback((questionId: string, choice: 'A' | 'B' | 'C' | 'D' | 'E' | null) => {
     setSession(prev => {
       if (!prev) return prev
       return { ...prev, answers: { ...prev.answers, [questionId]: choice } }
@@ -76,12 +122,12 @@ export function useQuiz() {
   const reveal = useCallback((questionId: string) => {
     setSession(prev => {
       if (!prev) return prev
+      if (prev.revealed[questionId]) return prev
       const q = prev.questions.find(x => x.id === questionId)
       if (!q) return prev
       const isCorrect = prev.answers[questionId] === q.correct
       const newRevealed = { ...prev.revealed, [questionId]: true }
 
-      // Update stats
       setStats(s => {
         const newStreak = isCorrect ? s.streak + 1 : 0
         const topicStats = s.masteryByTopic[q.topic] ?? { correct: 0, total: 0 }
@@ -118,13 +164,23 @@ export function useQuiz() {
 
   const endSession = useCallback(() => setSession(null), [])
 
+  const toggleBookmark = useCallback((questionId: string) => {
+    setBookmarks(prev =>
+      prev.includes(questionId) ? prev.filter(id => id !== questionId) : [...prev, questionId]
+    )
+  }, [])
+
+  const isBookmarked = useCallback((questionId: string) => bookmarks.includes(questionId), [bookmarks])
+
   const resetStats = useCallback(() => {
-    const fresh = EMPTY_STATS
-    setStats(fresh)
+    setStats(EMPTY_STATS)
+    setBookmarks([])
     try { localStorage.removeItem(STORAGE_KEY) } catch {}
+    try { localStorage.removeItem(BOOKMARKS_KEY) } catch {}
   }, [])
 
   React.useEffect(() => { saveStats(stats) }, [stats])
+  React.useEffect(() => { saveBookmarks(bookmarks) }, [bookmarks])
 
   const currentQuestion = useMemo(() =>
     session ? session.questions[session.currentIndex] ?? null : null,
@@ -136,5 +192,19 @@ export function useQuiz() {
     return QUIZ_QUESTIONS[idx]
   }, [])
 
-  return { session, stats, currentQuestion, dailyQuestion, startSession, answer, reveal, next, endSession, resetStats }
+  return {
+    session,
+    stats,
+    bookmarks,
+    currentQuestion,
+    dailyQuestion,
+    startSession,
+    answer,
+    reveal,
+    next,
+    endSession,
+    toggleBookmark,
+    isBookmarked,
+    resetStats,
+  }
 }

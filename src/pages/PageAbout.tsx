@@ -3,19 +3,18 @@ import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
 import { LEARN_CHAPTERS } from '../data/learn_content'
+import { CreatorPhoto, InstitutionLogo } from '../components/Institutions'
 
 function FacultyCard({
-  initials, name, role, meta, bio, tags, accent,
+  file, initials, name, role, meta, bio, tags, accent,
 }: {
-  initials: string; name: string; role: string; meta: string; bio: string[]; tags: string[]; accent: 'gold' | 'purple'
+  file: string; initials: string; name: string; role: string; meta: string; bio: string[]; tags: string[]; accent: 'gold' | 'purple'
 }) {
   return (
     <div className="card p-5">
       <div className="flex items-start gap-3.5">
-        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 font-display font-bold text-base ${
-          accent === 'gold' ? 'bg-gold-sheen text-ink' : 'bg-tsinghua text-white'
-        }`}>
-          {initials}
+        <div className="flex-shrink-0">
+          <CreatorPhoto file={file} initials={initials} size={56} ring={accent === 'gold' ? 'gold' : 'white'} />
         </div>
         <div className="min-w-0">
           <h2 className="font-serif font-bold text-ink text-lg leading-tight">{name}</h2>
@@ -58,6 +57,7 @@ export default function PageAbout() {
       <div className="space-y-3">
         <FacultyCard
           accent="gold"
+          file="yan-li.jpg"
           initials="YL"
           name="Prof. Yan Li, MD PhD"
           role="Author & Owner · Senior Faculty"
@@ -70,6 +70,7 @@ export default function PageAbout() {
         />
         <FacultyCard
           accent="purple"
+          file="pablo-lozano.jpg"
           initials="PL"
           name="Pablo Lozano Lominchar, MD PhD"
           role="Author & Owner · Course Director"
@@ -89,6 +90,11 @@ export default function PageAbout() {
         <h2 className="section-title text-base mb-3.5 flex items-center gap-2">
           <Globe size={16} className="text-primary-700" /> Institutions
         </h2>
+        <div className="flex items-center justify-center gap-5 py-2 mb-3 rounded-xl bg-primary-50/50">
+          <InstitutionLogo which="tsinghua" theme="light" className="h-10 max-w-[44%]" />
+          <span className="w-px h-9 bg-[#e6def0]" />
+          <InstitutionLogo which="btch" theme="light" className="h-10 max-w-[50%]" />
+        </div>
         <div className="space-y-3.5 text-[15px] leading-[1.6]">
           <div className="flex gap-3">
             <span className="w-1 rounded-full bg-gold-sheen flex-shrink-0" />

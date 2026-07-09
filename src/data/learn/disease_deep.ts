@@ -17,7 +17,7 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
     title: 'Colorectal Peritoneal Metastases — Deep Dive',
     subtitle: 'Biology, selection, the PRODIGE 7 controversy, prophylaxis, and systemic sequencing',
     icon: 'Dna',
-    reading_time_min: 30,
+    reading_time_min: 31,
     level: 'Core',
     track: 'Disease-Specific',
     guidelines_version: 'PSOGI 2022 · Chicago Consensus 2020 · NCCN Colon v3.2024 · ESMO 2023',
@@ -34,6 +34,8 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
       'Goéré D, et al. PROPHYLOCHIP-PRODIGE 15. Lancet Oncol 2020;21(9):1147–1154.',
       'Bhatt A, Glehen O, et al. CYTO-CHIP propensity study. J Clin Oncol 2019;37(23):2028–2040.',
       'Verwaal VJ, et al. J Clin Oncol 2003;21(20):3737–3743.',
+      'Huang CQ, Yang XJ, Yu Y, Wu HT, Liu Y, Yonemura Y, Li Y. PLoS One. 2014;9(9):e108509. PMID: 25259574.',
+      'Huang CQ, Min Y, Wang SY, Yang XJ, Liu Y, Xiong B, Yonemura Y, Li Y. Oncotarget. 2017;8(33):55657-55683. PMID: 28903452.',
     ],
     sections: [
       {
@@ -170,6 +172,13 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
             type: 'text',
             content:
               'The **CYTO-CHIP** propensity-matched analysis addresses established disease rather than prophylaxis: it compared CRS+HIPEC with CRS alone across French centres and found HIPEC associated with better OS and DFS. Being non-randomised it is vulnerable to selection bias, but it provides the counterweight to PRODIGE 7 that sustains interest in optimised HIPEC regimens.',
+          },
+          {
+            type: 'trial',
+            title: 'Chinese evidence — prospective CRS+HIPEC in colorectal PM',
+            content:
+              'A prospective phase II study from Prof. Yan Li’s Chinese centre reported a **median OS of 16 months** after CRS+HIPEC for colorectal peritoneal carcinomatosis, with complete cytoreduction and ≥6 adjuvant chemotherapy cycles as independent survival factors. A Chinese-led meta-analysis of 76 studies subsequently found a pooled survival hazard ratio of **2.67 favouring CRS+HIPEC**, independent of the HIPEC drug regimen — reinforcing complete cytoreduction as the therapeutic act that matters.',
+            ref: 'Huang CQ, Yang XJ, ... Yonemura Y, Li Y. PLoS One. 2014;9(9):e108509. PMID: 25259574; Huang CQ, et al. Oncotarget. 2017;8(33):55657-55683. PMID: 28903452.',
           },
           {
             type: 'pitfall',
@@ -387,6 +396,8 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
       'Moran BJ, et al. Basingstoke PMP outcomes. Eur J Surg Oncol / Br J Surg series.',
       'Chua TC, et al. Pooled international PMP registry. J Clin Oncol 2012;30(20):2449–2456.',
       'Sugarbaker PH, Chang D. Ann Surg Oncol 1999;6(8):727–731.',
+      'Gao S, Zhang X, Yu Z, Shi G, Ma R, Li Y. Front Surg. 2026;12:1692847. PMID: 41694806.',
+      'Wang B, Ma R, Shi G, Li XB, Yang R, Li Y. Orphanet J Rare Dis. 2024;19(1):1. PMID: 38178189.',
     ],
     sections: [
       {
@@ -551,6 +562,8 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
       'Carbone M, et al. BAP1 and mesothelioma. Nat Rev Cancer / Lancet Oncol reviews.',
       'Baratti D, Deraco M, et al. Peritoneal mesothelioma CRS+HIPEC series. Ann Surg Oncol.',
       'Baas P, et al. CheckMate-743 (pleural). Lancet 2021;397(10272):375–386.',
+      'Liang H, Su YD, Fu F, Li XB, Ma R, Yang R, Wu HL, Li Y. Eur J Surg Oncol. 2024;50(12):108692. PMID: 39298871.',
+      'Yu Y, Li Y, Lin YL, Ma R, Ji ZH, Zhang YB, An SL, Liu G, Yang R, Li XB. Chin J Gastrointest Surg. 2021;24(3):218-227. PMID: 34645167.',
     ],
     sections: [
       {
@@ -889,7 +902,7 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
     title: 'Gastric Peritoneal Metastases',
     subtitle: 'Investigational status, PCI ≤6, FLOT4, GASTRICHIP, claudin-18.2 and bidirectional therapy',
     icon: 'Activity',
-    reading_time_min: 26,
+    reading_time_min: 27,
     level: 'Advanced',
     track: 'Disease-Specific',
     guidelines_version: 'ESMO Gastric 2022 · JGCA 2021 · NCCN Gastric 2024 · SPOTLIGHT/GLOW',
@@ -906,6 +919,10 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
       'Shah MA, et al. GLOW (zolbetuximab). Nat Med 2023;29:2133–2141.',
       'Bonnot PE, et al. CYTO-CHIP gastric propensity study. J Clin Oncol 2019;37(23):2028–2040.',
       'Rau B, et al. GASTRIPEC-I. Ann Oncol 2024.',
+      'Yang XJ, Huang CQ, Suo T, Mei LJ, Yang GL, Cheng FL, Zhou YF, Xiong B, Yonemura Y, Li Y. Ann Surg Oncol. 2011;18(6):1575-1581. PMID: 21431408.',
+      'Yu P, Ye Z, Dai G, Zhang Y, Huang L, Du Y, Cheng X. BMC Cancer. 2020;20(1):1108. PMID: 33198674.',
+      'Wu HT, Peng KW, Ji ZH, Sun JH, Zhang Q, Yang XJ, Huang CQ, Li Y. Eur J Surg Oncol. 2016;42(7):1024-1034. PMID: 27179924.',
+      'Lv CB, Tong LY, Zeng WM, Liu YX, Li XL, Cai YQ, Chen QY. World J Surg Oncol. 2024;22(1):240. PMID: 39256787.',
     ],
     sections: [
       {
@@ -952,6 +969,13 @@ export const DISEASE_CHAPTERS: LearnChapter[] = [
             content:
               'In a French propensity-matched analysis of GC-PM, CRS+HIPEC was associated with improved OS versus CRS alone, but benefit concentrated in **CC-0 patients with low PCI**; median survival deteriorated rapidly with rising PCI and incomplete cytoreduction, reinforcing the ≤6 / CC-0 doctrine.',
             ref: 'Bonnot PE, et al. J Clin Oncol 2019;37(23):2028–2040.',
+          },
+          {
+            type: 'trial',
+            title: 'Chinese evidence — the first CRS+HIPEC RCT (gastric PM)',
+            content:
+              'The pivotal Chinese phase III RCT from Prof. Yan Li’s group (Yang, Huang, Yonemura, Li) randomised 68 patients with gastric peritoneal carcinomatosis to CRS alone versus CRS plus **cisplatin + mitomycin-C HIPEC**. Adding HIPEC nearly doubled median survival (**11.0 vs 6.5 months**) without added serious morbidity — the first randomised evidence that regional chemotherapy improves survival in gastric PM, and the foundation of the modern Chinese CRS+HIPEC programme. Completeness of cytoreduction and synchronous timing were the dominant survival determinants.',
+            ref: 'Yang XJ, Huang CQ, Suo T, ... Yonemura Y, Li Y. Ann Surg Oncol. 2011;18(6):1575-1581. PMID: 21431408.',
           },
           {
             type: 'trial',

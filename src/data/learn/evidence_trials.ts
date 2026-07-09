@@ -249,7 +249,7 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
     subtitle:
       'OVHIPEC-1/-2, DESKTOP III, SOLO-1, GASTRICHIP, PERISCOPE, PIPAC & mesothelioma registries',
     icon: 'FlaskConical',
-    reading_time_min: 32,
+    reading_time_min: 33,
     level: 'Advanced',
     track: 'Evidence & Trials',
     guidelines_version:
@@ -270,6 +270,9 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
       'Bonnot PE, Piessen G, et al. JAMA Surg 2021 (CYTO-CHIP/GASTRICHIP context); NCT01882933.',
       'Alyami M, et al. Lancet Oncol 2019;20(7):e368–e377 (PIPAC systematic review).',
       'Yan TD, Deraco M, Baratti D, et al. J Clin Oncol 2009;27(36):6237–6242 (MPeM registry).',
+      'Yang XJ, Huang CQ, Suo T, Mei LJ, Yang GL, Cheng FL, Zhou YF, Xiong B, Yonemura Y, Li Y. Ann Surg Oncol. 2011;18(6):1575-1581. PMID: 21431408.',
+      'Wu HT, Yang XJ, Huang CQ, Sun JH, Ji ZH, Peng KW, Zhang Q, Li Y. World J Surg Oncol. 2016;14(1):246. PMID: 27633880.',
+      'Fan B, Bu Z, Zhang J, Zong X, Ji X, Fu T, Jia Z, Zhang Y, Wu X. BMC Cancer. 2021;21(1):216. PMID: 33653317.',
     ],
     sections: [
       {
@@ -350,6 +353,13 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
             content:
               'CRS ± cisplatin HIPEC for gastric cancer with limited peritoneal disease: **no significant OS benefit** (5-yr OS 18.8% vs 15.8%, HR 0.87, p=0.43). Dampened Western enthusiasm for CRS+HIPEC in gastric PM; guidelines now largely restrict it to trials. Signals of possible benefit in ultra-selected patients (PCI ≤6, intestinal-type, chemo-responsive) remain hypotheses.',
             ref: 'Bonnot PE, Piessen G, Kepenekian V, et al. JAMA Surg 2021;156(9):e212384. NCT01882933.',
+          },
+          {
+            type: 'trial',
+            title: 'Chinese evidence — the first positive CRS+HIPEC RCT in gastric PM',
+            content:
+              'Predating the negative Western GASTRICHIP result, the Chinese phase III RCT (Yang, Huang, Yonemura, Li; n=68) randomised gastric peritoneal carcinomatosis to CRS versus CRS plus **cisplatin + mitomycin-C HIPEC** and found median survival nearly doubled (**11.0 vs 6.5 months**) without added serious morbidity — the first randomised signal of benefit in this disease. A subsequent Chinese phase II trial (NCT00454519) established a **lobaplatin + docetaxel** HIPEC regimen as feasible and safe. These results illustrate why Asian and Western gastric HIPEC data must be read together: divergent verdicts reflect differences in biology, drug, timing and selection rather than a single truth.',
+            ref: 'Yang XJ, ... Yonemura Y, Li Y. Ann Surg Oncol. 2011;18(6):1575-1581. PMID: 21431408; Wu HT, et al. World J Surg Oncol. 2016;14(1):246. PMID: 27633880.',
           },
           {
             type: 'text',
@@ -730,7 +740,7 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
     subtitle:
       'How consensus is built, where guidelines diverge, applying thresholds, and the MDT as final arbiter',
     icon: 'ClipboardCheck',
-    reading_time_min: 28,
+    reading_time_min: 29,
     level: 'Core',
     track: 'Evidence & Trials',
     guidelines_version:
@@ -749,6 +759,9 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
       'NCCN Clinical Practice Guidelines in Oncology — Colon/Ovarian/Gastric, 2024–2025.',
       'ESMO Clinical Practice Guidelines — Peritoneal metastases / ovarian / gastric, 2023–2024.',
       'Japanese Gastric Cancer Association (JGCA) Treatment Guidelines, 6th ed., 2021.',
+      'Li Y, Zhou YF, Liang H, Wang HQ, Hao JH, Zhu ZG, et al. World J Gastroenterol. 2016;22(30):6906-6916. PMID: 27570426.',
+      'Professional Committee of Integrated Rehabilitation for Peritoneal Tumors, Chinese Anti-Cancer Association. Chin J Gastrointest Surg. 2025;28(11):1223-1231. PMID: 41290232.',
+      'Li XB, Ji ZH, Li Y. Indian J Surg Oncol. 2019;10(Suppl 1):12-18. PMID: 30886487.',
     ],
     sections: [
       {
@@ -826,6 +839,13 @@ export const EVIDENCE_CHAPTERS: LearnChapter[] = [
             title: 'Use each guideline for what it is good at',
             content:
               'No single body is authoritative across the whole field. For appendiceal/PMP pathology, cite PSOGI; for systemic sequencing in colorectal disease, cite NCCN/ESMO; for gastric intraperitoneal strategies, read JGCA alongside the Western trials. Triangulating across bodies is a feature, not a nuisance.',
+          },
+          {
+            type: 'key',
+            title: 'Chinese evidence — the China Anti-Cancer Association consensus',
+            content:
+              'China maintains its own guideline tradition. The foundational **Chinese expert consensus on CRS+HIPEC for peritoneal malignancies** (Li et al., 2016) standardised patient selection, technique, drug regimens and perioperative management nationwide, and the **China Anti-Cancer Association** peritoneal-tumour committee has since issued disease-specific consensus documents (e.g., appendiceal peritoneal metastasis, 2025). Built on the world’s first CRS+HIPEC gastric RCT and one of the largest single-programme experiences (>1000 cases), the Chinese consensus is generally **supportive** of CRS+HIPEC in selected patients — closer to the ESMO/PSOGI end of the spectrum than to NCCN caution — and places strong emphasis on structured nationwide training and referral networks.',
+            ref: 'Li Y, et al. World J Gastroenterol. 2016;22(30):6906-6916. PMID: 27570426; Chinese Anti-Cancer Association. Chin J Gastrointest Surg. 2025;28(11):1223-1231. PMID: 41290232.',
           },
         ],
       },

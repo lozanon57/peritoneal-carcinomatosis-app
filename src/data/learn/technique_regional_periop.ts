@@ -777,7 +777,7 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
     title: 'HIPEC Delivery Systems & Technique',
     subtitle: 'Open (coliseum) vs closed vs semi-open, perfusion circuit, inflow/outflow, thermometry and occupational safety',
     icon: 'Thermometer',
-    reading_time_min: 30,
+    reading_time_min: 31,
     level: 'Core',
     track: 'Regional Therapy',
     guidelines_version: 'Chicago Consensus 2020 · PSOGI 2022 · Sugarbaker HIPEC technique',
@@ -794,6 +794,9 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
       'Chicago Consensus Working Group. HIPEC technique and standards. Ann Surg Oncol 2020;27:1794–1804.',
       'Van der Speeten K, Stuart OA, Sugarbaker PH. Pharmacokinetics and pharmacodynamics of perioperative cancer chemotherapy. Cancer J 2009;15:216–224.',
       'PSOGI/EURACAN HIPEC technical consensus. Eur J Surg Oncol 2022.',
+      'Ba MC, Cui SZ, Lin SQ, Tang YQ, Wu YB, Wang B, Zhang XL. Surg Endosc. 2013;27(8):2735-2743. PMID: 23392978.',
+      'Cui SZ, Ba MC, Tang YQ, Liu JW, Wu YB, Wang B, Zhang XL. J Laparoendosc Adv Surg Tech A. 2016;26(2):81-86. PMID: 26779722.',
+      'Ba M, Cui S, Wang B, Long H, Yan Z, Wang S, Wu Y, Gao Y. Yonsei Med J. 2017;58(3):497-504. PMID: 28332353.',
     ],
     sections: [
       {
@@ -834,6 +837,13 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
             title: 'Match technique to the drug and the priority',
             content:
               'Choose **open** when uniform distribution over a large, irregular cavity is paramount (bulky prior disease, PMP), and **closed** when raised intra-abdominal pressure to drive penetration and minimal occupational exposure are the priorities. Neither has proven superior for survival; institutional expertise and safety culture should drive the choice.',
+          },
+          {
+            type: 'trial',
+            title: 'Chinese evidence — minimally invasive HIPEC for malignant ascites',
+            content:
+              'Chinese groups pioneered laparoscope-assisted and B-ultrasound-guided **continuous circulatory HIPEC** as a less invasive route for palliating malignant ascites, including ascites from unresectable gastric cancer. A multivariate comparison found B-ultrasound-guided delivery achieved ascites control comparable to the laparoscopic approach with lower invasiveness, while a dedicated analysis characterised the port-site metastasis "chimney effect" to inform safer trocar and drain management during minimally invasive perfusion.',
+            ref: 'Ba MC, et al. Surg Endosc. 2013;27(8):2735-2743. PMID: 23392978; Cui SZ, et al. J Laparoendosc Adv Surg Tech A. 2016;26(2):81-86. PMID: 26779722.',
           },
         ],
       },
@@ -1146,7 +1156,7 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
     title: 'PIPAC & Aerosol Regional Therapy',
     subtitle: 'Nebuliser physics, capnoperitoneum, aerosol penetration, low-dose regimens, PRGS regression grading and repeat cycles',
     icon: 'Wind',
-    reading_time_min: 28,
+    reading_time_min: 29,
     level: 'Advanced',
     track: 'Regional Therapy',
     guidelines_version: 'Solass et al. 2014 · PSOGI PIPAC consensus · ISSPP recommendations',
@@ -1163,6 +1173,9 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
       'Alyami M, Hübner M, Grass F, et al. Pressurised intraperitoneal aerosol chemotherapy: rationale, evidence, and potential. Lancet Oncol 2019;20:e368–e377.',
       'Solass W, Sempoux C, Detlefsen S, et al. Peritoneal Regression Grading Score (PRGS). Pleura Peritoneum 2016;1:99–107.',
       'Grass F, Vuagniaux A, Teixeira-Farinha H, et al. Systematic review of PIPAC for peritoneal carcinomatosis. Br J Surg 2017;104:669–678.',
+      'Chen R, Yang Z, Li R, Yang Y, Zheng J, Wang J, Li Y. Gastroenterol Rep (Oxf). 2025;13:goaf040. PMID: 40520131.',
+      'Li RJ, Chen RJ, Wu DQ, Wang JJ, Yang ZF, Li Y. Chin J Gastrointest Surg. 2025;28(5):551-556. PMID: 40404375.',
+      'Yang ZF, Chen RJ, Li RJ, Li Y. Chin J Gastrointest Surg. 2025;28(5):497-507. PMID: 40404368.',
     ],
     sections: [
       {
@@ -1195,6 +1208,13 @@ export const TECHNIQUE_CHAPTERS: LearnChapter[] = [
             title: 'Distribution and pressure, not brute-force dose',
             content:
               'PIPAC\'s therapeutic gain comes from **physics (aerosol distribution + pressure-driven penetration)**, not from high drug concentration. That is why a fraction of the HIPEC dose can be effective — and why nebuliser function, tight capnoperitoneum and correct pressure are as important as the drug itself.',
+          },
+          {
+            type: 'trial',
+            title: 'Chinese evidence — PIPAC in gastric peritoneal metastases',
+            content:
+              'A Chinese-led meta-analysis (671 patients, 1357 procedures) reported a **66% histological response rate and 11.7-month median OS** with PIPAC in gastric peritoneal metastases, best achieved when combined with systemic chemotherapy over ≥3 sessions. A first Chinese case series using a domestically deployed PIPAC device confirmed the procedure is safe and technically feasible, with low pain scores and short hospital stays — reflecting rapid uptake of aerosol regional therapy in China.',
+            ref: 'Chen R, et al. Gastroenterol Rep (Oxf). 2025;13:goaf040. PMID: 40520131; Li RJ, et al. Chin J Gastrointest Surg. 2025;28(5):551-556. PMID: 40404375.',
           },
         ],
       },

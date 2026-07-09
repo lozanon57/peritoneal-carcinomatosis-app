@@ -8,6 +8,7 @@ import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
 import { LEARN_CHAPTERS } from '../data/learn_content'
+import { InstitutionLogo, CreatorPhoto } from '../components/Institutions'
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function Hero() {
@@ -22,9 +23,16 @@ function Hero() {
       </svg>
       <div className="absolute -left-10 bottom-[-40px] w-56 h-56 rounded-full bg-primary-500/30 blur-3xl" aria-hidden />
 
-      <div className="relative max-w-lg mx-auto px-5 pt-7 pb-8">
+      <div className="relative max-w-lg mx-auto px-5 pt-6 pb-8">
+        {/* Institution logos */}
+        <div className="flex items-center gap-4 mb-5">
+          <InstitutionLogo which="tsinghua" theme="dark" className="h-10 max-w-[44%]" />
+          <span className="w-px h-9 bg-white/25" />
+          <InstitutionLogo which="btch" theme="dark" className="h-10 max-w-[52%]" />
+        </div>
+
         <div className="eyebrow !text-gold-300 mb-3">
-          <Sparkles size={13} /> Tsinghua University · Beijing Tsinghua Changgung Hospital
+          <Sparkles size={13} /> Peritoneal Surface Oncology Academy
         </div>
 
         <h1 className="font-serif text-[31px] leading-[1.1] font-bold text-balance">
@@ -35,15 +43,21 @@ function Hero() {
         </p>
 
         {/* faculty */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 bg-white/12 backdrop-blur rounded-full pl-1 pr-3 py-1 text-xs font-medium">
-            <span className="w-5 h-5 rounded-full bg-gold-sheen flex items-center justify-center text-[9px] font-bold text-ink">YL</span>
-            Prof. Yan Li
-          </span>
-          <span className="inline-flex items-center gap-1.5 bg-white/12 backdrop-blur rounded-full pl-1 pr-3 py-1 text-xs font-medium">
-            <span className="w-5 h-5 rounded-full bg-white/90 flex items-center justify-center text-[9px] font-bold text-primary-800">PL</span>
-            Dr. Pablo Lozano
-          </span>
+        <div className="mt-5 flex items-center gap-5">
+          <div className="flex items-center gap-2.5">
+            <CreatorPhoto file="yan-li.jpg" initials="YL" size={44} ring="gold" />
+            <div className="leading-tight">
+              <div className="text-sm font-semibold text-white">Prof. Yan Li</div>
+              <div className="text-[10px] text-white/60">MD PhD · Author</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <CreatorPhoto file="pablo-lozano.jpg" initials="PL" size={44} ring="white" />
+            <div className="leading-tight">
+              <div className="text-sm font-semibold text-white">Dr. Pablo Lozano</div>
+              <div className="text-[10px] text-white/60">MD PhD · Author</div>
+            </div>
+          </div>
         </div>
 
         {/* CTAs */}

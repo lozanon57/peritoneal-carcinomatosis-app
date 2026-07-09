@@ -29,13 +29,46 @@ function studyTypeBadge(type: LandmarkTrial['study_type']) {
   return <span className={`badge border ${colors[type] ?? 'bg-gray-100 border-gray-200'}`}>{type}</span>
 }
 
+const PICO_META = [
+  { key: 'population', letter: 'P', label: 'Population', chip: 'bg-primary-700 text-white' },
+  { key: 'intervention', letter: 'I', label: 'Intervention', chip: 'bg-gold-500 text-white' },
+  { key: 'comparator', letter: 'C', label: 'Comparator', chip: 'bg-gray-500 text-white' },
+  { key: 'outcome', letter: 'O', label: 'Outcome', chip: 'bg-emerald-600 text-white' },
+] as const
+
+function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
+  return (
+    <div>
+      <p className="eyebrow mb-2">PICO framework</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {PICO_META.map(m => {
+          const text = pico[m.key]
+          if (!text) return null
+          return (
+            <div key={m.key} className="card p-3 flex gap-3 items-start">
+              <span className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-serif font-bold text-base ${m.chip}`}>
+                {m.letter}
+              </span>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-400">{m.label}</p>
+                <p className="text-[15px] text-gray-700 leading-relaxed mt-0.5">{text}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => void }) {
+  const practiceChange = trial.practice_change ?? trial.practice_impact
   return (
     <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col">
       <div className="bg-white border-b border-gray-100 px-4 pt-safe-top pb-3">
         <div className="flex items-start justify-between mt-3">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">{trial.name}</h2>
+            <h2 className="text-lg font-bold text-gray-900 font-serif">{trial.name}</h2>
             <p className="text-xs text-gray-500">{trial.publication} · n={trial.n_patients ?? '?'}</p>
           </div>
           <button onClick={onClose} className="p-2 -mr-2 text-gray-400">
@@ -50,27 +83,73 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        {trial.pico && <PicoBlock pico={trial.pico} />}
+
+        {trial.background && (
+          <div className="card">
+            <h3 className="section-title mb-1">Why this trial</h3>
+            <div className="rule-gold mb-2" />
+            <p className="text-[15px] text-gray-600 leading-relaxed">{trial.background}</p>
+          </div>
+        )}
+
+        {trial.design && (
+          <div className="card">
+            <h3 className="section-title mb-1">Design &amp; methods</h3>
+            <div className="rule-gold mb-2" />
+            <p className="text-[15px] text-gray-600 leading-relaxed">{trial.design}</p>
+          </div>
+        )}
+
         <div className="card">
-          <h3 className="font-semibold text-base text-gray-700 mb-1">Clinical Question</h3>
-          <p className="text-[15px] text-gray-600 leading-[1.7]">{trial.clinical_question}</p>
+          <h3 className="section-title mb-1">Clinical question</h3>
+          <div className="rule-gold mb-2" />
+          <p className="text-[15px] text-gray-600 leading-relaxed">{trial.clinical_question}</p>
         </div>
+
         <div className="card">
-          <h3 className="font-semibold text-base text-gray-700 mb-1">Key Results</h3>
-          <p className="text-[15px] text-gray-700 leading-[1.7]">{trial.key_result}</p>
-        </div>
-        <div className="card border-l-4 border-l-primary-400">
-          <h3 className="font-semibold text-base text-primary-700 mb-1">Practice Impact</h3>
-          <p className="text-[15px] text-gray-600 leading-[1.7]">{trial.practice_impact}</p>
-        </div>
-        <div className="card">
-          <h3 className="font-semibold text-base text-gray-700 mb-1">Full Citation</h3>
-          <p className="text-[15px] text-gray-500 leading-[1.7]">{trial.full_citation}</p>
-          {trial.doi && (
-            <p className="text-xs text-primary-600 mt-1">DOI: {trial.doi}</p>
+          <h3 className="section-title mb-1">Detailed results</h3>
+          <div className="rule-gold mb-2" />
+          <p className="text-[15px] text-gray-700 leading-relaxed">{trial.results_detail ?? trial.key_result}</p>
+          {trial.results_detail && trial.key_result && (
+            <p className="text-[13px] text-gray-400 leading-relaxed mt-2 pt-2 border-t border-gray-100">
+              <span className="font-semibold text-gray-500">In brief: </span>{trial.key_result}
+            </p>
           )}
         </div>
+
+        {practiceChange && (
+          <div className="callout-key">
+            <h3 className="font-semibold text-base text-primary-800 mb-1">How it changed practice</h3>
+            <p className="text-[15px] text-gray-700 leading-relaxed">{practiceChange}</p>
+          </div>
+        )}
+
+        {trial.criticisms && (
+          <div className="callout-pitfall">
+            <h3 className="font-semibold text-base mb-1">Criticisms &amp; caveats</h3>
+            <p className="text-[15px] leading-relaxed">{trial.criticisms}</p>
+          </div>
+        )}
+
+        <div className="card">
+          <h3 className="section-title mb-1">Full citation</h3>
+          <div className="rule-gold mb-2" />
+          <p className="text-[15px] text-gray-500 leading-relaxed">{trial.full_citation}</p>
+          {trial.doi && (
+            <a
+              href={`https://doi.org/${trial.doi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-xs text-primary-600 mt-2 underline"
+            >
+              DOI: {trial.doi}
+            </a>
+          )}
+        </div>
+
         <div className="card bg-gray-50">
-          <div className="flex gap-4 text-xs text-gray-500">
+          <div className="flex gap-4 text-xs text-gray-500 flex-wrap">
             <span><strong>Histologies:</strong> {trial.histologies.join(', ')}</span>
             <span><strong>Evidence:</strong> {trial.evidence_level}</span>
           </div>

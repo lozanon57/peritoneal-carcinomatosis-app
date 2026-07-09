@@ -1,7 +1,13 @@
-import { useState } from 'react'
-import { GraduationCap, Zap, BookOpen, ClipboardList, RotateCcw, ChevronRight, CheckCircle2, XCircle, Trophy } from 'lucide-react'
-import { useQuiz } from '../hooks/useQuiz'
-import type { QuizTopic } from '../types'
+import { useState, useEffect, useRef } from 'react'
+import {
+  Zap, Timer, ClipboardList, BookOpen, AlertTriangle, Star,
+  RotateCcw, ChevronRight, CheckCircle2, XCircle, Trophy, Lightbulb,
+  Flame, X, BookMarked, FileText,
+} from 'lucide-react'
+import { useQuiz, TIMED_SECONDS } from '../hooks/useQuiz'
+import type { QuizMode, QuizQuestion, QuizStats, QuizTopic } from '../types'
+
+type Choice = 'A' | 'B' | 'C' | 'D' | 'E'
 
 const TOPICS: { id: QuizTopic; label: string }[] = [
   { id: 'patient_selection', label: 'Patient Selection' },
@@ -16,344 +22,636 @@ const TOPICS: { id: QuizTopic; label: string }[] = [
   { id: 'histology_specific', label: 'Histology-Specific' },
 ]
 
-// ─── Mode selector ─────────────────────────────────────────────────────────────
+const COUNT_OPTIONS = [5, 10, 20] as const
 
-function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof useQuiz>['stats']; onStart: (mode: 'quick' | 'topic' | 'exam', topic?: QuizTopic) => void; onReset: () => void }) {
-  const [topicMode, setTopicMode] = useState(false)
-  const accuracy = stats.totalAnswered > 0 ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : null
+// ─── Difficulty helper ─────────────────────────────────────────────────────────
+
+function difficultyMeta(d: number) {
+  if (d <= 1) return { label: 'Easy', cls: 'badge-green' }
+  if (d === 2) return { label: 'Medium', cls: 'badge-gold' }
+  return { label: 'Hard', cls: 'badge-red' }
+}
+
+function fmtTime(secs: number): string {
+  const m = Math.floor(secs / 60)
+  const s = secs % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
+// ─── Configurator (mode picker) ─────────────────────────────────────────────────
+
+function Configurator({
+  stats,
+  bookmarkCount,
+  onStart,
+  onReset,
+}: {
+  stats: QuizStats
+  bookmarkCount: number
+  onStart: (mode: QuizMode, opts?: { topic?: QuizTopic; count?: number }) => void
+  onReset: () => void
+}) {
+  const [count, setCount] = useState<number>(10)
+  const [topicOpen, setTopicOpen] = useState(false)
+
+  const accuracy = stats.totalAnswered > 0 ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : 0
+  const weakCount = stats.wrongQuestionIds.length
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
+      {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-gray-900">E-Learning Quiz</h1>
-        <p className="text-xs text-gray-400">CRS+HIPEC · PIPAC · Peritoneal Surface Oncology</p>
+        <div className="eyebrow mb-1">Board Review</div>
+        <h1 className="section-title text-2xl">E-Learning Quiz</h1>
+        <div className="rule-gold mt-2" />
+        <p className="text-xs text-ink-muted mt-2">CRS+HIPEC · PIPAC · Peritoneal Surface Oncology</p>
       </div>
 
-      {/* Stats */}
-      {stats.totalAnswered > 0 && (
-        <div className="grid grid-cols-3 gap-3">
-          <div className="card text-center">
-            <div className="text-xl font-bold text-primary-600">{stats.totalAnswered}</div>
-            <div className="text-[10px] text-gray-400">Answered</div>
-          </div>
-          <div className="card text-center">
-            <div className="text-xl font-bold text-green-600">{accuracy}%</div>
-            <div className="text-[10px] text-gray-400">Accuracy</div>
-          </div>
-          <div className="card text-center">
-            <div className="text-xl font-bold text-amber-500">{stats.bestStreak}</div>
-            <div className="text-[10px] text-gray-400">Best streak</div>
-          </div>
+      {/* Overall stats */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="card p-3 text-center">
+          <div className="text-2xl font-bold text-primary-700 font-serif">{stats.totalAnswered}</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Answered</div>
+        </div>
+        <div className="card p-3 text-center">
+          <div className="text-2xl font-bold text-emerald-600 font-serif">{accuracy}%</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Accuracy</div>
+        </div>
+        <div className="card p-3 text-center">
+          <div className="text-2xl font-bold text-gold-600 font-serif">{stats.bestStreak}</div>
+          <div className="text-[10px] uppercase tracking-wide text-ink-muted mt-0.5">Best streak</div>
+        </div>
+      </div>
+
+      {stats.streak > 0 && (
+        <div className="flex items-center justify-center gap-2 text-sm">
+          <Flame size={16} className="text-orange-500" />
+          <span className="font-semibold text-ink-soft">{stats.streak}</span>
+          <span className="text-ink-muted">current streak</span>
         </div>
       )}
 
-      {/* Quick modes */}
-      <div className="space-y-2">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Quiz Modes</h2>
-        <button
-          onClick={() => onStart('quick')}
-          className="w-full card text-left active:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-primary-100 p-2 rounded-lg">
-              <Zap size={18} className="text-primary-600" />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-base">Quick Quiz</p>
-              <p className="text-xs text-gray-400">5 random questions · ~3 min</p>
-            </div>
-          </div>
-        </button>
-        <button
-          onClick={() => onStart('exam')}
-          className="w-full card text-left active:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-amber-100 p-2 rounded-lg">
-              <ClipboardList size={18} className="text-amber-600" />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-base">Exam Mode</p>
-              <p className="text-xs text-gray-400">20 questions · board-level difficulty</p>
-            </div>
-          </div>
-        </button>
-        <button
-          onClick={() => setTopicMode(v => !v)}
-          className="w-full card text-left active:bg-gray-50 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-100 p-2 rounded-lg">
-              <BookOpen size={18} className="text-blue-600" />
-            </div>
-            <div>
-              <p className="font-semibold text-gray-900 text-base">By Topic</p>
-              <p className="text-xs text-gray-400">10 questions · focused review</p>
-            </div>
-          </div>
-          <ChevronRight size={14} className={`ml-auto text-gray-300 transition-transform ${topicMode ? 'rotate-90' : ''}`} />
-        </button>
+      {/* Question count */}
+      <div>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted mb-2">Questions per session</h2>
+        <div className="flex gap-2">
+          {COUNT_OPTIONS.map(n => (
+            <button
+              key={n}
+              onClick={() => setCount(n)}
+              className={`${count === n ? 'chip chip-active' : 'chip'} flex-1 justify-center py-2`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {topicMode && (
-          <div className="pl-2 space-y-1.5">
+      {/* Modes */}
+      <div className="space-y-2.5">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-muted">Choose a mode</h2>
+
+        <ModeCard
+          icon={<Zap size={18} className="text-primary-700" />}
+          tint="bg-primary-100"
+          title="Practice"
+          subtitle={`${count} questions · immediate feedback`}
+          onClick={() => onStart('practice', { count })}
+        />
+        <ModeCard
+          icon={<Timer size={18} className="text-cardinal-600" />}
+          tint="bg-cardinal-100"
+          title="Timed"
+          subtitle={`${count} questions · ${TIMED_SECONDS}s each · board pressure`}
+          onClick={() => onStart('timed', { count })}
+        />
+        <ModeCard
+          icon={<ClipboardList size={18} className="text-gold-700" />}
+          tint="bg-gold-100"
+          title="Exam"
+          subtitle="20 questions · no feedback until the end"
+          onClick={() => onStart('exam', { count: 20 })}
+        />
+
+        {/* By topic */}
+        <button
+          onClick={() => setTopicOpen(v => !v)}
+          className="w-full card-interactive p-4 text-left flex items-center gap-3"
+        >
+          <div className="bg-primary-100 p-2.5 rounded-xl flex-shrink-0">
+            <BookOpen size={18} className="text-primary-700" />
+          </div>
+          <div className="min-w-0">
+            <p className="font-semibold text-ink text-[15px]">By Topic</p>
+            <p className="text-xs text-ink-muted">Focus one of 10 domains</p>
+          </div>
+          <ChevronRight size={16} className={`ml-auto text-ink-muted transition-transform ${topicOpen ? 'rotate-90' : ''}`} />
+        </button>
+        {topicOpen && (
+          <div className="grid grid-cols-2 gap-1.5 pl-1">
             {TOPICS.map(t => (
               <button
                 key={t.id}
-                onClick={() => onStart('topic', t.id)}
-                className="w-full text-left text-[15px] px-3 py-2 rounded-lg bg-gray-50 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors"
+                onClick={() => onStart('topic', { topic: t.id, count })}
+                className="text-left text-[13px] px-3 py-2.5 rounded-xl bg-primary-50/60 text-primary-800 font-medium hover:bg-primary-100 transition-colors"
               >
                 {t.label}
               </button>
             ))}
           </div>
         )}
+
+        {/* Weak areas */}
+        <ModeCard
+          icon={<AlertTriangle size={18} className="text-cardinal-600" />}
+          tint="bg-cardinal-100"
+          title="Weak Areas"
+          subtitle={weakCount > 0 ? `${weakCount} questions in your review pool` : 'No questions flagged yet'}
+          disabled={weakCount === 0}
+          onClick={() => onStart('weak', { count: Math.max(count, weakCount) })}
+        />
+
+        {/* Bookmarked */}
+        <ModeCard
+          icon={<BookMarked size={18} className="text-gold-700" />}
+          tint="bg-gold-100"
+          title="Bookmarked"
+          subtitle={bookmarkCount > 0 ? `${bookmarkCount} starred questions` : 'Star questions to review them here'}
+          disabled={bookmarkCount === 0}
+          onClick={() => onStart('bookmark', { count: Math.max(count, bookmarkCount) })}
+        />
       </div>
 
-      {/* Current streak */}
-      {stats.streak > 0 && (
-        <div className="card text-center col-span-3">
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl font-bold text-orange-500">🔥 {stats.streak}</span>
-            <span className="text-xs text-gray-400">Current streak</span>
-          </div>
-        </div>
-      )}
-
-      {/* Weak areas */}
-      {stats.wrongQuestionIds.length > 0 && (
-        <div>
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Spaced Repetition</h2>
-          <div className="card">
-            <p className="text-[15px] text-gray-700 leading-relaxed">
-              You have <span className="font-bold text-red-600">{stats.wrongQuestionIds.length}</span> questions marked for review.
-            </p>
-            <p className="text-xs text-gray-400 mt-0.5">These appear twice as often in future quizzes.</p>
-          </div>
-        </div>
-      )}
-
-      <button
-        onClick={onReset}
-        className="text-xs text-gray-300 underline w-full text-center"
-      >
+      <button onClick={onReset} className="text-xs text-ink-muted underline w-full text-center pt-2">
         Reset all progress
       </button>
     </div>
   )
 }
 
-// ─── Question card ─────────────────────────────────────────────────────────────
+function ModeCard({
+  icon, tint, title, subtitle, onClick, disabled,
+}: {
+  icon: React.ReactNode
+  tint: string
+  title: string
+  subtitle: string
+  onClick: () => void
+  disabled?: boolean
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`w-full card-interactive p-4 text-left flex items-center gap-3 ${disabled ? 'opacity-45 pointer-events-none' : ''}`}
+    >
+      <div className={`${tint} p-2.5 rounded-xl flex-shrink-0`}>{icon}</div>
+      <div className="min-w-0">
+        <p className="font-semibold text-ink text-[15px]">{title}</p>
+        <p className="text-xs text-ink-muted">{subtitle}</p>
+      </div>
+      <ChevronRight size={16} className="ml-auto text-ink-muted flex-shrink-0" />
+    </button>
+  )
+}
 
-function QuestionCard({
+// ─── Question runner ────────────────────────────────────────────────────────────
+
+function QuestionRunner({
   question,
-  selectedAnswer,
-  revealed,
-  onAnswer,
-  onReveal,
-  onNext,
+  mode,
+  secondsPerQuestion,
   index,
   total,
+  selected,
+  revealed,
+  bookmarked,
+  onSelect,
+  onTimeout,
+  onToggleBookmark,
+  onNext,
 }: {
-  question: ReturnType<typeof useQuiz>['currentQuestion']
-  selectedAnswer?: 'A' | 'B' | 'C' | 'D' | 'E'
-  revealed: boolean
-  onAnswer: (choice: 'A' | 'B' | 'C' | 'D' | 'E') => void
-  onReveal: () => void
-  onNext: () => void
+  question: QuizQuestion
+  mode: QuizMode
+  secondsPerQuestion?: number
   index: number
   total: number
+  selected: Choice | null | undefined
+  revealed: boolean
+  bookmarked: boolean
+  onSelect: (choice: Choice) => void
+  onTimeout: () => void
+  onToggleBookmark: () => void
+  onNext: () => void
 }) {
-  if (!question) return null
-  const q = question
+  const isExam = mode === 'exam'
+  const isTimed = mode === 'timed'
+  const answered = selected !== undefined
+  const isLast = index + 1 >= total
+  const correct = revealed && selected === question.correct
 
-  const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(opt => opt in q.options) as ('A' | 'B' | 'C' | 'D' | 'E')[]
+  const explanationRef = useRef<HTMLDivElement>(null)
+  const [timeLeft, setTimeLeft] = useState(secondsPerQuestion ?? TIMED_SECONDS)
 
-  function optionClass(opt: 'A' | 'B' | 'C' | 'D' | 'E') {
-    if (!revealed) {
-      return selectedAnswer === opt ? 'quiz-option bg-primary-50 border-primary-300 text-primary-800' : 'quiz-option'
+  // Reset timer when the question changes.
+  useEffect(() => {
+    if (isTimed) setTimeLeft(secondsPerQuestion ?? TIMED_SECONDS)
+  }, [question.id, isTimed, secondsPerQuestion])
+
+  // Countdown + auto-submit on expiry.
+  useEffect(() => {
+    if (!isTimed || revealed) return
+    if (timeLeft <= 0) {
+      onTimeout()
+      return
     }
-    if (opt === q.correct) return 'quiz-option quiz-correct'
-    if (opt === selectedAnswer && opt !== q.correct) return 'quiz-option quiz-wrong'
-    return 'quiz-option quiz-neutral'
+    const t = setTimeout(() => setTimeLeft(s => s - 1), 1000)
+    return () => clearTimeout(t)
+  }, [isTimed, revealed, timeLeft, onTimeout])
+
+  // Auto-scroll to explanation on reveal (mobile-friendly).
+  useEffect(() => {
+    if (revealed && explanationRef.current) {
+      const id = setTimeout(() => {
+        explanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 120)
+      return () => clearTimeout(id)
+    }
+  }, [revealed])
+
+  const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(o => o in question.options) as Choice[]
+  const diff = difficultyMeta(question.difficulty)
+
+  function optionClass(opt: Choice): string {
+    if (revealed) {
+      if (opt === question.correct) return 'border-emerald-500 bg-emerald-50'
+      if (opt === selected) return 'border-cardinal-400 bg-cardinal-50'
+      return 'border-[#eee] bg-gray-50 opacity-60'
+    }
+    if (opt === selected) return 'border-primary-500 bg-primary-50'
+    return 'border-[#e6def0] hover:border-primary-300 hover:bg-primary-50/50'
   }
 
-  const difficultyColor = question.difficulty <= 1 ? 'text-green-600' : question.difficulty === 2 ? 'text-amber-600' : 'text-red-600'
-  const difficultyLabel = question.difficulty <= 1 ? 'Easy' : question.difficulty === 2 ? 'Medium' : 'Hard'
+  function badgeClass(opt: Choice): string {
+    if (revealed) {
+      if (opt === question.correct) return 'bg-emerald-500 text-white border-emerald-500'
+      if (opt === selected) return 'bg-cardinal-500 text-white border-cardinal-500'
+      return 'bg-white text-ink-muted border-[#e6def0]'
+    }
+    if (opt === selected) return 'bg-primary-600 text-white border-primary-600'
+    return 'bg-white text-ink-soft border-[#e6def0]'
+  }
+
+  const showNext = revealed || (isExam && answered)
 
   return (
     <div className="space-y-4">
-      {/* Progress */}
+      {/* Header row */}
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-400">{index + 1} / {total}</span>
-        <div className="flex gap-1.5 items-center">
-          <span className={`text-xs font-medium ${difficultyColor}`}>{difficultyLabel}</span>
-          <span className="badge badge-gray text-[10px]">{question.topic.replace(/_/g, ' ')}</span>
+        <span className={`badge ${diff.cls}`}>{diff.label}</span>
+        <div className="flex items-center gap-2">
+          {isTimed && !revealed && (
+            <span className={`inline-flex items-center gap-1 text-sm font-semibold tabular-nums ${timeLeft <= 10 ? 'text-cardinal-600' : 'text-ink-soft'}`}>
+              <Timer size={15} />{fmtTime(Math.max(0, timeLeft))}
+            </span>
+          )}
+          <button
+            onClick={onToggleBookmark}
+            aria-label={bookmarked ? 'Remove bookmark' : 'Bookmark question'}
+            className="w-11 h-11 -mr-1.5 flex items-center justify-center rounded-xl hover:bg-gold-50 transition-colors"
+          >
+            <Star size={20} className={bookmarked ? 'fill-gold-400 text-gold-500' : 'text-ink-muted'} />
+          </button>
         </div>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-1.5">
-        <div
-          className="bg-primary-500 h-1.5 rounded-full transition-all"
-          style={{ width: `${((index + 1) / total) * 100}%` }}
-        />
+
+      {/* Progress */}
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs text-ink-muted">Question {index + 1} of {total}</span>
+          <span className="badge badge-gray text-[10px]">{question.topic.replace(/_/g, ' ')}</span>
+        </div>
+        <div className="w-full bg-primary-100 rounded-full h-1.5 overflow-hidden">
+          <div className="bg-gold-sheen h-1.5 rounded-full transition-all duration-500" style={{ width: `${((index + 1) / total) * 100}%` }} />
+        </div>
       </div>
 
       {/* Stem */}
-      <div className="card">
-        <p className="text-[16px] font-medium text-gray-800 leading-relaxed">{question.stem}</p>
-        {question.guideline_ref && (
-          <p className="text-[10px] text-gray-400 mt-2 italic">{question.guideline_ref}</p>
-        )}
+      <div className="card p-5">
+        <p className="text-[16px] leading-relaxed text-ink font-serif">{question.stem}</p>
       </div>
 
       {/* Options */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {opts.map(opt => (
           <button
             key={opt}
             disabled={revealed}
-            onClick={() => onAnswer(opt)}
-            className={`${optionClass(opt)} w-full text-left flex gap-3`}
+            onClick={() => onSelect(opt)}
+            className={`w-full text-left flex items-start gap-3 p-4 rounded-xl border-2 transition-all ${optionClass(opt)}`}
           >
-            <span className="font-bold text-xs flex-shrink-0 mt-0.5">{opt}.</span>
-            <span className="text-[15px] leading-relaxed">{question.options[opt]}</span>
-            {revealed && opt === question.correct && (
-              <CheckCircle2 size={16} className="ml-auto text-green-600 flex-shrink-0 mt-0.5" />
-            )}
-            {revealed && opt === selectedAnswer && opt !== question.correct && (
-              <XCircle size={16} className="ml-auto text-red-500 flex-shrink-0 mt-0.5" />
-            )}
+            <span className={`flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold ${badgeClass(opt)}`}>
+              {opt}
+            </span>
+            <span className="text-[15px] leading-relaxed text-ink-soft flex-1 pt-0.5">{question.options[opt]}</span>
+            {revealed && opt === question.correct && <CheckCircle2 size={18} className="text-emerald-600 flex-shrink-0 mt-1" />}
+            {revealed && opt === selected && opt !== question.correct && <XCircle size={18} className="text-cardinal-500 flex-shrink-0 mt-1" />}
           </button>
         ))}
       </div>
 
-      {/* Reveal / Next */}
-      {!revealed && selectedAnswer && (
-        <button onClick={onReveal} className="w-full btn-primary">
-          Check Answer
-        </button>
+      {/* Explanation (non-exam, after reveal) */}
+      {revealed && !isExam && (
+        <div ref={explanationRef} className="space-y-3 pt-1">
+          {/* Result banner */}
+          <div className={`rounded-xl p-3.5 flex items-center gap-2 ${correct ? 'bg-emerald-50 border border-emerald-200' : 'bg-cardinal-50 border border-cardinal-100'}`}>
+            {correct
+              ? <CheckCircle2 size={18} className="text-emerald-600 flex-shrink-0" />
+              : <XCircle size={18} className="text-cardinal-500 flex-shrink-0" />}
+            <span className={`font-semibold text-sm ${correct ? 'text-emerald-700' : 'text-cardinal-700'}`}>
+              {correct
+                ? 'Correct'
+                : selected == null
+                  ? `Time's up — Correct answer: ${question.correct}`
+                  : `Incorrect — Correct answer: ${question.correct}`}
+            </span>
+          </div>
+
+          {/* Pearl */}
+          {question.pearl && (
+            <div className="callout-pearl flex gap-2.5">
+              <Lightbulb size={18} className="text-gold-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-gold-700 mb-1">Teaching point</p>
+                <p className="text-[15px] leading-relaxed">{question.pearl}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Explanation */}
+          <div className="callout-key">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary-700 mb-1">Explanation</p>
+            <p className="text-[15px] leading-relaxed">{question.explanation}</p>
+          </div>
+
+          {/* Refs */}
+          {(question.guideline_ref || question.trial_ref) && (
+            <div className="space-y-1 px-1">
+              {question.guideline_ref && (
+                <p className="text-[11px] text-ink-muted flex items-start gap-1.5"><FileText size={12} className="mt-0.5 flex-shrink-0" />{question.guideline_ref}</p>
+              )}
+              {question.trial_ref && (
+                <p className="text-[11px] text-ink-muted flex items-start gap-1.5"><FileText size={12} className="mt-0.5 flex-shrink-0" />{question.trial_ref}</p>
+              )}
+            </div>
+          )}
+        </div>
       )}
 
-      {revealed && (
-        <div className="space-y-3">
-          <div className={`card ${selectedAnswer === question.correct ? 'border-green-200 bg-green-50' : 'border-red-100 bg-red-50'}`}>
-            <div className="flex items-center gap-2 mb-2">
-              {selectedAnswer === question.correct
-                ? <CheckCircle2 size={16} className="text-green-600" />
-                : <XCircle size={16} className="text-red-500" />}
-              <span className={`font-semibold text-sm ${selectedAnswer === question.correct ? 'text-green-700' : 'text-red-600'}`}>
-                {selectedAnswer === question.correct ? 'Correct!' : 'Incorrect'}
-              </span>
-            </div>
-            <p className="text-[15px] text-gray-700 leading-relaxed">{question.explanation}</p>
-            {question.pearl && (
-              <div className="mt-2 pt-2 border-t border-gray-200">
-                <p className="text-xs font-semibold text-amber-700 mb-0.5">Pearl</p>
-                <p className="text-[15px] text-gray-600 leading-relaxed">{question.pearl}</p>
-              </div>
-            )}
-          </div>
-          <button onClick={onNext} className="w-full btn-primary flex items-center justify-center gap-2">
-            Next <ChevronRight size={16} />
-          </button>
-        </div>
+      {/* Exam: subtle recorded hint */}
+      {isExam && answered && !revealed && (
+        <p className="text-xs text-ink-muted text-center">Answer recorded — feedback shown at the end.</p>
+      )}
+
+      {/* Next / Finish */}
+      {showNext && (
+        <button onClick={onNext} className="btn-primary">
+          {isLast ? 'Finish' : 'Next'} <ChevronRight size={16} />
+        </button>
       )}
     </div>
   )
 }
 
-// ─── Score screen ─────────────────────────────────────────────────────────────
+// ─── Score screen ───────────────────────────────────────────────────────────────
 
-function ScoreScreen({ correct, total, onRestart }: { correct: number; total: number; onRestart: () => void }) {
-  const pct = Math.round((correct / total) * 100)
-  const grade = pct >= 80 ? { label: 'Excellent', color: 'text-green-600' } :
-                pct >= 60 ? { label: 'Good', color: 'text-amber-600' } :
-                { label: 'Needs review', color: 'text-red-600' }
+function ScoreScreen({
+  questions, answers, mode, onRestart, onReview,
+}: {
+  questions: QuizQuestion[]
+  answers: Record<string, Choice | null>
+  mode: QuizMode
+  onRestart: () => void
+  onReview: () => void
+}) {
+  const total = questions.length
+  const correct = questions.filter(q => answers[q.id] === q.correct).length
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0
+  const grade = pct >= 80 ? { label: 'Excellent', color: '#059669', text: 'text-emerald-600' } :
+                pct >= 60 ? { label: 'Good', color: '#dda92b', text: 'text-gold-600' } :
+                { label: 'Needs review', color: '#c0392b', text: 'text-cardinal-600' }
+  const wrong = total - correct
 
   return (
-    <div className="text-center space-y-6 py-8">
+    <div className="text-center space-y-6 py-6">
       <div className="flex justify-center">
-        <div className="bg-primary-100 p-6 rounded-full">
-          <Trophy size={40} className="text-primary-600" />
+        <div className="bg-primary-100 p-5 rounded-full">
+          <Trophy size={36} className="text-primary-700" />
         </div>
       </div>
+
       <div>
-        <div className="relative w-24 h-24 mx-auto">
-          <svg className="w-24 h-24 -rotate-90" viewBox="0 0 96 96">
-            <circle cx="48" cy="48" r="40" fill="none" stroke="#f3f4f6" strokeWidth="8" />
+        <div className="relative w-28 h-28 mx-auto">
+          <svg className="w-28 h-28 -rotate-90" viewBox="0 0 112 112">
+            <circle cx="56" cy="56" r="48" fill="none" stroke="#f0eaf5" strokeWidth="9" />
             <circle
-              cx="48" cy="48" r="40" fill="none"
-              stroke={pct >= 80 ? '#16a34a' : pct >= 60 ? '#d97706' : '#dc2626'}
-              strokeWidth="8"
-              strokeDasharray={`${2 * Math.PI * 40}`}
-              strokeDashoffset={`${2 * Math.PI * 40 * (1 - pct / 100)}`}
+              cx="56" cy="56" r="48" fill="none"
+              stroke={grade.color} strokeWidth="9"
+              strokeDasharray={`${2 * Math.PI * 48}`}
+              strokeDashoffset={`${2 * Math.PI * 48 * (1 - pct / 100)}`}
               strokeLinecap="round"
-              style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+              style={{ transition: 'stroke-dashoffset 0.9s ease' }}
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className={`text-2xl font-bold ${grade.color}`}>{pct}%</span>
+            <span className={`text-3xl font-bold font-serif ${grade.text}`}>{pct}%</span>
           </div>
         </div>
-        <div className={`text-lg font-semibold mt-1 ${grade.color}`}>{grade.label}</div>
-        <div className="text-sm text-gray-500 mt-1">{correct} / {total} correct</div>
+        <div className={`text-lg font-semibold mt-2 font-serif ${grade.text}`}>{grade.label}</div>
+        <div className="text-sm text-ink-muted mt-0.5">{correct} / {total} correct · {mode} mode</div>
       </div>
-      <div className="card text-left max-w-xs mx-auto">
-        <div className="text-xs text-gray-400 text-center">
-          Wrong answers added to spaced repetition pool for targeted review.
+
+      {wrong > 0 && (
+        <div className="callout-key text-left">
+          <p className="text-[13px] leading-relaxed text-ink-soft">
+            <span className="font-semibold text-cardinal-600">{wrong}</span> wrong {wrong === 1 ? 'answer' : 'answers'} added to your spaced-repetition pool for targeted review.
+          </p>
         </div>
+      )}
+
+      <div className="space-y-2.5">
+        {mode === 'exam' && (
+          <button onClick={onReview} className="btn-secondary w-full">Review answers</button>
+        )}
+        <button onClick={onRestart} className="btn-primary">
+          <RotateCcw size={16} /> New quiz
+        </button>
       </div>
-      <button onClick={onRestart} className="btn-primary inline-flex items-center gap-2 mx-auto">
-        <RotateCcw size={16} /> New Quiz
-      </button>
     </div>
   )
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+// ─── Exam review list ───────────────────────────────────────────────────────────
+
+function ExamReview({
+  questions, answers, onBack,
+}: {
+  questions: QuizQuestion[]
+  answers: Record<string, Choice | null>
+  onBack: () => void
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="section-title text-xl">Review answers</h1>
+        <button onClick={onBack} className="text-xs text-ink-muted flex items-center gap-1"><X size={14} /> Close</button>
+      </div>
+      <div className="rule-gold" />
+      {questions.map((q, i) => {
+        const chosen = answers[q.id]
+        const correct = chosen === q.correct
+        const opts = (['A', 'B', 'C', 'D', 'E'] as const).filter(o => o in q.options) as Choice[]
+        return (
+          <div key={q.id} className="card p-4 space-y-2.5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-ink-muted">Q{i + 1}</span>
+              {correct
+                ? <span className="badge badge-green text-[10px]">Correct</span>
+                : <span className="badge badge-red text-[10px]">Incorrect</span>}
+            </div>
+            <p className="text-[15px] leading-relaxed text-ink font-serif">{q.stem}</p>
+            <div className="space-y-1.5">
+              {opts.map(opt => {
+                const isCorrect = opt === q.correct
+                const isChosen = opt === chosen
+                return (
+                  <div
+                    key={opt}
+                    className={`flex items-start gap-2 text-[13px] leading-relaxed p-2 rounded-lg ${
+                      isCorrect ? 'bg-emerald-50 text-emerald-900'
+                      : isChosen ? 'bg-cardinal-50 text-cardinal-700'
+                      : 'text-ink-muted'
+                    }`}
+                  >
+                    <span className="font-bold flex-shrink-0">{opt}.</span>
+                    <span className="flex-1">{q.options[opt]}</span>
+                    {isCorrect && <CheckCircle2 size={15} className="text-emerald-600 flex-shrink-0" />}
+                    {isChosen && !isCorrect && <XCircle size={15} className="text-cardinal-500 flex-shrink-0" />}
+                  </div>
+                )
+              })}
+            </div>
+            {q.pearl && (
+              <div className="callout-pearl text-[13px] flex gap-2">
+                <Lightbulb size={15} className="text-gold-600 flex-shrink-0 mt-0.5" />
+                <span>{q.pearl}</span>
+              </div>
+            )}
+          </div>
+        )
+      })}
+      <button onClick={onBack} className="btn-primary">Back to results</button>
+    </div>
+  )
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────────
 
 export default function PageQuiz() {
-  const { session, stats, currentQuestion, startSession, answer, reveal, next, endSession, resetStats } = useQuiz()
+  const {
+    session, stats, bookmarks, currentQuestion,
+    startSession, answer, reveal, next, endSession,
+    toggleBookmark, isBookmarked, resetStats,
+  } = useQuiz()
 
+  const [reviewing, setReviewing] = useState(false)
+
+  function handleReset() {
+    if (window.confirm('Reset all quiz progress, streaks and bookmarks?')) resetStats()
+  }
+
+  // Configurator
   if (!session) {
     return (
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
-        <ModeSelector stats={stats} onStart={startSession} onReset={resetStats} />
+      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+        <Configurator
+          stats={stats}
+          bookmarkCount={bookmarks.length}
+          onStart={startSession}
+          onReset={handleReset}
+        />
       </div>
     )
   }
 
+  // Finished
   if (session.finished) {
-    const correct = Object.entries(session.answers).filter(([qId, choice]) => {
-      const q = session.questions.find(x => x.id === qId)
-      return q && q.correct === choice
-    }).length
+    if (reviewing) {
+      return (
+        <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+          <ExamReview
+            questions={session.questions}
+            answers={session.answers}
+            onBack={() => setReviewing(false)}
+          />
+        </div>
+      )
+    }
     return (
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
-        <ScoreScreen correct={correct} total={session.questions.length} onRestart={endSession} />
+      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+        <ScoreScreen
+          questions={session.questions}
+          answers={session.answers}
+          mode={session.mode}
+          onRestart={() => { setReviewing(false); endSession() }}
+          onReview={() => setReviewing(true)}
+        />
       </div>
     )
   }
 
   if (!currentQuestion) return null
 
-  const revealed = !!session.revealed[currentQuestion.id]
-  const selectedAnswer = session.answers[currentQuestion.id] as 'A' | 'B' | 'C' | 'D' | 'E' | undefined
+  const q = currentQuestion
+  const revealed = !!session.revealed[q.id]
+  const selected = session.answers[q.id] as Choice | null | undefined
+  const isExam = session.mode === 'exam'
+
+  function handleSelect(choice: Choice) {
+    if (revealed) return
+    answer(q.id, choice)
+    if (!isExam) reveal(q.id)
+  }
+
+  function handleTimeout() {
+    if (revealed) return
+    answer(q.id, null)
+    reveal(q.id)
+  }
 
   return (
-    <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
+    <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
       <div className="flex items-center justify-between mb-4">
-        <button onClick={endSession} className="text-xs text-gray-400">✕ Exit</button>
-        <span className="text-xs text-gray-400 capitalize">{session.mode} mode</span>
+        <button onClick={endSession} className="text-xs text-ink-muted flex items-center gap-1">
+          <X size={14} /> Exit
+        </button>
+        <span className="text-xs text-ink-muted capitalize">{session.mode} mode</span>
       </div>
-      <QuestionCard
-        question={currentQuestion}
-        selectedAnswer={selectedAnswer}
-        revealed={revealed}
-        onAnswer={choice => answer(currentQuestion.id, choice)}
-        onReveal={() => reveal(currentQuestion.id)}
-        onNext={next}
+
+      <QuestionRunner
+        key={q.id}
+        question={q}
+        mode={session.mode}
+        secondsPerQuestion={session.secondsPerQuestion}
         index={session.currentIndex}
         total={session.questions.length}
+        selected={selected}
+        revealed={revealed}
+        bookmarked={isBookmarked(q.id)}
+        onSelect={handleSelect}
+        onTimeout={handleTimeout}
+        onToggleBookmark={() => toggleBookmark(q.id)}
+        onNext={next}
       />
     </div>
   )

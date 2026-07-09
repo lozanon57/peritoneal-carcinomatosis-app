@@ -11,6 +11,7 @@ import PageQuiz from './pages/PageQuiz'
 import PageAbout from './pages/PageAbout'
 import PageLearn from './pages/PageLearn'
 import PageLibrary from './pages/PageLibrary'
+import { InstitutionFooter } from './components/Institutions'
 
 // ─── i18n context ─────────────────────────────────────────────────────────────
 interface I18nCtx { lang: Language; t: (key: string) => string; toggleLang: () => void }
@@ -148,6 +149,7 @@ function AppShell() {
           <Route path="/library"    element={<PageLibrary />} />
           <Route path="/about"      element={<PageAbout />} />
         </Routes>
+        <InstitutionFooter />
       </main>
       <BottomNav />
     </>
