@@ -97,9 +97,9 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
 
       <div className={nodeTypeClass[current.type]}>
         <div className="text-xs uppercase font-semibold text-gray-400 mb-1 tracking-wide">{current.type}</div>
-        <p className="font-medium text-gray-800">{current.text}</p>
+        <p className="font-medium text-gray-800 text-[16px] leading-relaxed">{current.text}</p>
         {current.detail && (
-          <p className="text-sm text-gray-500 mt-2 leading-relaxed">{current.detail}</p>
+          <p className="text-[15px] text-gray-500 mt-2 leading-[1.7]">{current.detail}</p>
         )}
         {current.reference && (
           <p className="text-xs text-primary-600 mt-2 italic">{current.reference}</p>
@@ -225,8 +225,8 @@ export default function PageAlgorithms() {
                   <GitBranch size={16} className="text-primary-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 text-sm">{algo.title}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{algo.subtitle}</p>
+                  <p className="font-semibold text-gray-900 text-base">{algo.title}</p>
+                  <p className="text-sm text-gray-400 leading-relaxed mt-0.5">{algo.subtitle}</p>
                 </div>
               </div>
               <ChevronRight size={16} className="text-gray-300 flex-shrink-0" />

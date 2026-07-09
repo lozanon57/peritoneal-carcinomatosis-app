@@ -12,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'Peritoneal Carcinomatosis & CRS+HIPEC Academy',
         short_name: 'PC Academy',
-        description: 'Evidence-based CRS+HIPEC, PIPAC & peritoneal surface oncology academy — Beijing Tsinghua Changgung Hospital · HGUGM · MSKCC',
+        description: 'Evidence-based CRS+HIPEC, PIPAC & peritoneal surface oncology academy — Tsinghua University · Beijing Tsinghua Changgung Hospital',
         theme_color: '#6a0f8e',
         background_color: '#26063a',
         display: 'standalone',
@@ -44,6 +44,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

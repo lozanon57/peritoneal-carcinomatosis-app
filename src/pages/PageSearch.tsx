@@ -68,11 +68,11 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         {tab === 'overview' && (
           <>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-1 text-sm">Description</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{disease.description}</p>
+              <h3 className="font-semibold text-gray-800 mb-1 text-base">Description</h3>
+              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.description}</p>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm">PCI Threshold</h3>
+              <h3 className="font-semibold text-gray-800 mb-2 text-base">PCI Threshold</h3>
               <div className="flex items-center gap-3">
                 <div className="bg-primary-50 rounded-xl p-3 text-center min-w-[64px]">
                   <div className="text-2xl font-bold text-primary-600">
@@ -80,16 +80,16 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
                   </div>
                   <div className="text-[10px] text-primary-400 font-medium">max PCI</div>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed flex-1">{disease.pci_threshold}</p>
+                <p className="text-[15px] text-gray-600 leading-[1.7] flex-1">{disease.pci_threshold}</p>
               </div>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm">Prognosis</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{disease.prognosis}</p>
+              <h3 className="font-semibold text-gray-800 mb-2 text-base">Prognosis</h3>
+              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.prognosis}</p>
             </div>
             {disease.ihc.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">IHC Profile</h3>
+                <h3 className="font-semibold text-gray-800 mb-2 text-base">IHC Profile</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {disease.ihc.map(m => (
                     <span key={m} className="badge badge-blue">{m}</span>
@@ -99,10 +99,10 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             )}
             {disease.molecular_markers.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">Molecular Markers</h3>
+                <h3 className="font-semibold text-gray-800 mb-2 text-base">Molecular Markers</h3>
                 <div className="space-y-1.5">
                   {disease.molecular_markers.map((m, i) => (
-                    <div key={i} className="text-sm">
+                    <div key={i} className="text-[15px] leading-relaxed">
                       <span className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">{m.alteration}</span>
                       {m.frequency && <span className="text-gray-400 text-xs ml-1.5">{m.frequency}</span>}
                       {m.therapeutic_relevance && (
@@ -114,8 +114,8 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               </div>
             )}
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-1 text-sm">Patient Selection</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">{disease.patient_selection}</p>
+              <h3 className="font-semibold text-gray-800 mb-1 text-base">Patient Selection</h3>
+              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.patient_selection}</p>
             </div>
           </>
         )}
@@ -124,7 +124,7 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <>
             {disease.hipec_protocols.length > 0 ? (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-3 text-sm">HIPEC Protocols</h3>
+                <h3 className="font-semibold text-gray-800 mb-3 text-base">HIPEC Protocols</h3>
                 <div className="space-y-2">
                   {disease.hipec_protocols.map((p, i) => <HIPECProtocolCard key={i} protocol={p} index={i} />)}
                 </div>
@@ -136,24 +136,24 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
             )}
             {disease.pipac_indication && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">PIPAC</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{disease.pipac_indication}</p>
+                <h3 className="font-semibold text-gray-800 mb-2 text-base">PIPAC</h3>
+                <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.pipac_indication}</p>
               </div>
             )}
             {disease.systemic_treatment && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">Systemic Treatment</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{disease.systemic_treatment}</p>
+                <h3 className="font-semibold text-gray-800 mb-2 text-base">Systemic Treatment</h3>
+                <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.systemic_treatment}</p>
               </div>
             )}
           </>
         )}
 
         {tab === 'pearls' && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {disease.clinical_pearls.map((pearl, i) => (
               <div key={i} className="card border-l-4 border-l-amber-400">
-                <p className="text-sm text-gray-700">{pearl}</p>
+                <p className="text-[15px] text-gray-700 leading-[1.7]">{pearl}</p>
               </div>
             ))}
             {disease.clinical_pearls.length === 0 && (

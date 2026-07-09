@@ -80,7 +80,7 @@ function BlockView({ block }: { block: LearnBlock }) {
   switch (block.type) {
     case 'text':
       return (
-        <p className="text-sm text-ink-soft leading-relaxed">
+        <p className="text-[16px] text-ink-soft leading-[1.85]">
           {block.content ? renderInline(block.content) : null}
         </p>
       )
@@ -98,7 +98,7 @@ function BlockView({ block }: { block: LearnBlock }) {
             {meta.label}
           </div>
           {block.title ? <p className="font-serif font-bold text-ink text-[15px] mb-1">{block.title}</p> : null}
-          {block.content ? <p className="leading-relaxed">{renderInline(block.content)}</p> : null}
+          {block.content ? <p className="text-[15px] leading-[1.7]">{renderInline(block.content)}</p> : null}
           {block.ref ? <p className="mt-2 text-[11px] text-ink-muted italic">{block.ref}</p> : null}
         </div>
       )
@@ -107,10 +107,10 @@ function BlockView({ block }: { block: LearnBlock }) {
     case 'list':
       return (
         <div>
-          {block.title ? <p className="font-serif font-semibold text-ink text-sm mb-2">{block.title}</p> : null}
+          {block.title ? <p className="font-serif font-semibold text-ink text-base mb-2">{block.title}</p> : null}
           <ul className="space-y-1.5">
             {(block.items ?? []).map((item, i) => (
-              <li key={i} className="flex gap-2.5 text-sm text-ink-soft leading-relaxed">
+              <li key={i} className="flex gap-2.5 text-[15px] text-ink-soft leading-relaxed">
                 <span className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold-sheen" />
                 <span>{renderInline(item)}</span>
               </li>
@@ -122,7 +122,7 @@ function BlockView({ block }: { block: LearnBlock }) {
     case 'table':
       return (
         <div>
-          {block.title ? <p className="font-serif font-semibold text-ink text-sm mb-2">{block.title}</p> : null}
+          {block.title ? <p className="font-serif font-semibold text-ink text-base mb-2">{block.title}</p> : null}
           <div className="overflow-x-auto -mx-4 px-4 no-scrollbar">
             <table className="w-full text-xs border-collapse">
               <thead>
@@ -221,7 +221,7 @@ function ChapterReader({
             <Icon size={22} className="text-primary-700" />
           </div>
           <h1 className="font-serif text-2xl font-bold text-ink leading-tight text-balance">{chapter.title}</h1>
-          <p className="text-sm text-ink-soft leading-relaxed">{chapter.subtitle}</p>
+          <p className="text-[15px] text-ink-soft leading-relaxed">{chapter.subtitle}</p>
           <p className="text-[11px] text-ink-muted italic pt-1">{chapter.guidelines_version}</p>
         </header>
 
@@ -233,7 +233,7 @@ function ChapterReader({
           </div>
           <ul className="space-y-2">
             {chapter.learning_objectives.map((obj, i) => (
-              <li key={i} className="flex gap-2.5 text-sm text-ink-soft leading-relaxed">
+              <li key={i} className="flex gap-2.5 text-[15px] text-ink-soft leading-relaxed">
                 <span className="mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gold-sheen" />
                 <span>{obj}</span>
               </li>
@@ -290,7 +290,7 @@ function ChapterCard({ chapter, onOpen }: { chapter: LearnChapter; onOpen: () =>
             <span className={`badge ${levelBadgeClass(chapter.level)}`}>{chapter.level}</span>
           </div>
           <h3 className="font-serif font-bold text-ink leading-snug text-balance">{chapter.title}</h3>
-          <p className="text-xs text-ink-soft leading-relaxed mt-1">{chapter.subtitle}</p>
+          <p className="text-sm text-ink-soft leading-relaxed mt-1">{chapter.subtitle}</p>
           <div className="flex items-center gap-3 mt-2.5 text-[11px] text-ink-muted">
             <span className="inline-flex items-center gap-1">
               <Clock size={11} />
@@ -330,7 +330,7 @@ export default function PageLearn() {
       <header className="pt-6 pb-4">
         <div className="eyebrow text-primary-700">CURRICULUM</div>
         <h1 className="font-serif text-3xl font-bold text-ink mt-1">Learn</h1>
-        <p className="text-sm text-ink-soft leading-relaxed mt-1">
+        <p className="text-[15px] text-ink-soft leading-relaxed mt-1">
           Structured peritoneal surface oncology — from foundations to mastery
         </p>
         <div className="rule-gold mt-3" />

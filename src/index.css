@@ -27,7 +27,7 @@
   .card {
     @apply bg-white rounded-2xl border border-[#efe9f3] shadow-card;
   }
-  .card-pad { @apply card p-4; }
+  .card-pad { @apply card p-5; }
   .card-interactive {
     @apply card transition-all duration-200 active:scale-[0.99] hover:shadow-lift hover:border-primary-200;
   }
@@ -50,15 +50,18 @@
   .badge-red    { @apply bg-cardinal-100 text-cardinal-700; }
   .badge-gray   { @apply bg-gray-100 text-gray-600; }
 
+  /* ── Reading paragraph (comfortable, user-friendly) ────────────────────── */
+  .read-p { @apply text-[15.5px] leading-[1.8] text-ink-soft; }
+
   /* ── Inputs ────────────────────────────────────────────────────────────── */
   .input-field {
-    @apply w-full rounded-xl border border-[#e6def0] bg-white px-3 py-2.5 text-sm text-ink outline-none
+    @apply w-full rounded-xl border border-[#e6def0] bg-white px-3.5 py-3 text-[15px] text-ink outline-none
            focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all placeholder:text-ink-muted/60;
   }
 
   /* ── Buttons ───────────────────────────────────────────────────────────── */
   .btn-primary {
-    @apply w-full py-2.5 px-4 bg-primary-700 text-white rounded-xl text-sm font-semibold
+    @apply w-full py-3 px-4 bg-primary-700 text-white rounded-xl text-[15px] font-semibold
            hover:bg-primary-800 active:scale-[0.99] transition-all flex items-center justify-center gap-2
            shadow-[0_4px_14px_rgba(106,15,142,0.28)];
   }
@@ -88,7 +91,7 @@
   .pb-safe { padding-bottom: max(1rem, var(--sab)); }
 
   /* ── Teaching callouts (residency-course pedagogy) ─────────────────────── */
-  .callout        { @apply rounded-2xl border p-4 text-sm leading-relaxed; }
+  .callout        { @apply rounded-2xl border p-5 text-[15px] leading-[1.75]; }
   .callout-trial  { @apply callout bg-primary-50/70 border-primary-200 text-ink-soft; }
   .callout-pearl  { @apply callout bg-gold-50 border-gold-200 text-ink-soft; }
   .callout-pitfall{ @apply callout bg-cardinal-50 border-cardinal-100 text-ink-soft; }
@@ -104,7 +107,7 @@
 
   /* ── Quiz answer buttons ───────────────────────────────────────────────── */
   .quiz-option {
-    @apply w-full text-left p-3.5 rounded-xl border-2 border-[#e6def0] text-sm text-ink-soft
+    @apply w-full text-left p-4 rounded-xl border-2 border-[#e6def0] text-[15px] leading-relaxed text-ink-soft
            hover:border-primary-300 hover:bg-primary-50 transition-all;
   }
   .quiz-correct { @apply border-emerald-500 bg-emerald-50 text-emerald-900; }

@@ -50,20 +50,20 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         <div className="card">
-          <h3 className="font-semibold text-sm text-gray-700 mb-1">Clinical Question</h3>
-          <p className="text-sm text-gray-600">{trial.clinical_question}</p>
+          <h3 className="font-semibold text-base text-gray-700 mb-1">Clinical Question</h3>
+          <p className="text-[15px] text-gray-600 leading-[1.7]">{trial.clinical_question}</p>
         </div>
         <div className="card">
-          <h3 className="font-semibold text-sm text-gray-700 mb-1">Key Results</h3>
-          <p className="text-sm text-gray-700 leading-relaxed">{trial.key_result}</p>
+          <h3 className="font-semibold text-base text-gray-700 mb-1">Key Results</h3>
+          <p className="text-[15px] text-gray-700 leading-[1.7]">{trial.key_result}</p>
         </div>
         <div className="card border-l-4 border-l-primary-400">
-          <h3 className="font-semibold text-sm text-primary-700 mb-1">Practice Impact</h3>
-          <p className="text-sm text-gray-600 leading-relaxed">{trial.practice_impact}</p>
+          <h3 className="font-semibold text-base text-primary-700 mb-1">Practice Impact</h3>
+          <p className="text-[15px] text-gray-600 leading-[1.7]">{trial.practice_impact}</p>
         </div>
         <div className="card">
-          <h3 className="font-semibold text-sm text-gray-700 mb-1">Full Citation</h3>
-          <p className="text-xs text-gray-500 leading-relaxed">{trial.full_citation}</p>
+          <h3 className="font-semibold text-base text-gray-700 mb-1">Full Citation</h3>
+          <p className="text-[15px] text-gray-500 leading-[1.7]">{trial.full_citation}</p>
           {trial.doi && (
             <p className="text-xs text-primary-600 mt-1">DOI: {trial.doi}</p>
           )}
@@ -92,7 +92,7 @@ function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => vo
         </div>
         <ChevronRight size={16} className="text-gray-300 flex-shrink-0 mt-0.5" />
       </div>
-      <p className="text-xs text-gray-600 mt-2 line-clamp-2">{trial.clinical_question}</p>
+      <p className="text-sm text-gray-600 leading-relaxed mt-2 line-clamp-2">{trial.clinical_question}</p>
       <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
         <span>{trial.year}</span>
         <span>·</span>

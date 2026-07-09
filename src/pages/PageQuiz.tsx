@@ -59,7 +59,7 @@ function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof us
               <Zap size={18} className="text-primary-600" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">Quick Quiz</p>
+              <p className="font-semibold text-gray-900 text-base">Quick Quiz</p>
               <p className="text-xs text-gray-400">5 random questions · ~3 min</p>
             </div>
           </div>
@@ -73,7 +73,7 @@ function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof us
               <ClipboardList size={18} className="text-amber-600" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">Exam Mode</p>
+              <p className="font-semibold text-gray-900 text-base">Exam Mode</p>
               <p className="text-xs text-gray-400">20 questions · board-level difficulty</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof us
               <BookOpen size={18} className="text-blue-600" />
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">By Topic</p>
+              <p className="font-semibold text-gray-900 text-base">By Topic</p>
               <p className="text-xs text-gray-400">10 questions · focused review</p>
             </div>
           </div>
@@ -100,7 +100,7 @@ function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof us
               <button
                 key={t.id}
                 onClick={() => onStart('topic', t.id)}
-                className="w-full text-left text-sm px-3 py-2 rounded-lg bg-gray-50 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors"
+                className="w-full text-left text-[15px] px-3 py-2 rounded-lg bg-gray-50 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors"
               >
                 {t.label}
               </button>
@@ -124,7 +124,7 @@ function ModeSelector({ stats, onStart, onReset }: { stats: ReturnType<typeof us
         <div>
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Spaced Repetition</h2>
           <div className="card">
-            <p className="text-sm text-gray-700">
+            <p className="text-[15px] text-gray-700 leading-relaxed">
               You have <span className="font-bold text-red-600">{stats.wrongQuestionIds.length}</span> questions marked for review.
             </p>
             <p className="text-xs text-gray-400 mt-0.5">These appear twice as often in future quizzes.</p>
@@ -199,7 +199,7 @@ function QuestionCard({
 
       {/* Stem */}
       <div className="card">
-        <p className="text-sm font-medium text-gray-800 leading-relaxed">{question.stem}</p>
+        <p className="text-[16px] font-medium text-gray-800 leading-relaxed">{question.stem}</p>
         {question.guideline_ref && (
           <p className="text-[10px] text-gray-400 mt-2 italic">{question.guideline_ref}</p>
         )}
@@ -215,7 +215,7 @@ function QuestionCard({
             className={`${optionClass(opt)} w-full text-left flex gap-3`}
           >
             <span className="font-bold text-xs flex-shrink-0 mt-0.5">{opt}.</span>
-            <span className="text-sm">{question.options[opt]}</span>
+            <span className="text-[15px] leading-relaxed">{question.options[opt]}</span>
             {revealed && opt === question.correct && (
               <CheckCircle2 size={16} className="ml-auto text-green-600 flex-shrink-0 mt-0.5" />
             )}
@@ -244,11 +244,11 @@ function QuestionCard({
                 {selectedAnswer === question.correct ? 'Correct!' : 'Incorrect'}
               </span>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{question.explanation}</p>
+            <p className="text-[15px] text-gray-700 leading-relaxed">{question.explanation}</p>
             {question.pearl && (
               <div className="mt-2 pt-2 border-t border-gray-200">
                 <p className="text-xs font-semibold text-amber-700 mb-0.5">Pearl</p>
-                <p className="text-xs text-gray-600">{question.pearl}</p>
+                <p className="text-[15px] text-gray-600 leading-relaxed">{question.pearl}</p>
               </div>
             )}
           </div>

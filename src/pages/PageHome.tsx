@@ -24,13 +24,13 @@ function Hero() {
 
       <div className="relative max-w-lg mx-auto px-5 pt-7 pb-8">
         <div className="eyebrow !text-gold-300 mb-3">
-          <Sparkles size={13} /> Beijing Tsinghua Changgung · HGUGM · MSKCC
+          <Sparkles size={13} /> Tsinghua University · Beijing Tsinghua Changgung Hospital
         </div>
 
-        <h1 className="font-serif text-[30px] leading-[1.08] font-bold text-balance">
+        <h1 className="font-serif text-[31px] leading-[1.1] font-bold text-balance">
           Master Peritoneal<br />Surface Oncology
         </h1>
-        <p className="mt-3 text-[13.5px] text-white/75 leading-relaxed max-w-[19rem]">
+        <p className="mt-3.5 text-[15px] text-white/80 leading-[1.65] max-w-[20rem]">
           A board-level academy for CRS+HIPEC, PIPAC and cytoreductive surgery — from first principles to landmark evidence.
         </p>
 
