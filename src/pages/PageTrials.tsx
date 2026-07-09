@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, ChevronDown, X, Search, BookText } from 'lucide-react'
+import { ChevronRight, ChevronDown, X, Search, SearchX, BookText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { useAppI18n } from '../App'
@@ -108,7 +108,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
             <h2 className="t-h2 text-balance">{trial.name}</h2>
             <p className="t-small mt-1">{trial.publication} · n={trial.n_patients ?? '?'}</p>
           </div>
-          <button onClick={onClose} aria-label="Close" className="p-2 -mr-2 rounded-lg text-ink-muted hover:text-ink hover:bg-primary-50 transition-colors flex-shrink-0">
+          <button onClick={onClose} aria-label="Close" className="p-2 -mr-2 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-ink-muted hover:text-ink hover:bg-primary-50 transition-colors flex-shrink-0">
             <X size={20} />
           </button>
         </div>
@@ -194,7 +194,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => void }) {
   const { t } = useAppI18n()
   return (
-    <button onClick={onClick} className="w-full text-left card-interactive">
+    <button onClick={onClick} className="w-full text-left card-interactive focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-app">
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
@@ -325,7 +325,13 @@ export default function PageTrials() {
             </div>
           ))}
           {displayed.length === 0 && (
-            <div className="text-center py-8 text-ink-muted text-sm">{t('trials.no_trials')}</div>
+            <div className="flex flex-col items-center text-center py-16">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary-50 mb-4">
+                <SearchX size={28} className="text-ink-muted" />
+              </div>
+              <p className="t-h3">{t('trials.no_trials')}</p>
+              <p className="t-small mt-1">{t('trials.search_placeholder')}</p>
+            </div>
           )}
         </div>
       </div>

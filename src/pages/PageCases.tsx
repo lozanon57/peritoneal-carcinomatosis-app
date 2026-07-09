@@ -165,7 +165,7 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
 
       {/* ── SCENARIO / INFO ──────────────────────────────────────────────── */}
       {(node.type === 'scenario' || node.type === 'info') && (
-        <div className="card animate-slide-up">
+        <div className="card border-l-4 border-l-primary-500 animate-slide-up">
           {node.title && <div className="eyebrow mb-1.5">{node.title}</div>}
           <p className="t-body">
             <RichText text={node.body} />
@@ -188,8 +188,8 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
       {/* ── DECISION ─────────────────────────────────────────────────────── */}
       {node.type === 'decision' && (
         <div className="animate-slide-up">
-          <div className="card mb-3">
-            {node.title && <div className="eyebrow mb-1.5">{node.title}</div>}
+          <div className="card mb-3 border-l-4 border-l-gold-500">
+            {node.title && <div className="eyebrow !text-gold-700 mb-1.5">{node.title}</div>}
             <p className="text-[15px] leading-[1.7] text-ink font-medium">
               <RichText text={node.body} />
             </p>
@@ -213,20 +213,24 @@ function CaseRunner({ sim, onExit }: { sim: CaseSimulation; onExit: () => void }
                     disabled={!!chosenId}
                     className={[
                       'w-full text-left rounded-2xl border p-4 transition-all',
+                      'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-app',
                       isChosen && meta ? meta.ring : 'border-line bg-surface',
-                      !chosenId ? 'active:scale-[0.99] card-interactive' : '',
+                      !chosenId ? 'active:scale-[0.99] card-interactive hover:border-primary-300' : '',
                       dim ? 'opacity-40' : '',
                     ].join(' ')}
                   >
-                    <div className="flex items-start gap-2.5">
-                      {isChosen ? (
-                        <CheckCircle2 size={18} className={`flex-shrink-0 mt-0.5 ${meta?.text ?? ''}`} />
-                      ) : (
-                        <Circle size={18} className="flex-shrink-0 mt-0.5 text-ink-muted" />
-                      )}
-                      <span className="text-[14.5px] leading-snug text-ink">
-                        <RichText text={opt.label} />
-                      </span>
+                    <div className="flex items-center justify-between gap-2.5">
+                      <div className="flex items-start gap-2.5">
+                        {isChosen ? (
+                          <CheckCircle2 size={18} className={`flex-shrink-0 mt-0.5 ${meta?.text ?? ''}`} />
+                        ) : (
+                          <Circle size={18} className="flex-shrink-0 mt-0.5 text-primary-400" />
+                        )}
+                        <span className="text-[14.5px] leading-snug text-ink">
+                          <RichText text={opt.label} />
+                        </span>
+                      </div>
+                      {!chosenId && <ChevronRight size={16} className="flex-shrink-0 text-ink-muted mt-0.5" />}
                     </div>
                   </button>
 

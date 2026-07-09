@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Search, ExternalLink, BookText, ArrowLeft } from 'lucide-react'
+import { Search, SearchX, ExternalLink, BookText, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { REFERENCE_BANK } from '../data/references_bank'
 import { CHINA_REFERENCES } from '../data/references_china'
@@ -100,7 +100,13 @@ export default function PageLibrary() {
           </div>
         ))}
         {topics.length === 0 && (
-          <p className="text-center text-ink-muted text-sm py-10">No references match “{query}”.</p>
+          <div className="flex flex-col items-center text-center py-16">
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary-50 mb-4">
+              <SearchX size={28} className="text-ink-muted" />
+            </div>
+            <p className="t-h3">No references match “{query}”.</p>
+            <p className="t-small mt-1">Search authors, title, journal, topic…</p>
+          </div>
         )}
       </div>
     </div>
