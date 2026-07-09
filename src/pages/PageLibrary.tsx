@@ -2,7 +2,12 @@ import { useState, useMemo } from 'react'
 import { Search, ExternalLink, BookText, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { REFERENCE_BANK } from '../data/references_bank'
+import { CHINA_REFERENCES } from '../data/references_china'
 import type { Reference } from '../data/references_bank'
+
+// China literature featured first, then the international bank
+const ALL_TOPICS = [...CHINA_REFERENCES, ...REFERENCE_BANK]
+const isChina = (id: string) => id.startsWith('cn-')
 
 function RefCard({ r }: { r: Reference }) {
   const href = r.doi
@@ -33,12 +38,13 @@ export default function PageLibrary() {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
 
-  const totalRefs = useMemo(() => REFERENCE_BANK.reduce((s, t) => s + t.references.length, 0), [])
+  const totalRefs = useMemo(() => ALL_TOPICS.reduce((s, t) => s + t.references.length, 0), [])
+  const chinaRefs = useMemo(() => CHINA_REFERENCES.reduce((s, t) => s + t.references.length, 0), [])
 
   const topics = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return REFERENCE_BANK
-    return REFERENCE_BANK
+    if (!q) return ALL_TOPICS
+    return ALL_TOPICS
       .map(t => ({
         ...t,
         references: t.references.filter(r =>
@@ -59,8 +65,10 @@ export default function PageLibrary() {
         <div className="eyebrow text-primary-700"><BookText size={13} /> Bibliography</div>
         <h1 className="font-serif text-3xl font-bold text-ink mt-1">Library</h1>
         <p className="text-[15px] text-ink-soft leading-relaxed mt-1.5">
-          {totalRefs} PubMed-verified references across {REFERENCE_BANK.length} topics — landmark trials,
-          consensus guidelines and key reviews in peritoneal surface oncology.
+          {totalRefs} PubMed-verified references across {ALL_TOPICS.length} topics — landmark trials,
+          consensus guidelines and key reviews in peritoneal surface oncology, including
+          {' '}<strong className="text-primary-800">{chinaRefs} Chinese-authored references</strong> from
+          Tsinghua / Chinese peritoneal surface oncology.
         </p>
         <div className="rule-gold mt-3" />
       </header>
@@ -82,6 +90,7 @@ export default function PageLibrary() {
           <div key={topic.id}>
             <div className="flex items-center gap-2 mb-3">
               <span className="section-title text-base">{topic.topic}</span>
+              {isChina(topic.id) && <span className="badge badge-red">中国 · China</span>}
               <span className="rule-gold" />
               <span className="text-[11px] text-ink-muted ml-auto">{topic.references.length}</span>
             </div>
