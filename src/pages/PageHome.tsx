@@ -50,19 +50,21 @@ function Hero() {
           <div className="lg:col-span-5 lg:pl-4">
 
         {/* faculty */}
-        <div className="mt-5 lg:mt-0 flex items-center gap-5">
-          <div className="flex items-center gap-2.5">
-            <CreatorPhoto file="yan-li.jpg" initials="YL" size={44} ring="gold" />
+        <div className="mt-5 lg:mt-0 flex flex-row lg:flex-col items-start gap-5 lg:gap-5">
+          <div className="flex items-center gap-2.5 lg:gap-4">
+            <span className="lg:hidden"><CreatorPhoto file="yan-li.jpg" initials="YL" size={44} ring="gold" /></span>
+            <span className="hidden lg:block"><CreatorPhoto file="yan-li.jpg" initials="YL" size={80} ring="gold" /></span>
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-white">Prof. Yan Li</div>
-              <div className="text-[10px] text-white/60">MD PhD · Author</div>
+              <div className="text-sm lg:text-xl font-semibold text-white">Prof. Yan Li</div>
+              <div className="text-[10px] lg:text-sm text-white/65">MD PhD · Author</div>
             </div>
           </div>
-          <div className="flex items-center gap-2.5">
-            <CreatorPhoto file="pablo-lozano.jpg" initials="PL" size={44} ring="white" />
+          <div className="flex items-center gap-2.5 lg:gap-4">
+            <span className="lg:hidden"><CreatorPhoto file="pablo-lozano.jpg" initials="PL" size={44} ring="white" /></span>
+            <span className="hidden lg:block"><CreatorPhoto file="pablo-lozano.jpg" initials="PL" size={80} ring="white" /></span>
             <div className="leading-tight">
-              <div className="text-sm font-semibold text-white">Dr. Pablo Lozano</div>
-              <div className="text-[10px] text-white/60">MD PhD, EBPSM · Author</div>
+              <div className="text-sm lg:text-xl font-semibold text-white">Dr. Pablo Lozano</div>
+              <div className="text-[10px] lg:text-sm text-white/65">MD PhD, EBPSM · Author</div>
             </div>
           </div>
         </div>
