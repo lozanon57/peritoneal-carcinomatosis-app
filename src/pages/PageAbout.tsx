@@ -6,15 +6,15 @@ import { LEARN_CHAPTERS } from '../data/learn_content'
 import { CreatorPhoto, InstitutionLogo } from '../components/Institutions'
 
 function FacultyCard({
-  file, initials, name, role, meta, bio, tags, accent,
+  file, initials, name, role, meta, bio, tags, accent, objectPosition = 'center',
 }: {
-  file: string; initials: string; name: string; role: string; meta: string; bio: string[]; tags: string[]; accent: 'gold' | 'purple'
+  file: string; initials: string; name: string; role: string; meta: string; bio: string[]; tags: string[]; accent: 'gold' | 'purple'; objectPosition?: string
 }) {
   return (
     <div className="card p-5">
       <div className="flex items-start gap-3.5">
         <div className="flex-shrink-0">
-          <CreatorPhoto file={file} initials={initials} size={56} ring={accent === 'gold' ? 'gold' : 'white'} />
+          <CreatorPhoto file={file} initials={initials} size={56} ring={accent === 'gold' ? 'gold' : 'white'} objectPosition={objectPosition} />
         </div>
         <div className="min-w-0">
           <h2 className="font-serif font-bold text-ink text-lg leading-tight">{name}</h2>
@@ -71,15 +71,16 @@ export default function PageAbout() {
         <FacultyCard
           accent="purple"
           file="pablo-lozano.jpg"
+          objectPosition="54% 16%"
           initials="PL"
           name="Pablo Lozano Lominchar, MD PhD"
           role="Author & Owner · Course Director"
-          meta="Peritoneal Surface Oncology · Tsinghua University · BTCH"
+          meta="Peritoneal Surface Oncology · ESPSM · Tsinghua University · BTCH"
           bio={[
             'Surgical oncologist specialised in peritoneal surface oncology — CRS+HIPEC, PIPAC and cytoreductive surgery for sarcoma and complex retroperitoneal tumours.',
             'Author and director of the academy curriculum, translating landmark evidence into structured, board-level teaching.',
           ]}
-          tags={['CRS+HIPEC', 'PIPAC', 'Sarcoma', 'Curriculum']}
+          tags={['CRS+HIPEC', 'PIPAC', 'ESPSM', 'Sarcoma', 'Curriculum']}
         />
         <a href="https://orcid.org/0000-0003-0614-6329" target="_blank" rel="noopener noreferrer"
           className="btn-secondary w-full text-sm"><Link2 size={14} /> ORCID · Dr. Pablo Lozano</a>

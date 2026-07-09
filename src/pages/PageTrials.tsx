@@ -184,6 +184,38 @@ function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => vo
   )
 }
 
+const HIST_ORDER = ['cpm', 'ovarian', 'mesothelioma', 'mpm', 'appendiceal/PMP', 'appendiceal', 'gastric', 'general']
+const HIST_GROUP_LABELS: Record<string, string> = {
+  cpm: 'Colorectal Peritoneal Metastases',
+  ovarian: 'Ovarian & Primary Peritoneal',
+  mesothelioma: 'Peritoneal Mesothelioma',
+  mpm: 'Peritoneal Mesothelioma',
+  'appendiceal/PMP': 'Appendiceal / Pseudomyxoma',
+  appendiceal: 'Appendiceal / Pseudomyxoma',
+  gastric: 'Gastric',
+  general: 'Cross-cutting & Consensus',
+}
+
+function primaryHist(t: LandmarkTrial): string {
+  return HIST_ORDER.find(h => t.histologies.includes(h)) ?? t.histologies[0] ?? 'general'
+}
+
+function groupByHistology(trials: LandmarkTrial[]): { label: string; trials: LandmarkTrial[] }[] {
+  const map = new Map<string, LandmarkTrial[]>()
+  for (const t of trials) {
+    const label = HIST_GROUP_LABELS[primaryHist(t)] ?? primaryHist(t)
+    if (!map.has(label)) map.set(label, [])
+    map.get(label)!.push(t)
+  }
+  const ordered: string[] = []
+  for (const h of HIST_ORDER) {
+    const l = HIST_GROUP_LABELS[h] ?? h
+    if (map.has(l) && !ordered.includes(l)) ordered.push(l)
+  }
+  for (const l of map.keys()) if (!ordered.includes(l)) ordered.push(l)
+  return ordered.map(l => ({ label: l, trials: map.get(l)! }))
+}
+
 export default function PageTrials() {
   const navigate = useNavigate()
   const [filter, setFilter] = useState<HistFilter>('all')
@@ -243,9 +275,20 @@ export default function PageTrials() {
           ))}
         </div>
 
-        <div className="space-y-2">
-          {displayed.map(t => (
-            <TrialCard key={t.id} trial={t} onClick={() => setSelected(t)} />
+        <div className="space-y-6">
+          {groupByHistology(displayed).map(group => (
+            <div key={group.label}>
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="section-title text-base">{group.label}</span>
+                <span className="rule-gold" />
+                <span className="text-[11px] text-gray-400 ml-auto">{group.trials.length}</span>
+              </div>
+              <div className="space-y-2">
+                {group.trials.map(t => (
+                  <TrialCard key={t.id} trial={t} onClick={() => setSelected(t)} />
+                ))}
+              </div>
+            </div>
           ))}
           {displayed.length === 0 && (
             <div className="text-center py-8 text-gray-400 text-sm">No trials for this filter</div>

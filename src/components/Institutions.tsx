@@ -61,11 +61,13 @@ export function CreatorPhoto({
   initials,
   size = 56,
   ring = 'gold',
+  objectPosition = 'center',
 }: {
   file: string
   initials: string
   size?: number
   ring?: 'gold' | 'white'
+  objectPosition?: string
 }) {
   const [failed, setFailed] = useState(false)
   const src = `${BASE}team/${file}`
@@ -88,7 +90,7 @@ export function CreatorPhoto({
       alt={initials}
       onError={() => setFailed(true)}
       className={`rounded-full object-cover ${ringCls}`}
-      style={style}
+      style={{ ...style, objectPosition }}
     />
   )
 }
