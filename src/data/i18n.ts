@@ -10,7 +10,7 @@ const en: Translations = {
     about: 'About',
   },
   home: {
-    title: 'PC & CRS+HIPEC',
+    title: 'PSM Academy',
     subtitle: 'Peritoneal Carcinomatosis E-Learning Platform',
     institution: 'Tsinghua University · Beijing Tsinghua Changgung Hospital',
     modules: 'Modules',
@@ -133,7 +133,7 @@ const en: Translations = {
   },
   about: {
     title: 'About',
-    app_name: 'PC & CRS+HIPEC E-Learning',
+    app_name: 'PSM Academy — Peritoneal Surface Malignancy',
     app_desc: 'Evidence-based educational platform for peritoneal carcinomatosis surgeons and surgical oncology fellows. Covers patient selection, HIPEC/PIPAC protocols, landmark trials, and clinical decision algorithms.',
     educational_notice: 'Educational Tool — For Surgical Oncology Professionals',
     educational_detail: 'This application is an educational resource for surgical oncologists, peritoneal disease surgeons, and fellows. Content is based on PSOGI 2022, ESMO 2023, and published evidence. It does not replace individualised clinical judgement or MDT decisions.',
@@ -164,7 +164,7 @@ const es: Translations = {
     about: 'Acerca de',
   },
   home: {
-    title: 'PC & CRS+HIPEC',
+    title: 'PSM Academy',
     subtitle: 'Plataforma E-Learning en Carcinomatosis Peritoneal',
     institution: 'Tsinghua University · Beijing Tsinghua Changgung Hospital',
     modules: 'Módulos',
@@ -287,7 +287,7 @@ const es: Translations = {
   },
   about: {
     title: 'Acerca de',
-    app_name: 'PC & CRS+HIPEC E-Learning',
+    app_name: 'PSM Academy — Peritoneal Surface Malignancy',
     app_desc: 'Plataforma educativa basada en evidencia para cirujanos de carcinomatosis peritoneal y fellows de oncología quirúrgica. Cubre selección de pacientes, protocolos HIPEC/PIPAC, ensayos históricos y algoritmos de decisión clínica.',
     educational_notice: 'Herramienta Educativa — Para Profesionales de Oncología Quirúrgica',
     educational_detail: 'Esta aplicación es un recurso educativo para oncólogos quirúrgicos, cirujanos de enfermedad peritoneal y fellows. El contenido está basado en PSOGI 2022, ESMO 2023 y evidencia publicada. No sustituye al juicio clínico individualizado ni a las decisiones del comité multidisciplinar.',

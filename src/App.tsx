@@ -61,7 +61,7 @@ function TopHeader() {
         <button onClick={() => navigate('/')} className="flex items-center gap-2.5 active:opacity-70 transition-opacity">
           <Brandmark />
           <div className="leading-none text-left">
-            <div className="font-display font-bold text-[15px] text-ink tracking-tight">PC Academy</div>
+            <div className="font-display font-bold text-[15px] text-ink tracking-tight">PSM Academy</div>
             <div className="text-[9.5px] font-semibold uppercase tracking-[0.13em] text-primary-700/80">CRS · HIPEC · PIPAC</div>
           </div>
         </button>

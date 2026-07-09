@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   ArrowLeft,
   ArrowRight,
@@ -214,6 +214,30 @@ function SectionView({ section }: { section: LearnSection }) {
   )
 }
 
+// ── Reading progress bar ──────────────────────────────────────────────────────
+function ReadingProgress() {
+  const [pct, setPct] = useState(0)
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.scrollingElement || document.documentElement
+      const max = el.scrollHeight - el.clientHeight
+      setPct(max > 0 ? Math.min(100, Math.max(0, (el.scrollTop / max) * 100)) : 0)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+  return (
+    <div className="fixed top-14 left-0 right-0 z-30 h-1 pointer-events-none">
+      <div className="h-full bg-gold-sheen transition-[width] duration-150 ease-out" style={{ width: `${pct}%` }} />
+    </div>
+  )
+}
+
 // ── Chapter reader ────────────────────────────────────────────────────────────
 function ChapterReader({
   chapter,
@@ -232,6 +256,7 @@ function ChapterReader({
 
   return (
     <div className="max-w-lg mx-auto px-4 pb-16">
+      <ReadingProgress />
       {/* Top bar */}
       <div className="sticky top-0 z-10 -mx-4 px-4 py-3 bg-[#f7f5fa]/90 backdrop-blur border-b border-[#efe9f3] flex items-center justify-between">
         <button onClick={onBack} className="btn-ghost -ml-3 flex items-center gap-1">

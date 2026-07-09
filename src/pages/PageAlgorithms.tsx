@@ -13,7 +13,7 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
   if (!current) {
     return (
       <div className="text-center py-10">
-        <p className="text-gray-400 text-sm">Node not found</p>
+        <p className="text-ink-muted text-sm">Node not found</p>
         <button onClick={onBack} className="btn-primary mt-4">Back to list</button>
       </div>
     )
@@ -53,22 +53,22 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
   const stepNum = history.length + 1
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-fade-in">
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-gray-500">
+        <button onClick={onBack} className="flex items-center gap-1 text-sm text-ink-soft">
           <ArrowLeft size={16} /> Algorithms
         </button>
-        <button onClick={restart} className="flex items-center gap-1 text-xs text-gray-400">
+        <button onClick={restart} className="flex items-center gap-1 text-xs text-ink-muted">
           <RotateCcw size={12} /> Restart
         </button>
       </div>
 
       <div className="space-y-1.5">
         <div className="flex justify-between items-center">
-          <span className="text-xs font-semibold text-gray-700 truncate max-w-[200px]">{algo.title}</span>
-          <span className="text-xs text-gray-400 whitespace-nowrap">Step {stepNum} / {totalNodes}</span>
+          <span className="text-xs font-semibold text-ink-soft truncate max-w-[200px]">{algo.title}</span>
+          <span className="text-xs text-ink-muted whitespace-nowrap">Step {stepNum} / {totalNodes}</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-1">
+        <div className="w-full bg-primary-100 rounded-full h-1">
           <div
             className="bg-primary-500 h-1 rounded-full transition-all duration-300"
             style={{ width: `${Math.min((stepNum / totalNodes) * 100, 100)}%` }}
@@ -78,12 +78,12 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
 
       {history.length > 0 && (
         <div className="overflow-x-auto no-scrollbar">
-          <div className="flex items-center gap-1 text-xs text-gray-400 flex-nowrap pb-1">
+          <div className="flex items-center gap-1 text-xs text-ink-muted flex-nowrap pb-1">
             {history.slice(-4).map((hId) => {
               const node = algo.nodes.find(n => n.id === hId)
               return (
                 <span key={hId} className="flex items-center gap-1 flex-shrink-0">
-                  <span className="bg-gray-100 rounded px-1.5 py-0.5 max-w-[80px] truncate block">
+                  <span className="bg-primary-50 rounded px-1.5 py-0.5 max-w-[80px] truncate block">
                     {node?.text?.slice(0, 22) ?? hId}
                   </span>
                   <ChevronRight size={10} />
@@ -96,13 +96,13 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
       )}
 
       <div className={nodeTypeClass[current.type]}>
-        <div className="text-xs uppercase font-semibold text-gray-400 mb-1 tracking-wide">{current.type}</div>
-        <p className="font-medium text-gray-800 text-[16px] leading-relaxed">{current.text}</p>
+        <div className="text-xs uppercase font-semibold text-ink-muted mb-1 tracking-wide">{current.type}</div>
+        <p className="font-medium text-ink text-[16px] leading-relaxed">{current.text}</p>
         {current.detail && (
-          <p className="text-[15px] text-gray-500 mt-2 leading-[1.7]">{current.detail}</p>
+          <p className="text-[15px] text-ink-soft mt-2 leading-[1.7]">{current.detail}</p>
         )}
         {current.reference && (
-          <p className="text-xs text-primary-600 mt-2 italic">{current.reference}</p>
+          <p className="text-xs text-primary-700 mt-2 italic">{current.reference}</p>
         )}
       </div>
 
@@ -158,7 +158,7 @@ function AlgoRunner({ algo, onBack }: { algo: Algorithm; onBack: () => void }) {
       )}
 
       {history.length > 0 && (
-        <button onClick={goBack} className="w-full text-sm text-gray-400 py-2">
+        <button onClick={goBack} className="w-full text-sm text-ink-muted py-2">
           ← Go back one step
         </button>
       )}
@@ -188,21 +188,21 @@ export default function PageAlgorithms() {
 
   if (selected) {
     return (
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto">
+      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto animate-fade-in">
         <AlgoRunner algo={selected} onBack={() => setSelected(null)} />
       </div>
     )
   }
 
   return (
-    <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4">
+    <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Decision Algorithms</h1>
-        <p className="text-xs text-gray-400">{ALGORITHMS.length} clinical decision trees</p>
+        <h1 className="text-xl font-bold text-ink">Decision Algorithms</h1>
+        <p className="text-xs text-ink-muted">{ALGORITHMS.length} clinical decision trees</p>
       </div>
 
       <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" />
         <input
           type="search"
           value={search}
@@ -217,22 +217,22 @@ export default function PageAlgorithms() {
           <button
             key={algo.id}
             onClick={() => setSelected(algo)}
-            className="w-full text-left card active:bg-gray-50 transition-colors"
+            className="w-full text-left card-interactive"
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3">
                 <div className="bg-primary-100 p-2 rounded-lg flex-shrink-0">
-                  <GitBranch size={16} className="text-primary-600" />
+                  <GitBranch size={16} className="text-primary-700" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 text-base">{algo.title}</p>
-                  <p className="text-sm text-gray-400 leading-relaxed mt-0.5">{algo.subtitle}</p>
+                  <p className="font-semibold text-ink text-base">{algo.title}</p>
+                  <p className="text-sm text-ink-muted leading-relaxed mt-0.5">{algo.subtitle}</p>
                 </div>
               </div>
-              <ChevronRight size={16} className="text-gray-300 flex-shrink-0" />
+              <ChevronRight size={16} className="text-ink-muted flex-shrink-0" />
             </div>
             <div className="ml-11 mt-2">
-              <span className="badge badge-blue">{CATEGORY_LABELS[algo.category] ?? algo.category}</span>
+              <span className="badge badge-purple">{CATEGORY_LABELS[algo.category] ?? algo.category}</span>
             </div>
           </button>
         ))}

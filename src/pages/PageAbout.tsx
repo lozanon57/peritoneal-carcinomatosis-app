@@ -71,7 +71,6 @@ export default function PageAbout() {
         <FacultyCard
           accent="purple"
           file="pablo-lozano.jpg"
-          objectPosition="54% 16%"
           initials="PL"
           name="Pablo Lozano Lominchar, MD PhD"
           role="Author & Owner · Course Director"

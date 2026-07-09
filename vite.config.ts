@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.png', 'icons/*.svg'],
       manifest: {
-        name: 'Peritoneal Carcinomatosis & CRS+HIPEC Academy',
-        short_name: 'PC Academy',
+        name: 'PSM Academy — Peritoneal Surface Malignancy',
+        short_name: 'PSM Academy',
         description: 'Evidence-based CRS+HIPEC, PIPAC & peritoneal surface oncology academy — Tsinghua University · Beijing Tsinghua Changgung Hospital',
         theme_color: '#6a0f8e',
         background_color: '#26063a',

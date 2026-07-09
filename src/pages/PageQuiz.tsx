@@ -286,7 +286,7 @@ function QuestionRunner({
     if (revealed) {
       if (opt === question.correct) return 'border-emerald-500 bg-emerald-50'
       if (opt === selected) return 'border-cardinal-400 bg-cardinal-50'
-      return 'border-[#eee] bg-gray-50 opacity-60'
+      return 'border-[#efe9f3] bg-gray-50 opacity-60'
     }
     if (opt === selected) return 'border-primary-500 bg-primary-50'
     return 'border-[#e6def0] hover:border-primary-300 hover:bg-primary-50/50'
@@ -573,7 +573,7 @@ export default function PageQuiz() {
   // Configurator
   if (!session) {
     return (
-      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
         <Configurator
           stats={stats}
           bookmarkCount={bookmarks.length}
@@ -588,7 +588,7 @@ export default function PageQuiz() {
   if (session.finished) {
     if (reviewing) {
       return (
-        <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+        <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
           <ExamReview
             questions={session.questions}
             answers={session.answers}
@@ -598,7 +598,7 @@ export default function PageQuiz() {
       )
     }
     return (
-      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+      <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
         <ScoreScreen
           questions={session.questions}
           answers={session.answers}
@@ -630,7 +630,7 @@ export default function PageQuiz() {
   }
 
   return (
-    <div className="px-4 pt-6 pb-10 max-w-lg mx-auto">
+    <div className="px-4 pt-6 pb-10 max-w-lg mx-auto animate-fade-in">
       <div className="flex items-center justify-between mb-4">
         <button onClick={endSession} className="text-xs text-ink-muted flex items-center gap-1">
           <X size={14} /> Exit

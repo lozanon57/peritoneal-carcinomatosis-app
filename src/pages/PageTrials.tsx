@@ -50,8 +50,8 @@ function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
                 {m.letter}
               </span>
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-400">{m.label}</p>
-                <p className="text-[15px] text-gray-700 leading-relaxed mt-0.5">{text}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">{m.label}</p>
+                <p className="text-[15px] text-ink-soft leading-relaxed mt-0.5">{text}</p>
               </div>
             </div>
           )
@@ -64,14 +64,14 @@ function PicoBlock({ pico }: { pico: NonNullable<LandmarkTrial['pico']> }) {
 function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => void }) {
   const practiceChange = trial.practice_change ?? trial.practice_impact
   return (
-    <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col">
-      <div className="bg-white border-b border-gray-100 px-4 pt-safe-top pb-3">
+    <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
+      <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
         <div className="flex items-start justify-between mt-3">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 font-serif">{trial.name}</h2>
-            <p className="text-xs text-gray-500">{trial.publication} · n={trial.n_patients ?? '?'}</p>
+            <h2 className="text-lg font-bold text-ink font-serif">{trial.name}</h2>
+            <p className="text-xs text-ink-muted">{trial.publication} · n={trial.n_patients ?? '?'}</p>
           </div>
-          <button onClick={onClose} className="p-2 -mr-2 text-gray-400">
+          <button onClick={onClose} className="p-2 -mr-2 text-ink-muted">
             <X size={20} />
           </button>
         </div>
@@ -89,7 +89,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
           <div className="card">
             <h3 className="section-title mb-1">Why this trial</h3>
             <div className="rule-gold mb-2" />
-            <p className="text-[15px] text-gray-600 leading-relaxed">{trial.background}</p>
+            <p className="text-[15px] text-ink-soft leading-relaxed">{trial.background}</p>
           </div>
         )}
 
@@ -97,23 +97,23 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
           <div className="card">
             <h3 className="section-title mb-1">Design &amp; methods</h3>
             <div className="rule-gold mb-2" />
-            <p className="text-[15px] text-gray-600 leading-relaxed">{trial.design}</p>
+            <p className="text-[15px] text-ink-soft leading-relaxed">{trial.design}</p>
           </div>
         )}
 
         <div className="card">
           <h3 className="section-title mb-1">Clinical question</h3>
           <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-gray-600 leading-relaxed">{trial.clinical_question}</p>
+          <p className="text-[15px] text-ink-soft leading-relaxed">{trial.clinical_question}</p>
         </div>
 
         <div className="card">
           <h3 className="section-title mb-1">Detailed results</h3>
           <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-gray-700 leading-relaxed">{trial.results_detail ?? trial.key_result}</p>
+          <p className="text-[15px] text-ink-soft leading-relaxed">{trial.results_detail ?? trial.key_result}</p>
           {trial.results_detail && trial.key_result && (
-            <p className="text-[13px] text-gray-400 leading-relaxed mt-2 pt-2 border-t border-gray-100">
-              <span className="font-semibold text-gray-500">In brief: </span>{trial.key_result}
+            <p className="text-[13px] text-ink-muted leading-relaxed mt-2 pt-2 border-t border-[#efe9f3]">
+              <span className="font-semibold text-ink-muted">In brief: </span>{trial.key_result}
             </p>
           )}
         </div>
@@ -121,7 +121,7 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
         {practiceChange && (
           <div className="callout-key">
             <h3 className="font-semibold text-base text-primary-800 mb-1">How it changed practice</h3>
-            <p className="text-[15px] text-gray-700 leading-relaxed">{practiceChange}</p>
+            <p className="text-[15px] text-ink-soft leading-relaxed">{practiceChange}</p>
           </div>
         )}
 
@@ -135,21 +135,21 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
         <div className="card">
           <h3 className="section-title mb-1">Full citation</h3>
           <div className="rule-gold mb-2" />
-          <p className="text-[15px] text-gray-500 leading-relaxed">{trial.full_citation}</p>
+          <p className="text-[15px] text-ink-muted leading-relaxed">{trial.full_citation}</p>
           {trial.doi && (
             <a
               href={`https://doi.org/${trial.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block text-xs text-primary-600 mt-2 underline"
+              className="inline-block text-xs text-primary-700 mt-2 underline"
             >
               DOI: {trial.doi}
             </a>
           )}
         </div>
 
-        <div className="card bg-gray-50">
-          <div className="flex gap-4 text-xs text-gray-500 flex-wrap">
+        <div className="card bg-primary-50/40">
+          <div className="flex gap-4 text-xs text-ink-soft flex-wrap">
             <span><strong>Histologies:</strong> {trial.histologies.join(', ')}</span>
             <span><strong>Evidence:</strong> {trial.evidence_level}</span>
           </div>
@@ -161,19 +161,19 @@ function TrialDetail({ trial, onClose }: { trial: LandmarkTrial; onClose: () => 
 
 function TrialCard({ trial, onClick }: { trial: LandmarkTrial; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="w-full text-left card active:bg-gray-50 transition-colors">
+    <button onClick={onClick} className="w-full text-left card-interactive">
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-gray-900 text-sm">{trial.name}</span>
+            <span className="font-bold text-ink text-sm">{trial.name}</span>
             {studyTypeBadge(trial.study_type)}
           </div>
-          <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{trial.publication}</p>
+          <p className="text-xs text-ink-muted mt-0.5 line-clamp-1">{trial.publication}</p>
         </div>
-        <ChevronRight size={16} className="text-gray-300 flex-shrink-0 mt-0.5" />
+        <ChevronRight size={16} className="text-ink-muted flex-shrink-0 mt-0.5" />
       </div>
-      <p className="text-sm text-gray-600 leading-relaxed mt-2 line-clamp-2">{trial.clinical_question}</p>
-      <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+      <p className="text-sm text-ink-soft leading-relaxed mt-2 line-clamp-2">{trial.clinical_question}</p>
+      <div className="flex items-center gap-2 mt-2 text-xs text-ink-muted">
         <span>{trial.year}</span>
         <span>·</span>
         <span>n={trial.n_patients ?? '?'}</span>
@@ -236,11 +236,11 @@ export default function PageTrials() {
 
   return (
     <>
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4">
+      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Landmark Trials</h1>
-            <p className="text-xs text-gray-400">{displayed.length} trials shown</p>
+            <h1 className="text-xl font-bold text-ink">Landmark Trials</h1>
+            <p className="text-xs text-ink-muted">{displayed.length} trials shown</p>
           </div>
           <button
             onClick={() => navigate('/library')}
@@ -251,7 +251,7 @@ export default function PageTrials() {
         </div>
 
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" />
           <input
             type="search"
             value={search}
@@ -267,7 +267,7 @@ export default function PageTrials() {
               key={h}
               onClick={() => setFilter(h)}
               className={`flex-shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                filter === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-500 border-gray-200'
+                filter === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
               }`}
             >
               {h === 'all' ? 'All' : h}
@@ -281,7 +281,7 @@ export default function PageTrials() {
               <div className="flex items-center gap-2 mb-2.5">
                 <span className="section-title text-base">{group.label}</span>
                 <span className="rule-gold" />
-                <span className="text-[11px] text-gray-400 ml-auto">{group.trials.length}</span>
+                <span className="text-[11px] text-ink-muted ml-auto">{group.trials.length}</span>
               </div>
               <div className="space-y-2">
                 {group.trials.map(t => (
@@ -291,7 +291,7 @@ export default function PageTrials() {
             </div>
           ))}
           {displayed.length === 0 && (
-            <div className="text-center py-8 text-gray-400 text-sm">No trials for this filter</div>
+            <div className="text-center py-8 text-ink-muted text-sm">No trials for this filter</div>
           )}
         </div>
       </div>

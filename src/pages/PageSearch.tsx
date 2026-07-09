@@ -32,30 +32,30 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
   ]
 
   return (
-    <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col">
-      <div className="bg-white border-b border-gray-100 px-4 pt-safe-top pb-3">
+    <div className="fixed inset-0 z-50 bg-[#f7f5fa] flex flex-col animate-fade-in">
+      <div className="bg-white border-b border-[#efe9f3] px-4 pt-safe-top pb-3">
         <div className="flex items-start justify-between mt-3">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 leading-tight">{disease.name_short}</h2>
-            <p className="text-xs text-gray-500">{disease.name}</p>
+            <h2 className="text-lg font-bold text-ink leading-tight">{disease.name_short}</h2>
+            <p className="text-xs text-ink-muted">{disease.name}</p>
           </div>
-          <button onClick={onClose} className="p-2 -mr-2 text-gray-400">
+          <button onClick={onClose} className="p-2 -mr-2 text-ink-muted">
             <X size={20} />
           </button>
         </div>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           {eligibilityBadge(disease.hipec_eligibility)}
-          <span className="badge badge-blue">{disease.origin}</span>
+          <span className="badge badge-purple">{disease.origin}</span>
         </div>
       </div>
 
-      <div className="flex border-b border-gray-100 bg-white">
+      <div className="flex border-b border-[#efe9f3] bg-white">
         {tabs.map(({ id, label, Icon }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
             className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 text-xs font-medium transition-colors ${
-              tab === id ? 'text-primary-700 border-b-2 border-primary-600' : 'text-gray-400'
+              tab === id ? 'text-primary-700 border-b-2 border-primary-600' : 'text-ink-muted'
             }`}
           >
             <Icon size={14} />
@@ -68,11 +68,11 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
         {tab === 'overview' && (
           <>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-1 text-base">Description</h3>
-              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.description}</p>
+              <h3 className="font-semibold text-ink mb-1 text-base">Description</h3>
+              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.description}</p>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-2 text-base">PCI Threshold</h3>
+              <h3 className="font-semibold text-ink mb-2 text-base">PCI Threshold</h3>
               <div className="flex items-center gap-3">
                 <div className="bg-primary-50 rounded-xl p-3 text-center min-w-[64px]">
                   <div className="text-2xl font-bold text-primary-600">
@@ -80,33 +80,33 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
                   </div>
                   <div className="text-[10px] text-primary-400 font-medium">max PCI</div>
                 </div>
-                <p className="text-[15px] text-gray-600 leading-[1.7] flex-1">{disease.pci_threshold}</p>
+                <p className="text-[15px] text-ink-soft leading-[1.7] flex-1">{disease.pci_threshold}</p>
               </div>
             </div>
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-2 text-base">Prognosis</h3>
-              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.prognosis}</p>
+              <h3 className="font-semibold text-ink mb-2 text-base">Prognosis</h3>
+              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.prognosis}</p>
             </div>
             {disease.ihc.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-base">IHC Profile</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">IHC Profile</h3>
                 <div className="flex flex-wrap gap-1.5">
                   {disease.ihc.map(m => (
-                    <span key={m} className="badge badge-blue">{m}</span>
+                    <span key={m} className="badge badge-purple">{m}</span>
                   ))}
                 </div>
               </div>
             )}
             {disease.molecular_markers.length > 0 && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-base">Molecular Markers</h3>
+                <h3 className="font-semibold text-ink mb-2 text-base">Molecular Markers</h3>
                 <div className="space-y-1.5">
                   {disease.molecular_markers.map((m, i) => (
                     <div key={i} className="text-[15px] leading-relaxed">
-                      <span className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">{m.alteration}</span>
-                      {m.frequency && <span className="text-gray-400 text-xs ml-1.5">{m.frequency}</span>}
+                      <span className="font-mono text-xs bg-primary-50 px-1.5 py-0.5 rounded text-primary-800">{m.alteration}</span>
+                      {m.frequency && <span className="text-ink-muted text-xs ml-1.5">{m.frequency}</span>}
                       {m.therapeutic_relevance && (
-                        <p className="text-xs text-gray-500 mt-0.5">{m.therapeutic_relevance}</p>
+                        <p className="text-xs text-ink-muted mt-0.5">{m.therapeutic_relevance}</p>
                       )}
                     </div>
                   ))}
@@ -114,8 +114,8 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
               </div>
             )}
             <div className="card">
-              <h3 className="font-semibold text-gray-800 mb-1 text-base">Patient Selection</h3>
-              <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.patient_selection}</p>
+              <h3 className="font-semibold text-ink mb-1 text-base">Patient Selection</h3>
+              <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.patient_selection}</p>
             </div>
           </>
         )}
@@ -124,26 +124,26 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <>
             {disease.hipec_protocols.length > 0 ? (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-3 text-base">HIPEC Protocols</h3>
+                <h3 className="font-semibold text-ink mb-3 text-base">HIPEC Protocols</h3>
                 <div className="space-y-2">
                   {disease.hipec_protocols.map((p, i) => <HIPECProtocolCard key={i} protocol={p} index={i} />)}
                 </div>
               </div>
             ) : (
-              <div className="card text-center text-gray-400 text-sm py-6">
+              <div className="card text-center text-ink-muted text-sm py-6">
                 No established HIPEC protocol for this entity
               </div>
             )}
             {disease.pipac_indication && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-base">PIPAC</h3>
-                <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.pipac_indication}</p>
+                <h3 className="font-semibold text-ink mb-2 text-base">PIPAC</h3>
+                <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.pipac_indication}</p>
               </div>
             )}
             {disease.systemic_treatment && (
               <div className="card">
-                <h3 className="font-semibold text-gray-800 mb-2 text-base">Systemic Treatment</h3>
-                <p className="text-[15px] text-gray-600 leading-[1.7]">{disease.systemic_treatment}</p>
+                <h3 className="font-semibold text-ink mb-2 text-base">Systemic Treatment</h3>
+                <p className="text-[15px] text-ink-soft leading-[1.7]">{disease.systemic_treatment}</p>
               </div>
             )}
           </>
@@ -153,11 +153,11 @@ function DiseaseDetail({ disease, onClose }: { disease: PCDisease; onClose: () =
           <div className="space-y-3">
             {disease.clinical_pearls.map((pearl, i) => (
               <div key={i} className="card border-l-4 border-l-amber-400">
-                <p className="text-[15px] text-gray-700 leading-[1.7]">{pearl}</p>
+                <p className="text-[15px] text-ink-soft leading-[1.7]">{pearl}</p>
               </div>
             ))}
             {disease.clinical_pearls.length === 0 && (
-              <div className="text-center text-gray-400 text-sm py-6">No pearls available</div>
+              <div className="text-center text-ink-muted text-sm py-6">No pearls available</div>
             )}
           </div>
         )}
@@ -170,17 +170,17 @@ function DiseaseCard({ disease, onClick }: { disease: PCDisease; onClick: () => 
   return (
     <button
       onClick={onClick}
-      className="w-full text-left card active:bg-gray-50 transition-colors"
+      className="w-full text-left card-interactive"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-gray-900 text-sm">{disease.name_short}</span>
+            <span className="font-semibold text-ink text-sm">{disease.name_short}</span>
             {eligibilityBadge(disease.hipec_eligibility)}
           </div>
-          <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{disease.name}</p>
+          <p className="text-xs text-ink-muted mt-0.5 line-clamp-1">{disease.name}</p>
         </div>
-        <ChevronDown size={16} className="text-gray-300 mt-0.5 flex-shrink-0 rotate-[-90deg]" />
+        <ChevronDown size={16} className="text-ink-muted mt-0.5 flex-shrink-0 rotate-[-90deg]" />
       </div>
       {disease.tags.slice(0, 3).map(t => (
         <span key={t} className="inline-block badge badge-gray mr-1 mt-1.5">{t}</span>
@@ -199,14 +199,14 @@ export default function PageSearch() {
 
   return (
     <>
-      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4">
+      <div className="px-4 pt-6 pb-4 max-w-lg mx-auto space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Disease Search</h1>
-          <p className="text-xs text-gray-400">{results.length} entities</p>
+          <h1 className="text-xl font-bold text-ink">Disease Search</h1>
+          <p className="text-xs text-ink-muted">{results.length} entities</p>
         </div>
 
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" />
           <input
             type="search"
             value={filters.query}
@@ -215,7 +215,7 @@ export default function PageSearch() {
             className="input-field pl-9"
           />
           {filters.query && (
-            <button onClick={() => updateFilter('query', '')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <button onClick={() => updateFilter('query', '')} className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted">
               <X size={14} />
             </button>
           )}
@@ -223,23 +223,23 @@ export default function PageSearch() {
 
         <button
           onClick={() => setShowFilters(v => !v)}
-          className="flex items-center gap-1.5 text-xs font-medium text-gray-500"
+          className="flex items-center gap-1.5 text-xs font-medium text-ink-soft"
         >
           {showFilters ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           Filters {(filters.origin !== 'all' || filters.hipec !== 'all') ? '(active)' : ''}
         </button>
 
         {showFilters && (
-          <div className="space-y-3 p-3 bg-gray-50 rounded-xl">
+          <div className="space-y-3 p-3 bg-primary-50/40 rounded-xl">
             <div>
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Origin</label>
+              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">Origin</label>
               <div className="flex flex-wrap gap-1.5">
                 {ORIGINS.map(o => (
                   <button
                     key={o}
                     onClick={() => updateFilter('origin', o as typeof filters.origin)}
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      filters.origin === o ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-500 border-gray-200'
+                      filters.origin === o ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
                     }`}
                   >
                     {o === 'all' ? 'All' : o.charAt(0).toUpperCase() + o.slice(1)}
@@ -248,14 +248,14 @@ export default function PageSearch() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">HIPEC Eligibility</label>
+              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wide block mb-1.5">HIPEC Eligibility</label>
               <div className="flex flex-wrap gap-1.5">
                 {HIPEC_OPTS.map(h => (
                   <button
                     key={h}
                     onClick={() => updateFilter('hipec', h as typeof filters.hipec)}
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      filters.hipec === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-gray-500 border-gray-200'
+                      filters.hipec === h ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-ink-soft border-[#efe9f3]'
                     }`}
                   >
                     {h === 'all' ? 'All' : h.charAt(0).toUpperCase() + h.slice(1)}
@@ -263,13 +263,13 @@ export default function PageSearch() {
                 ))}
               </div>
             </div>
-            <button onClick={resetFilters} className="text-xs text-gray-400 underline">Reset filters</button>
+            <button onClick={resetFilters} className="text-xs text-ink-muted underline">Reset filters</button>
           </div>
         )}
 
         <div className="space-y-2">
           {results.length === 0 && (
-            <div className="text-center py-10 text-gray-400 text-sm">No results found</div>
+            <div className="text-center py-10 text-ink-muted text-sm">No results found</div>
           )}
           {results.map(d => (
             <DiseaseCard key={d.id} disease={d} onClick={() => setSelected(d)} />
