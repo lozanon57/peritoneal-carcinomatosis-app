@@ -1,10 +1,15 @@
-import { ShieldCheck, CheckCircle2, Globe, ClipboardList, GraduationCap, Award, Link2, Mail, Copyright } from 'lucide-react'
+import { ShieldCheck, CheckCircle2, Globe, ClipboardList, GraduationCap, Award, Link2, Mail, Copyright, RefreshCw, ExternalLink } from 'lucide-react'
 import { PC_DISEASES } from '../data/diseases'
 import { LANDMARK_TRIALS } from '../data/landmark_trials'
 import { QUIZ_QUESTIONS } from '../data/quiz_questions'
 import { LEARN_CHAPTERS } from '../data/learn_content'
+import { GUIDELINES, LAST_REVIEW, NEXT_REVIEW, REVIEW_CADENCE_MONTHS } from '../data/guidelines'
 import { useAppI18n } from '../App'
 import { CreatorPhoto, InstitutionLogo } from '../components/Institutions'
+
+const REGION_LABEL: Record<string, string> = {
+  international: 'International', europe: 'Europe', usa: 'USA', china: 'China', japan: 'Japan',
+}
 
 function FacultyCard({
   file, initials, name, role, meta, bio, tags, accent, objectPosition = 'center',
@@ -153,6 +158,40 @@ export default function PageAbout() {
             <div key={i} className="flex gap-2.5">
               <CheckCircle2 size={15} className="text-emerald-600 mt-0.5 flex-shrink-0" />
               <p>{txt}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Guidelines & quarterly updates */}
+      <div className="card p-5">
+        <div className="flex items-center gap-2 mb-1.5">
+          <RefreshCw size={16} className="text-primary-700" />
+          <h2 className="section-title text-base">{t('about.guidelines_title')}</h2>
+        </div>
+        <p className="t-small mb-4">
+          {t('about.review_note').replace('{n}', String(REVIEW_CADENCE_MONTHS))}
+          {' '}<span className="text-ink-soft font-semibold">{t('about.last_reviewed')}: {LAST_REVIEW}</span>
+          {' · '}<span className="text-primary-700 font-semibold">{t('about.next_review')}: {NEXT_REVIEW}</span>
+        </p>
+        <div className="space-y-2">
+          {GUIDELINES.map(g => (
+            <div key={g.id} className="flex items-start gap-3 rounded-xl border border-line bg-surface2 p-3">
+              <span className="badge badge-purple mt-0.5 flex-shrink-0">{g.org}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13.5px] font-semibold text-ink leading-snug">{g.name}</p>
+                <p className="t-caption mt-0.5">{g.scope}</p>
+                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                  <span className="badge badge-gold">{g.version}</span>
+                  <span className="badge badge-gray">{REGION_LABEL[g.region] ?? g.region}</span>
+                  {g.url && (
+                    <a href={g.url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary-700">
+                      <ExternalLink size={11} /> {g.published}
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>

@@ -1,0 +1,47 @@
+name: Quarterly guideline review
+
+# Opens a reminder issue every 3 months so the academy's guidelines and evidence
+# stay current. Runs 09:00 UTC on the 1st of Jan, Apr, Jul and Oct (and on demand).
+on:
+  schedule:
+    - cron: '0 9 1 1,4,7,10 *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  open-review-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open quarterly review issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const month = new Date().toISOString().slice(0, 7)
+            const body = [
+              '## Quarterly guideline & evidence review',
+              '',
+              'Time to refresh **PSM Academy** clinical content (every 3 months).',
+              'Edit `src/data/guidelines.ts` and, where needed, `src/data/landmark_trials.ts` / `src/data/diseases.ts`, then bump `LAST_REVIEW` and `NEXT_REVIEW` (+3 months).',
+              '',
+              '### Checklist',
+              '- [ ] **NCCN** (Colon, Rectal, Gastric, Ovarian) — new version?',
+              '- [ ] **ESMO** (mCRC, Gastric, Ovarian) — new version?',
+              '- [ ] **PSOGI** consensus updates',
+              '- [ ] **Chicago Consensus** updates',
+              '- [ ] **CSCO** (China) — new version?',
+              '- [ ] **CACA** CRS+HIPEC technical guideline (China) — new version?',
+              '- [ ] **JGCA / JPGA** (Japan) gastric guidelines — new edition?',
+              '- [ ] New landmark RCTs / practice-changing trials (PubMed, ASCO/ESMO/ASCO-GI)',
+              '- [ ] Bump `LAST_REVIEW` and `NEXT_REVIEW` in `src/data/guidelines.ts`',
+              '',
+              'Full procedure: `docs/UPDATING.md`. All clinical changes must be verified by a qualified specialist before merging.',
+            ].join('\n')
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Quarterly guideline & evidence review — ${month}`,
+              body,
+              labels: ['guideline-review'],
+            })
